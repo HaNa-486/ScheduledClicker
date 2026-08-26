@@ -41,10 +41,11 @@ swiftc -O \
 lipo -create "$build_root/ScheduledClicker-arm64" "$build_root/ScheduledClicker-x86_64" -output "$executable"
 chmod +x "$executable"
 
+cp "$project_root/macOS/Tests/SchedulerCoreTests.swift" "$build_root/main.swift"
 swiftc \
   -framework AppKit -framework ApplicationServices \
   "$project_root/macOS/Sources/SchedulerCore.swift" \
-  "$project_root/macOS/Tests/SchedulerCoreTests.swift" \
+  "$build_root/main.swift" \
   -o "$test_executable"
 
 "$test_executable"

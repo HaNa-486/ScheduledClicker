@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Diagnostics;
 using ScheduledClicker;
 
 internal static class SchedulerCoreTests
@@ -22,7 +23,11 @@ internal static class SchedulerCoreTests
             ExpectCancel(CancelResult.Canceled, service.Cancel(), "cancel armed schedule");
             ExpectCancel(CancelResult.NothingScheduled, service.Cancel(), "cancel idle schedule");
         }
-        Console.WriteLine(failures == 0 ? "PASS: 8 tests" : "FAIL: " + failures + " test(s)");
+        long clockStart = 1000;
+        var monotonicPlan = new ClickPlan(now.AddSeconds(10), new Point(0, 0), ClickKind.Single, clockStart + Stopwatch.Frequency * 10L);
+        ExpectNear(10, monotonicPlan.Remaining(now.AddHours(5), clockStart).TotalSeconds, "delay ignores forward wall-clock jump");
+        ExpectNear(5, monotonicPlan.Remaining(now.AddHours(-5), clockStart + Stopwatch.Frequency * 5L).TotalSeconds, "delay follows elapsed monotonic time");
+        Console.WriteLine(failures == 0 ? "PASS: 10 tests" : "FAIL: " + failures + " test(s)");
         Environment.ExitCode = failures == 0 ? 0 : 1;
     }
 
@@ -36,6 +41,13 @@ internal static class SchedulerCoreTests
     private static void ExpectCancel(CancelResult expected, CancelResult actual, string name)
     {
         if (expected == actual) return;
+        failures++;
+        Console.WriteLine("FAIL " + name + ": expected [" + expected + "] actual [" + actual + "]");
+    }
+
+    private static void ExpectNear(double expected, double actual, string name)
+    {
+        if (Math.Abs(expected - actual) < 0.001) return;
         failures++;
         Console.WriteLine("FAIL " + name + ": expected [" + expected + "] actual [" + actual + "]");
     }

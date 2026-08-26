@@ -7,12 +7,29 @@ namespace ScheduledClicker
 {
     internal static class Program
     {
+        [DllImport("user32.dll")]
+        private static extern bool SetProcessDpiAwarenessContext(IntPtr dpiContext);
+
+        [DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
+
         [STAThread]
         private static void Main()
         {
+            EnableBestDpiAwareness();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+        }
+
+        private static void EnableBestDpiAwareness()
+        {
+            try
+            {
+                if (SetProcessDpiAwarenessContext(new IntPtr(-4))) return;
+            }
+            catch (EntryPointNotFoundException) { }
+            SetProcessDPIAware();
         }
     }
 
@@ -236,6 +253,7 @@ namespace ScheduledClicker
 
             DateTime now = DateTime.Now;
             DateTime runAt;
+            TimeSpan? requestedDelay = null;
             if (absoluteMode.Checked)
             {
                 runAt = targetTime.Value;
@@ -248,7 +266,8 @@ namespace ScheduledClicker
                     MessageBox.Show(this, "倒數延遲至少要 1 秒。", "時間無效", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                runAt = now.AddSeconds(totalSeconds);
+                requestedDelay = TimeSpan.FromSeconds(totalSeconds);
+                runAt = now.Add(requestedDelay.Value);
             }
 
             var kind = clickKind.SelectedIndex == 1 ? ClickKind.Double : ClickKind.Single;
@@ -262,6 +281,17 @@ namespace ScheduledClicker
 
             string summary = string.Format("時間：{0:yyyy/MM/dd HH:mm:ss}\n位置：X {1}, Y {2}\n方式：{3}\n\n確定啟動嗎？", plan.TargetTime, plan.TargetPoint.X, plan.TargetPoint.Y, kind == ClickKind.Double ? "雙擊" : "單擊");
             if (MessageBox.Show(this, summary, "確認排程", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK) return;
+
+            DateTime confirmedAt = DateTime.Now;
+            plan = requestedDelay.HasValue
+                ? ClickPlan.FromDelay(confirmedAt, requestedDelay.Value, capturedPoint.Value, kind)
+                : new ClickPlan(runAt, capturedPoint.Value, kind);
+            error = PlanValidator.Validate(plan, confirmedAt, SystemInformation.VirtualScreen);
+            if (error != null)
+            {
+                MessageBox.Show(this, error, "無法啟動", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             schedule.Arm(plan);
             hotkeyRegistered = RegisterHotKey(Handle, HotkeyId, 0, (uint)Keys.F8);
@@ -277,7 +307,7 @@ namespace ScheduledClicker
         {
             var plan = statusLabel.Tag as ClickPlan;
             if (!schedule.IsArmed || plan == null) return;
-            TimeSpan remaining = plan.TargetTime - DateTime.Now;
+            TimeSpan remaining = plan.RemainingNow();
             if (remaining < TimeSpan.Zero) remaining = TimeSpan.Zero;
             string stopHint = hotkeyRegistered ? "按 F8 可停止。" : "F8 被占用，請用取消排程按鈕。";
             statusLabel.Text = string.Format("已排程：{0:HH:mm:ss} 執行，剩餘 {1:00}:{2:00}:{3:00}。{4}", plan.TargetTime, (int)remaining.TotalHours, remaining.Minutes, remaining.Seconds, stopHint);

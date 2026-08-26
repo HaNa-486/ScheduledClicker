@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -23,12 +24,37 @@ namespace ScheduledClicker
         public DateTime TargetTime { get; private set; }
         public Point TargetPoint { get; private set; }
         public ClickKind ClickKind { get; private set; }
+        private long? monotonicDeadline;
 
         public ClickPlan(DateTime targetTime, Point targetPoint, ClickKind clickKind)
+            : this(targetTime, targetPoint, clickKind, null)
+        {
+        }
+
+        internal ClickPlan(DateTime targetTime, Point targetPoint, ClickKind clickKind, long? monotonicDeadline)
         {
             TargetTime = targetTime;
             TargetPoint = targetPoint;
             ClickKind = clickKind;
+            this.monotonicDeadline = monotonicDeadline;
+        }
+
+        internal static ClickPlan FromDelay(DateTime wallNow, TimeSpan delay, Point targetPoint, ClickKind clickKind)
+        {
+            long deadline = Stopwatch.GetTimestamp() + (long)Math.Round(delay.TotalSeconds * Stopwatch.Frequency);
+            return new ClickPlan(wallNow.Add(delay), targetPoint, clickKind, deadline);
+        }
+
+        internal TimeSpan RemainingNow()
+        {
+            return Remaining(DateTime.Now, Stopwatch.GetTimestamp());
+        }
+
+        internal TimeSpan Remaining(DateTime wallNow, long monotonicNow)
+        {
+            if (monotonicDeadline.HasValue)
+                return TimeSpan.FromSeconds((monotonicDeadline.Value - monotonicNow) / (double)Stopwatch.Frequency);
+            return TargetTime - wallNow;
         }
     }
 
@@ -74,7 +100,7 @@ namespace ScheduledClicker
                 currentPlan = plan;
                 generation++;
                 int localGeneration = generation;
-                timer = new Timer(delegate { CheckAndRun(localGeneration); }, null, NextDelay(plan.TargetTime), Timeout.Infinite);
+                timer = new Timer(delegate { CheckAndRun(localGeneration); }, null, NextDelay(plan.RemainingNow()), Timeout.Infinite);
             }
         }
 
@@ -98,9 +124,10 @@ namespace ScheduledClicker
             {
                 if (currentPlan == null || expectedGeneration != generation) return;
                 plan = currentPlan;
-                if (DateTime.Now < plan.TargetTime)
+                TimeSpan remaining = plan.RemainingNow();
+                if (remaining > TimeSpan.Zero)
                 {
-                    timer.Change(NextDelay(plan.TargetTime), Timeout.Infinite);
+                    timer.Change(NextDelay(remaining), Timeout.Infinite);
                     return;
                 }
                 currentPlan = null;
@@ -111,7 +138,7 @@ namespace ScheduledClicker
 
             try
             {
-                if (DateTime.Now - plan.TargetTime > TimeSpan.FromSeconds(5))
+                if (-plan.RemainingNow() > TimeSpan.FromSeconds(5))
                     throw new InvalidOperationException("已錯過預定時間超過 5 秒，為避免誤點擊已取消。 ");
                 if (!NativeMouse.IsPointOnActiveMonitor(plan.TargetPoint))
                     throw new InvalidOperationException("螢幕配置已改變，原先位置已不在可用螢幕上，已取消點擊。 ");
@@ -130,9 +157,9 @@ namespace ScheduledClicker
             }
         }
 
-        private static int NextDelay(DateTime target)
+        private static int NextDelay(TimeSpan remaining)
         {
-            double milliseconds = (target - DateTime.Now).TotalMilliseconds;
+            double milliseconds = remaining.TotalMilliseconds;
             if (milliseconds <= 25) return Math.Max(1, (int)Math.Ceiling(milliseconds));
             if (milliseconds <= 2000) return 20;
             if (milliseconds <= 30000) return 250;

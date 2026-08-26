@@ -3,10 +3,10 @@
 Keep this concise. Every fresh PDOS context reads it first.
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 2
+- State revision: 3
 - Updated: 2026-08-26
-- State confidence: high for source/build; conditional for live mouse injection
-- Phase: handoff
+- State confidence: high for source/build and user-reported Windows 11 journeys; mixed-DPI combinations remain partially verified
+- Phase: ready for owner GitHub push
 
 ## Repository identity
 
@@ -22,20 +22,20 @@ Keep this concise. Every fresh PDOS context reads it first.
 
 ## Current work
 
-- Current slice: v1.0 local delivery completed
+- Current slice: v1.0 public-repository documentation, MIT licensing, and pre-push audit
 - Active workstreams: see `workstreams/`
 - Active review:
 - Active remediations:
-- Blocking dependencies: live SendInput journey cannot run inside Codex isolated desktop
-- Consequential open decisions: code signing only if the user later wants public distribution
+- Blocking dependencies: none for owner-controlled GitHub push
+- Consequential open decisions: repository visibility and GitHub publication remain owner-controlled; code signing is optional future work
 
 ## Handoff
 
-- What changed: built source, tests, docs, manifest, build script, and standalone dist/ScheduledClicker.exe
-- Verification evidence: VERIFICATION.md; 10/10 core tests; startup smoke pass; Defender no threats; independent review fixes applied
-- Not verified: live click landing on a real user desktop due sandbox access denied
-- Residual risks: unsigned executable; fixed coordinates can target changed UI; UIPI blocks higher-integrity windows; live and mixed-DPI click landing await user desktop verification
-- Next safe action: user runs a harmless 10-second single-click and double-click test on their Windows 11 desktop
+- What changed: built source, tests, docs, manifest, standalone EXE, Codex continuation use case, MIT License, changelog, and local Git history
+- Verification evidence: VERIFICATION.md; 10/10 core tests; startup smoke pass; Defender no threats; independent review fixes; user reported both absolute and delay modes successful on Windows 11
+- Not verified: every mixed-DPI multi-monitor combination
+- Residual risks: unsigned executable; fixed coordinates can target changed UI; UIPI blocks higher-integrity windows
+- Next safe action: owner reviews repository visibility, adds the intended GitHub remote, and pushes the clean branch
 
 ## Read next
 

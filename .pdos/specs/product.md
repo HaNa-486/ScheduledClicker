@@ -2,7 +2,7 @@
 
 ## Problem and user
 
-Windows 11 使用者需要在無人操作的未來時間，於固定螢幕座標執行單擊或雙擊。
+Windows 11 使用者需要在無人操作的未來時間，於固定螢幕座標執行單擊或雙擊。主要公開使用情境是：ChatGPT Plus／Codex 使用者可依產品畫面顯示的額度重設時間，在合法恢復可用後送出預先準備的提示，讓中斷的 Session 繼續。
 
 ## Desired outcome and success signal
 
@@ -10,7 +10,7 @@ Windows 11 使用者需要在無人操作的未來時間，於固定螢幕座標
 
 ## Scope and non-goals
 
-範圍：Windows 11、目前登入使用者工作階段、固定座標、一次性排程。非目標：依圖片辨識按鈕、重複巨集、背景服務、跨重新啟動持久化、繞過 Windows 權限隔離。
+範圍：Windows 11、目前登入使用者工作階段、固定座標、一次性排程。非目標：依圖片辨識按鈕、重複巨集、背景服務、跨重新啟動持久化、繞過 Windows 權限隔離，或繞過／重設任何第三方服務的用量限制。
 
 ## Critical journey
 

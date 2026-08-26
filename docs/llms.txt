@@ -12,9 +12,9 @@ Runtimes: Windows .NET Framework 4.x; Apple Swift/AppKit/ApplicationServices
 
 ## Verified properties
 
-- Core automated tests: 10/10 Windows tests; the expanded macOS suite is required to pass on the macOS release runner before publication.
+- Core automated tests: 10/10 Windows tests and 21/21 macOS tests passed.
 - User reported both exact-time and delay modes successful on Windows 11.
-- The macOS universal app is compiled and exercised on a GitHub-hosted macOS runner; interactive clicking requires user-granted Accessibility permission and a physical logged-in desktop.
+- The universal Apple silicon + Intel app compiled, passed its test/self-check suite, and passed ad-hoc signature verification on a GitHub-hosted macOS 15 runner. Interactive clicking still requires user-granted Accessibility permission and a physical logged-in desktop.
 - No third-party runtime packages, network access, telemetry, accounts, or persistence.
 - Microsoft Defender scan found no threats in the published v1.0.0 executable.
 - The Windows executable is unsigned; the macOS app is ad-hoc signed but not Apple-notarized.

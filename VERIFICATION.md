@@ -29,8 +29,15 @@ SHA-256：`DE9FEE3CCD277EA3627E5070088A5CF67909CD8D68914F779E017DA48BED6C3E`
 
 - 目標：macOS 13 Ventura 或更新版本，universal `arm64` + `x86_64` app。
 - 原始碼：Apple Swift、AppKit 與 ApplicationServices，沒有第三方套件。
-- 必須通過：真實 macOS runner 編譯、完整核心測試、游標／事件建立自我檢查、雙架構檢查、plist 驗證、ad-hoc 簽章驗證及 ZIP SHA-256。
-- 目前狀態：**等待 GitHub macOS CI 證據，不可視為已發布或互動式實機驗證完成。**
-- 即使 CI 通過，GitHub runner 也不會取得使用者的輔助使用權限，因此不會真的注入滑鼠點擊。使用者仍需在自己的 Mac 授權後，以無風險目標測試指定時間與倒數延遲。
+- CI：[`Build and test` run 32950460010](https://github.com/HaNa-486/ScheduledClicker/actions/runs/32950460010)，候選 commit `e320e8262131f4defe6fed19303528bff71d78e8`，Windows 與 macOS jobs 均成功。
+- macOS 核心測試：21/21 通過，涵蓋驗證、單調倒數、系統時鐘變動、排程、執行、取消、重新排程、逾期拒絕、顯示器配置變更及原生點擊失敗。
+- 安全自我檢查：通過；runner 可讀取顯示器與游標位置，並成功建立單擊 3 事件與雙擊 5 事件序列，但自我檢查不會送出事件。
+- 架構：`x86_64 arm64`，同一個 app 同時支援 Intel 與 Apple silicon。
+- plist：`plutil -lint` 通過。
+- ad-hoc 簽章：`codesign --verify --deep --strict` 通過，app 為 valid on disk 且符合 Designated Requirement；這不是 Apple Developer ID 簽章或 Apple 公證。
+- 封裝：ZIP 只包含 `ScheduledClicker.app`、執行檔、Info.plist、Resources 與 `_CodeSignature`。
+- macOS ZIP 大小：102,344 bytes。
+- macOS ZIP SHA-256：`20303159765B40BF536E88DFBCBE5B21582D0691DBDDCFCB038D30E615F6993F`；下載 CI artifact 後以 Windows `Get-FileHash` 二次核對，與 runner 產生的 `.sha256` 完全相符。
+- CI runner 不會取得使用者的輔助使用權限，因此刻意不注入真實滑鼠點擊。使用者仍需在自己的 Mac 授權後，以無風險目標測試指定時間與倒數延遲。
 
-結論：Windows 版可供一般 Windows 11 使用者試用。macOS 版必須在 CI 與發布資產驗證完成後才可發布；未簽章／未公證、固定座標誤點、尚未完整覆蓋的 Windows 混合 DPI 組合，以及尚未完成的 macOS 互動式實機點擊，都是已知限制。
+結論：Windows 版可供一般 Windows 11 使用者試用；macOS release candidate 已達到自動化建置與安全驗證門檻，可在 GitHub Release 發布供 macOS 使用者試用。未簽章／未公證、固定座標誤點、尚未完整覆蓋的 Windows 混合 DPI 組合，以及尚未完成的 macOS 互動式實機點擊，都是已知限制。

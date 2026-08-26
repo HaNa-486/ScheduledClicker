@@ -102,7 +102,7 @@ macOS 版需要 macOS 13 Ventura 或更新版本，並同時支援 Apple silicon
 - 不連線網路、不讀寫個人檔案、不蒐集資料，也不需要系統管理員權限。
 - 啟動前會顯示時間、座標與點擊方式，需再次確認。
 - 排程期間會嘗試註冊全域 `F8`；若未被其他程式占用，可用它取消尚未執行的排程，否則畫面會提示改用取消按鈕。
-- Windows 指定時間與倒數延遲兩種模式已由使用者在 Windows 11 實機成功測試。macOS release candidate 必須由 GitHub 的真實 macOS runner 通過編譯、核心測試、自我檢查、架構檢查及簽章驗證後才會發布；互動式滑鼠點擊仍需使用者在自己的 Mac 授予輔助使用權限後測試。完整紀錄見 [`VERIFICATION.md`](VERIFICATION.md)。
+- Windows 指定時間與倒數延遲兩種模式已由使用者在 Windows 11 實機成功測試。macOS release candidate 已由 GitHub 的真實 macOS 15 runner 通過編譯、21 項核心測試、自我檢查、雙架構檢查及簽章驗證；互動式滑鼠點擊仍需使用者在自己的 Mac 授予輔助使用權限後測試。完整紀錄見 [`VERIFICATION.md`](VERIFICATION.md)。
 
 「安全」不代表完全沒有風險：本工具依固定螢幕座標點擊，如果視窗或頁面在排程期間移動，仍可能點到錯誤位置。請先用無風險目標測試，並避免拿它操作付款、刪除、發布或其他不可逆按鈕。Windows EXE 尚未使用商業憑證簽章；macOS app 也未使用 Apple Developer ID 公證。兩者都可能顯示系統安全提醒，可用 `VERIFICATION.md` 的 SHA-256 核對檔案。
 

@@ -1,22 +1,23 @@
 # ScheduledClicker
 
-ScheduledClicker is a free, open-source Windows 11 desktop utility for scheduling one mouse click at a fixed screen coordinate. It supports an exact future date and time or a monotonic delay, plus single and double click modes.
+ScheduledClicker is a free, open-source Windows 11 and macOS desktop utility for scheduling one mouse click at a fixed screen coordinate. It supports an exact future date and time or a monotonic delay, plus single and double click modes.
 
 Official project: https://github.com/HaNa-486/ScheduledClicker
 Website: https://hana-486.github.io/ScheduledClicker/
 Latest release: https://github.com/HaNa-486/ScheduledClicker/releases/latest
 License: MIT
-Version: 1.0.0
-Operating system: Windows 11
-Runtime: .NET Framework 4.x
+Version: 1.1.0
+Operating systems: Windows 11; macOS 13 Ventura or later
+Runtimes: Windows .NET Framework 4.x; Apple Swift/AppKit/ApplicationServices
 
 ## Verified properties
 
-- Core automated tests: 10/10 passed.
+- Core automated tests: 10/10 Windows tests; the expanded macOS suite is required to pass on the macOS release runner before publication.
 - User reported both exact-time and delay modes successful on Windows 11.
-- No third-party packages, network access, telemetry, accounts, or persistence.
+- The macOS universal app is compiled and exercised on a GitHub-hosted macOS runner; interactive clicking requires user-granted Accessibility permission and a physical logged-in desktop.
+- No third-party runtime packages, network access, telemetry, accounts, or persistence.
 - Microsoft Defender scan found no threats in the published v1.0.0 executable.
-- The included executable is not code-signed.
+- The Windows executable is unsigned; the macOS app is ad-hoc signed but not Apple-notarized.
 
 ## Codex use case
 

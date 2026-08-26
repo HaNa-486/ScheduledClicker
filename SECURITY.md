@@ -2,11 +2,11 @@
 
 ## 供應鏈
 
-此專案沒有第三方執行期或建置期相依套件，也沒有複用網路上的原始碼。建置只引用 Microsoft Windows 內建的 `System.dll`、`System.Drawing.dll`、`System.Windows.Forms.dll` 與 `user32.dll`。
+此專案沒有第三方執行期或建置期套件，也沒有複用網路上的原始碼。Windows 建置只引用 Microsoft 內建的 `System.dll`、`System.Drawing.dll`、`System.Windows.Forms.dll` 與 `user32.dll`；macOS 建置只引用 Apple 內建的 Swift 標準函式庫、AppKit 與 ApplicationServices。
 
 ## 權限與資料
 
-應用程式以目前使用者權限執行（manifest：`asInvoker`、`uiAccess=false`），不含網路功能、持久化、自動啟動、剪貼簿存取或遙測。排程與座標只存在記憶體中，關閉程式後即消失。
+兩個版本都以目前登入使用者執行，不含網路功能、持久化、自動啟動、剪貼簿存取或遙測。排程與座標只存在記憶體中，關閉程式後即消失。Windows manifest 使用 `asInvoker`、`uiAccess=false`；macOS 必須由使用者明確授予「輔助使用」權限，否則程式拒絕啟動排程且無法送出滑鼠事件。
 
 ## 已知邊界
 
@@ -16,3 +16,6 @@
 - 電腦休眠、鎖定或系統時間跳動而使排程錯過超過 5 秒時，工具會取消點擊，避免在過晚且情境已改變時誤操作。
 - 倒數延遲使用單調計時，不會因 NTP 校時或手動調整系統時鐘而提早／延後；指定日期時間則刻意依系統時鐘執行。
 - 程式宣告 Per-Monitor V2 DPI 感知，讓游標擷取與 Windows 輸入使用一致的實體螢幕座標空間。
+- macOS 版在啟動時記錄顯示器 ID 與範圍，執行前若顯示器被重新排列、改變解析度、加入或移除就會停止；也會重新確認座標仍在螢幕內，並在未取得輔助使用權限時停止。
+- macOS 成品只有 ad-hoc 簽章，沒有 Apple Developer ID 簽章或 Apple 公證；使用者第一次開啟時可能需要透過「隱私權與安全性」明確允許。
+- Windows EXE 與 macOS app 是不同的原生程式；請勿在不相符的作業系統執行或使用非官方轉檔版本。

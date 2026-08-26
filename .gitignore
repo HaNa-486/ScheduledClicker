@@ -1,4 +1,6 @@
 .artifacts/
+dist/ScheduledClicker-macOS-universal.zip
+dist/ScheduledClicker-macOS-universal.sha256
 *.pdb
 *.user
 *.suo

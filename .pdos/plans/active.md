@@ -5,3 +5,5 @@
 | 核心排程與輸入 | 指定未來時間執行單/雙擊 | 計時競態、錯誤座標 | 10/10 邊界測試通過；隔離桌面拒絕 SendInput，待使用者實機確認 | completed |
 | WinForms UI | 時鐘、兩種時間模式、座標擷取、取消 | 操作誤解 | 啟動煙霧測試通過；實際畫面互動待使用者桌面確認 | completed |
 | 安全與交付 | 無第三方相依的單一 EXE | 未簽章警示、供應鏈 | 靜態掃描、Defender、SHA-256 均完成 | completed |
+| macOS 原生版本 | macOS 13+ universal app 與 Windows 功能對等 | Accessibility 權限、未公證、跨架構 | 10 項核心測試、自我檢查、universal 架構與 ad-hoc 簽章由 macOS CI 驗證 | in_progress |
+| 跨平台文件與探索 | README、安全說明、網站與 AI/社群 metadata 正確反映雙平台 | 過度宣稱互動式實機證據 | CI 證據與未驗證項目分開揭露；Google metadata 靜態檢查 | in_progress |

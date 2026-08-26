@@ -2,6 +2,25 @@
 
 本專案的重大變更會記錄在此。格式參考 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本採用 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [1.1.0] - 2026-08-26
+
+### Added
+
+- 原生 macOS 13+ AppKit 版本，同時支援 Apple silicon 與 Intel Mac。
+- macOS 指定時間、單調倒數延遲、三秒位置擷取、單擊／雙擊、即時時鐘、取消及 `F8` 緊急停止。
+- macOS 輔助使用權限檢查、逾期五秒取消、完整顯示器配置快照比對及座標防誤點機制。
+- 零第三方套件的 universal app 建置、測試、ad-hoc 簽章、ZIP 封裝與 SHA-256 腳本。
+- GitHub Actions 的 Windows 回歸測試與真實 macOS runner 建置／測試／安全驗證。
+
+### Changed
+
+- README、Security、Verification、GitHub Pages、結構化資料、AI 可讀摘要與社群預覽更新為 Windows + macOS。
+
+### Security
+
+- 兩個平台都維持本機運作，沒有網路、遙測、帳號、持久化或第三方執行期套件。
+- macOS 滑鼠控制必須由使用者在系統設定明確授予輔助使用權限。
+
 ## [1.0.0] - 2026-08-26
 
 ### Added

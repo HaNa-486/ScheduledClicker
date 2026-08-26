@@ -4,6 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-63d8cd.svg)](LICENSE)
 [![Windows 11](https://img.shields.io/badge/Windows-11-58a6ff.svg)](https://github.com/HaNa-486/ScheduledClicker/releases/latest)
 
+![ScheduledClicker — Windows 11 Scheduled Auto Clicker](docs/social-preview.png)
+
 **Website:** [hana-486.github.io/ScheduledClicker](https://hana-486.github.io/ScheduledClicker/)
 
 ScheduledClicker is a free, open-source Windows 11 utility that performs one single or double mouse click at a specific future time or after a delay. It is a portable, local-only C# WinForms app with no ads, accounts, telemetry, network access, or third-party packages.
@@ -23,6 +25,24 @@ It was created for workflows such as sending a prepared Codex message after the 
 ## Download
 
 Download the latest Windows executable from [GitHub Releases](https://github.com/HaNa-486/ScheduledClicker/releases/latest). The executable is not commercially code-signed, so Windows SmartScreen may show a warning. Compare its SHA-256 value with [`VERIFICATION.md`](VERIFICATION.md) or build it from source.
+
+## Frequently asked questions
+
+### What is ScheduledClicker?
+
+ScheduledClicker is a free Windows 11 scheduled auto clicker for one timed single or double mouse click at a captured screen position.
+
+### Can it continue a Codex session after usage resets?
+
+Yes. Prepare the message in the same Codex session, keep the window in place, and schedule the click shortly after the reset time displayed by Codex. It does not detect or bypass limits.
+
+### Is ScheduledClicker safe?
+
+The app has no network, telemetry, account, or persistence features and uses no third-party packages. Fixed-coordinate automation can still misclick if a window moves, so test a harmless target first and avoid irreversible actions.
+
+### Is it free and open source?
+
+Yes. The source and executable are published under the permissive MIT License.
 
 ---
 

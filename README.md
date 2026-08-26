@@ -1,4 +1,32 @@
-# 定時滑鼠點擊器
+# ScheduledClicker — Windows 11 Scheduled Auto Clicker
+
+[![Release](https://img.shields.io/github/v/release/HaNa-486/ScheduledClicker?label=release)](https://github.com/HaNa-486/ScheduledClicker/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-63d8cd.svg)](LICENSE)
+[![Windows 11](https://img.shields.io/badge/Windows-11-58a6ff.svg)](https://github.com/HaNa-486/ScheduledClicker/releases/latest)
+
+**Website:** [hana-486.github.io/ScheduledClicker](https://hana-486.github.io/ScheduledClicker/)
+
+ScheduledClicker is a free, open-source Windows 11 utility that performs one single or double mouse click at a specific future time or after a delay. It is a portable, local-only C# WinForms app with no ads, accounts, telemetry, network access, or third-party packages.
+
+It was created for workflows such as sending a prepared Codex message after the usage reset time shown in the app. ScheduledClicker does **not** detect, bypass, reset, or increase any ChatGPT or Codex limit—it only performs an ordinary mouse click at the time you choose.
+
+## Key features
+
+- Schedule one click at an exact future date and time.
+- Schedule one click after a seconds, minutes, or hours delay.
+- Choose single click or double click at a captured screen coordinate.
+- View a live clock, countdown, confirmation, completion, and error states.
+- Cancel on screen or use `F8` when the global hotkey is available.
+- Run as a single portable Windows executable with no installer.
+- Review the complete C# source, security notes, tests, and SHA-256 report.
+
+## Download
+
+Download the latest Windows executable from [GitHub Releases](https://github.com/HaNa-486/ScheduledClicker/releases/latest). The executable is not commercially code-signed, so Windows SmartScreen may show a warning. Compare its SHA-256 value with [`VERIFICATION.md`](VERIFICATION.md) or build it from source.
+
+---
+
+## 定時滑鼠點擊器
 
 給 Windows 11 使用的免安裝小工具，可在指定時間或一段延遲後，把滑鼠移到預先擷取的位置並執行單擊或雙擊。畫面會持續顯示目前時間與排程倒數。
 

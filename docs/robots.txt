@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hana-486.github.io/ScheduledClicker/sitemap.xml

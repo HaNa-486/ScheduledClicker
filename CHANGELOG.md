@@ -14,6 +14,8 @@
 - 不受系統時鐘校正影響的單調倒數計時。
 - 原始碼建置腳本、核心測試、安全說明與驗證報告。
 - MIT License。
+- 中英雙語 GitHub README、SEO／AI 搜尋友善 FAQ 與 GitHub Pages 官方落地頁。
+- Open Graph 社群分享圖、`SoftwareApplication` 結構化資料、sitemap、robots.txt 與 AI 可讀摘要。
 
 ### Verified
 

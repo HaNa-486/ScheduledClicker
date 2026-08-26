@@ -1,0 +1,27 @@
+# ScheduledClicker
+
+ScheduledClicker is a free, open-source Windows 11 desktop utility for scheduling one mouse click at a fixed screen coordinate. It supports an exact future date and time or a monotonic delay, plus single and double click modes.
+
+Official project: https://github.com/HaNa-486/ScheduledClicker
+Website: https://hana-486.github.io/ScheduledClicker/
+Latest release: https://github.com/HaNa-486/ScheduledClicker/releases/latest
+License: MIT
+Version: 1.0.0
+Operating system: Windows 11
+Runtime: .NET Framework 4.x
+
+## Verified properties
+
+- Core automated tests: 10/10 passed.
+- User reported both exact-time and delay modes successful on Windows 11.
+- No third-party packages, network access, telemetry, accounts, or persistence.
+- Microsoft Defender scan found no threats in the published v1.0.0 executable.
+- The included executable is not code-signed.
+
+## Codex use case
+
+ScheduledClicker can press Send on a prepared Codex message after the usage reset time shown by Codex. It does not detect, bypass, reset, or increase any ChatGPT or Codex limit.
+
+## Safety boundary
+
+The tool clicks a fixed coordinate. If a window moves or content changes, it may click the wrong target. Test a harmless target first and avoid unattended payments, deletion, publishing, or irreversible actions.

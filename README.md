@@ -5,7 +5,7 @@
 [![Windows 11](https://img.shields.io/badge/Windows-11-58a6ff.svg)](https://github.com/HaNa-486/ScheduledClicker/releases/latest)
 [![macOS 13+](https://img.shields.io/badge/macOS-13%2B-9aa4b2.svg)](https://github.com/HaNa-486/ScheduledClicker/releases/latest)
 
-![ScheduledClicker — Windows and macOS Scheduled Auto Clicker](docs/social-preview.png)
+![ScheduledClicker — Windows and macOS Scheduled Auto Clicker](docs/social-preview.jpg)
 
 **Website:** [hana-486.github.io/ScheduledClicker](https://hana-486.github.io/ScheduledClicker/)
 

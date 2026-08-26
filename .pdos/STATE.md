@@ -3,15 +3,15 @@
 Keep this concise. Every fresh PDOS context reads it first.
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 3
+- State revision: 4
 - Updated: 2026-08-26
 - State confidence: high for source/build and user-reported Windows 11 journeys; mixed-DPI combinations remain partially verified
-- Phase: ready for owner GitHub push
+- Phase: pushed to owner GitHub repository
 
 ## Repository identity
 
-- Branch: master
-- Observed commit: 2f160c81c0fd78a7a161d4e08af5aa04bd1ad41b
+- Branch: main
+- Observed commit: 80747083ccbaf061dbae8124c8ecd5dedd9d4a2e
 
 ## Product anchors
 
@@ -22,12 +22,12 @@ Keep this concise. Every fresh PDOS context reads it first.
 
 ## Current work
 
-- Current slice: v1.0 public-repository documentation, MIT licensing, and pre-push audit
+- Current slice: v1.0 pushed to GitHub main branch
 - Active workstreams: see `workstreams/`
 - Active review:
 - Active remediations:
 - Blocking dependencies: none for owner-controlled GitHub push
-- Consequential open decisions: repository visibility and GitHub publication remain owner-controlled; code signing is optional future work
+- Consequential open decisions: repository visibility, GitHub Release creation, and code signing remain owner-controlled
 
 ## Handoff
 
@@ -35,7 +35,7 @@ Keep this concise. Every fresh PDOS context reads it first.
 - Verification evidence: VERIFICATION.md; 10/10 core tests; startup smoke pass; Defender no threats; independent review fixes; user reported both absolute and delay modes successful on Windows 11
 - Not verified: every mixed-DPI multi-monitor combination
 - Residual risks: unsigned executable; fixed coordinates can target changed UI; UIPI blocks higher-integrity windows
-- Next safe action: owner reviews repository visibility, adds the intended GitHub remote, and pushes the clean branch
+- Next safe action: owner reviews the GitHub repository page and optionally creates a signed or unsigned v1.0.0 Release
 
 ## Read next
 

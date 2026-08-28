@@ -31,15 +31,17 @@ SHA-256：`5215937ABDF90DB24167B217F199FCE221B275438F1F1B027AB8A787B0706C13`
 - 目標：macOS 13 Ventura 或更新版本，universal `arm64` + `x86_64` app。
 - 原始碼：Apple Swift、AppKit 與 ApplicationServices，沒有第三方套件。
 - 使用者實機證據：2026-08-28 於 MacBook Air 確認 v1.1.0 排程功能可用；同時提供深色外觀截圖，證明固定淺色背景造成白字白底。v1.1.1 針對此缺陷改用 AppKit 語意背景色並重整表單。
-- CI：待 v1.1.1 候選 commit 的 GitHub-hosted macOS 15 runner 完成後補入。
+- CI：[`Build and test` run 33139685219](https://github.com/HaNa-486/ScheduledClicker/actions/runs/33139685219)，候選 commit `c6ed3e6f4a41aad3c15a34311adc5e02ccffaaa4`，Windows 與 macOS jobs 均成功。
 - macOS 核心測試：21/21 通過，涵蓋驗證、單調倒數、系統時鐘變動、排程、執行、取消、重新排程、逾期拒絕、顯示器配置變更及原生點擊失敗。
-- 介面外觀測試：v1.1.1 建置會分別以 Aqua 與 Dark Aqua 啟動 AppKit 視窗，檢查主要／次要文字對比以及指定時間／倒數延遲欄位可見性；CI 結果待補。
+- 介面外觀測試：通過；v1.1.1 分別以 `NSAppearanceNameAqua` 與 `NSAppearanceNameDarkAqua` 啟動 AppKit 視窗，主要文字對比至少 4.5:1、次要文字至少 3:1，且指定時間／倒數延遲欄位可見性檢查通過。
+- 介面視覺檢查：CI 保存淺色與深色實際渲染 PNG；人工檢查確認標題、說明、時鐘、卡片、時間／位置控制、主按鈕、停用的取消按鈕與狀態文字在兩種外觀下皆可辨識。此項仍不取代使用者 MacBook Air 的最終確認。
 - 安全自我檢查：通過；runner 可讀取顯示器與游標位置，並成功建立單擊 3 事件與雙擊 5 事件序列，但自我檢查不會送出事件。
 - 架構：`x86_64 arm64`，同一個 app 同時支援 Intel 與 Apple silicon。
 - plist：`plutil -lint` 通過。
 - ad-hoc 簽章：`codesign --verify --deep --strict` 通過，app 為 valid on disk 且符合 Designated Requirement；這不是 Apple Developer ID 簽章或 Apple 公證。
 - 封裝：ZIP 只包含 `ScheduledClicker.app`、執行檔、Info.plist、Resources 與 `_CodeSignature`。
-- macOS ZIP 大小與 SHA-256：待 v1.1.1 CI 候選成品產生後補入。
+- macOS ZIP 大小：120,446 bytes。
+- macOS ZIP SHA-256：`20090A3B1D2E8D823C3343031E530CA82FC1E0B3781BB5FCA2FCAC6A26CCF56B`；下載 CI artifact 後以 Windows `Get-FileHash` 二次核對，與 runner 產生的 `.sha256` 完全相符。
 - CI runner 不會取得使用者的輔助使用權限，因此刻意不注入真實滑鼠點擊。既有 v1.1.0 互動式點擊已由使用者實機確認；v1.1.1 的新版介面仍需使用者在自己的 Mac 做最後視覺確認。
 
-結論：Windows 1.1.1 已通過本機建置、10/10 核心測試、啟動煙霧測試、靜態能力檢查與 Defender 掃描。macOS 1.1.1 在 CI 與外觀測試完成前仍是候選狀態。未簽章／未公證、固定座標誤點、尚未完整覆蓋的 Windows 混合 DPI 組合，以及新版 macOS 介面尚待實機視覺確認，都是已知限制。
+結論：Windows 1.1.1 已通過本機建置、10/10 核心測試、啟動煙霧測試、靜態能力檢查與 Defender 掃描；macOS 1.1.1 已通過 21/21 核心測試、淺色／深色介面測試、安全自我檢查、universal 架構、plist、ad-hoc 簽章與封裝驗證。未簽章／未公證、固定座標誤點、尚未完整覆蓋的 Windows 混合 DPI 組合，以及新版 macOS 介面尚待實機視覺確認，都是已知限制。

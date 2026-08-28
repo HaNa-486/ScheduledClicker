@@ -86,7 +86,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Semantic colors keep the entire window readable in both Aqua and Dark Aqua.
         window.backgroundColor = .windowBackgroundColor
 
-        guard let content = window.contentView else { return }
+        let content = AppearanceBackgroundView(frame: window.contentView?.bounds ?? .zero)
+        content.autoresizingMask = [.width, .height]
+        window.contentView = content
         let title = label("定時滑鼠點擊器", frame: NSRect(x: 32, y: 654, width: 616, height: 34), size: 26, bold: true)
         let subtitle = label("在指定時間安全地執行一次滑鼠單擊或雙擊", frame: NSRect(x: 32, y: 625, width: 616, height: 22), color: .secondaryLabelColor)
         let clockCaption = label("目前時間", frame: NSRect(x: 34, y: 590, width: 100, height: 20), size: 12, bold: true, color: .secondaryLabelColor)
@@ -155,6 +157,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         armButton.toolTip = "檢查設定並啟動一次性排程"
         cancelButton.frame = NSRect(x: 446, y: 125, width: 210, height: 46)
         cancelButton.bezelStyle = .rounded
+        cancelButton.bezelColor = .controlBackgroundColor
+        cancelButton.contentTintColor = .secondaryLabelColor
         cancelButton.target = self
         cancelButton.action = #selector(cancelSchedule(_:))
         cancelButton.isEnabled = false
@@ -384,6 +388,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         clickType.isEnabled = enabled
         armButton.isEnabled = enabled
         cancelButton.isEnabled = !enabled
+        cancelButton.contentTintColor = enabled ? .secondaryLabelColor : .labelColor
         if enabled { updateModeState() }
         else {
             targetDate.isEnabled = false
@@ -494,5 +499,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         alert.informativeText = message
         alert.alertStyle = style
         alert.runModal()
+    }
+}
+
+private final class AppearanceBackgroundView: NSView {
+    override func draw(_ dirtyRect: NSRect) {
+        NSColor.windowBackgroundColor.setFill()
+        dirtyRect.fill()
+        super.draw(dirtyRect)
     }
 }

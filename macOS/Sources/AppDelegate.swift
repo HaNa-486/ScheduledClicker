@@ -93,7 +93,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         clockLabel.frame = NSRect(x: 32, y: 552, width: 616, height: 34)
         clockLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 23, weight: .semibold)
         clockLabel.textColor = .systemBlue
-        clockLabel.accessibilityLabel = "目前時間"
+        clockLabel.setAccessibilityLabel("目前時間")
         content.addSubview(title)
         content.addSubview(subtitle)
         content.addSubview(clockCaption)
@@ -107,14 +107,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         timeMode.selectedSegment = 0
         timeMode.target = self
         timeMode.action = #selector(modeChanged(_:))
-        timeMode.accessibilityLabel = "時間模式"
+        timeMode.setAccessibilityLabel("時間模式")
         content.addSubview(timeMode)
 
         targetDate.frame = NSRect(x: 326, y: 421, width: 292, height: 30)
         targetDate.datePickerStyle = .textFieldAndStepper
         targetDate.datePickerElements = [.yearMonthDay, .hourMinuteSecond]
         targetDate.dateValue = Date().addingTimeInterval(60)
-        targetDate.accessibilityLabel = "指定執行時間"
+        targetDate.setAccessibilityLabel("指定執行時間")
         content.addSubview(targetDate)
 
         configureNumericField(delayHours, frame: NSRect(x: 326, y: 421, width: 56, height: 30), label: "倒數小時")
@@ -144,7 +144,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         content.addSubview(positionLabel)
         clickType.frame = NSRect(x: 468, y: 213, width: 150, height: 30)
         clickType.selectedSegment = 0
-        clickType.accessibilityLabel = "點擊方式"
+        clickType.setAccessibilityLabel("點擊方式")
         content.addSubview(clickType)
 
         armButton.frame = NSRect(x: 24, y: 125, width: 406, height: 46)
@@ -167,7 +167,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusLabel.frame = NSRect(x: 48, y: 38, width: 584, height: 34)
         statusLabel.font = NSFont.systemFont(ofSize: 14)
         statusLabel.textColor = .secondaryLabelColor
-        statusLabel.accessibilityLabel = "排程狀態"
+        statusLabel.setAccessibilityLabel("排程狀態")
         content.addSubview(statusLabel)
         updateModeState()
     }
@@ -176,7 +176,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let box = NSBox(frame: frame)
         box.boxType = .custom
         box.titlePosition = .noTitle
-        box.borderType = .lineBorder
         box.borderColor = .separatorColor
         box.borderWidth = 1
         box.cornerRadius = 12
@@ -195,7 +194,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func configureNumericField(_ field: NSTextField, frame: NSRect, label: String) {
         field.frame = frame
         field.alignment = .right
-        field.accessibilityLabel = label
+        field.setAccessibilityLabel(label)
     }
 
     @objc private func modeChanged(_ sender: NSSegmentedControl) {

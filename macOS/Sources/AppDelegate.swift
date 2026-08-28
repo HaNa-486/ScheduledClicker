@@ -43,7 +43,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         if CommandLine.arguments.contains("--ui-smoke-test") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self, self.validateUserInterface() else {
+                guard let self, self.validateUserInterface(), self.saveSmokeScreenshotIfRequested() else {
                     fputs("macOS UI smoke test failed: unreadable appearance or invalid mode visibility.\n", stderr)
                     exit(1)
                 }
@@ -448,6 +448,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 && contrastRatio(foreground: .labelColor, background: .controlBackgroundColor) >= 4.5
         }
         return absoluteModeIsValid && delayModeIsValid && readable
+    }
+
+    private func saveSmokeScreenshotIfRequested() -> Bool {
+        guard let argumentIndex = CommandLine.arguments.firstIndex(of: "--screenshot"),
+              CommandLine.arguments.indices.contains(argumentIndex + 1) else { return true }
+        guard let contentView = window.contentView,
+              let representation = contentView.bitmapImageRepForCachingDisplay(in: contentView.bounds) else { return false }
+        contentView.cacheDisplay(in: contentView.bounds, to: representation)
+        guard let data = representation.representation(using: .png, properties: [:]) else { return false }
+        do {
+            try data.write(to: URL(fileURLWithPath: CommandLine.arguments[argumentIndex + 1]), options: .atomic)
+            return true
+        } catch {
+            fputs("Unable to write UI smoke screenshot: \(error.localizedDescription)\n", stderr)
+            return false
+        }
     }
 
     private func contrastRatio(foreground: NSColor, background: NSColor) -> CGFloat {

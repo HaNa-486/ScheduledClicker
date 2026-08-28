@@ -50,8 +50,8 @@ swiftc \
 
 "$test_executable"
 "$executable" --self-test
-"$executable" --ui-smoke-test --appearance light
-"$executable" --ui-smoke-test --appearance dark
+"$executable" --ui-smoke-test --appearance light --screenshot "$build_root/ui-light.png"
+"$executable" --ui-smoke-test --appearance dark --screenshot "$build_root/ui-dark.png"
 plutil -lint "$app_root/Contents/Info.plist"
 test "$(lipo -archs "$executable")" = "x86_64 arm64" || test "$(lipo -archs "$executable")" = "arm64 x86_64"
 

@@ -3,15 +3,15 @@
 Keep this concise. Every fresh PDOS context reads it first.
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 12
+- State revision: 13
 - Updated: 2026-08-28
 - State confidence: high for source/build, cross-platform automated verification, user-reported Windows 11 and macOS click journeys, Aqua/Dark Aqua render evidence, and v1.1.2 three-digit clock animation on a physical MacBook Air
-- Phase: website navigation and download-contrast fix verified locally and ready for PR
+- Phase: website navigation and download-contrast fix deployed and publicly verified
 
 ## Repository identity
 
-- Branch: codex/site-navigation-contrast
-- Observed commit: 71b9a72801ec1f9d15dd39d5ff89c0529d0e51b4
+- Branch: main
+- Observed commit: 6606f51e971e39471ba2920a462bcaae160d6aed
 
 ## Product anchors
 
@@ -32,10 +32,10 @@ Keep this concise. Every fresh PDOS context reads it first.
 ## Handoff
 
 - What changed: normalized both navigation tiers on every page, added accurate current-page/focus states, exposed every detailed destination at narrow widths, restored high-contrast download-button text, and extended static regression checks to URLs and `aria-current`.
-- Verification evidence: eight-page site validator; desktop and 375 px browser journeys; no page overflow; all seven detailed destinations visible; download buttons measured at 10.10:1 minimum contrast with visible focus outline; independent re-review no findings.
+- Verification evidence: PR #1; candidate CI 33163921638/33163951291; main CI 33164047528; Pages deployment 33164047159; eight-page public-site crawl; desktop and 375 px browser journeys; no page overflow; all seven detailed destinations visible; download buttons measured at 10.10:1 minimum contrast with visible focus outline; independent re-review no findings.
 - Not verified: every Windows mixed-DPI combination; Google index inclusion/ranking timing
 - Residual risks: Windows is unsigned and macOS is ad-hoc signed/not notarized; fixed coordinates can target changed content even when display geometry is stable; Windows UIPI blocks higher-integrity targets; sleeping/locked desktops cannot click
-- Next safe action: open a PR, require GitHub CI success, merge with branch deletion, and verify the deployed Pages site
+- Next safe action: no website blocker remains; monitor real-user feedback and keep future site changes on the branch → PR → CI → review → merge path
 
 ## Read next
 

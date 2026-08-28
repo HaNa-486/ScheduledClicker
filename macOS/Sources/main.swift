@@ -30,6 +30,16 @@ if CommandLine.arguments.contains("--self-test") {
 }
 
 let application = NSApplication.shared
+if let appearanceIndex = CommandLine.arguments.firstIndex(of: "--appearance"),
+   CommandLine.arguments.indices.contains(appearanceIndex + 1) {
+    switch CommandLine.arguments[appearanceIndex + 1] {
+    case "dark": application.appearance = NSAppearance(named: .darkAqua)
+    case "light": application.appearance = NSAppearance(named: .aqua)
+    default:
+        fputs("Unknown appearance. Use light or dark.\n", stderr)
+        exit(2)
+    }
+}
 let delegate = AppDelegate()
 application.delegate = delegate
 application.setActivationPolicy(.regular)

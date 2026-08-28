@@ -13,8 +13,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let clockLabel = NSTextField(labelWithString: "")
     private let statusLabel = NSTextField(wrappingLabelWithString: "等待設定。")
     private let positionLabel = NSTextField(labelWithString: "尚未選擇位置")
-    private let absoluteMode = NSButton(radioButtonWithTitle: "指定時間", target: nil, action: nil)
-    private let delayMode = NSButton(radioButtonWithTitle: "倒數延遲", target: nil, action: nil)
+    private let timeMode = NSSegmentedControl(labels: ["指定時間", "倒數延遲"], trackingMode: .selectOne, target: nil, action: nil)
     private let targetDate = NSDatePicker()
     private let delayHours = NSTextField(string: "0")
     private let delayMinutes = NSTextField(string: "0")
@@ -23,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let captureButton = NSButton(title: "3 秒後擷取滑鼠位置", target: nil, action: nil)
     private let armButton = NSButton(title: "啟動排程", target: nil, action: nil)
     private let cancelButton = NSButton(title: "取消排程", target: nil, action: nil)
+    private var delayViews: [NSView] = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         buildMenu()
@@ -42,7 +42,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
 
         if CommandLine.arguments.contains("--ui-smoke-test") {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { NSApp.terminate(nil) }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self, self.validateUserInterface() else {
+                    fputs("macOS UI smoke test failed: unreadable appearance or invalid mode visibility.\n", stderr)
+                    exit(1)
+                }
+                print("macOS UI smoke test passed for \(self.window.effectiveAppearance.name.rawValue).")
+                NSApp.terminate(nil)
+            }
         }
     }
 
@@ -67,7 +74,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func buildWindow() {
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 610, height: 620),
+            contentRect: NSRect(x: 0, y: 0, width: 680, height: 720),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
@@ -75,64 +82,78 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window.title = "ScheduledClicker — 定時滑鼠點擊器"
         window.center()
         window.isReleasedWhenClosed = false
-        window.backgroundColor = NSColor(calibratedWhite: 0.97, alpha: 1)
+        // Never combine a fixed light background with dynamic system text colors.
+        // Semantic colors keep the entire window readable in both Aqua and Dark Aqua.
+        window.backgroundColor = .windowBackgroundColor
 
         guard let content = window.contentView else { return }
-        let title = label("定時滑鼠點擊器", frame: NSRect(x: 28, y: 548, width: 554, height: 34), size: 24, bold: true)
-        clockLabel.frame = NSRect(x: 28, y: 510, width: 554, height: 30)
-        clockLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 20, weight: .semibold)
+        let title = label("定時滑鼠點擊器", frame: NSRect(x: 32, y: 654, width: 616, height: 34), size: 26, bold: true)
+        let subtitle = label("在指定時間安全地執行一次滑鼠單擊或雙擊", frame: NSRect(x: 32, y: 625, width: 616, height: 22), color: .secondaryLabelColor)
+        let clockCaption = label("目前時間", frame: NSRect(x: 34, y: 590, width: 100, height: 20), size: 12, bold: true, color: .secondaryLabelColor)
+        clockLabel.frame = NSRect(x: 32, y: 552, width: 616, height: 34)
+        clockLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 23, weight: .semibold)
         clockLabel.textColor = .systemBlue
+        clockLabel.accessibilityLabel = "目前時間"
         content.addSubview(title)
+        content.addSubview(subtitle)
+        content.addSubview(clockCaption)
         content.addSubview(clockLabel)
 
-        content.addSubview(groupBox(title: "1. 選擇執行時間", frame: NSRect(x: 24, y: 330, width: 562, height: 168)))
-        absoluteMode.frame = NSRect(x: 45, y: 432, width: 100, height: 24)
-        delayMode.frame = NSRect(x: 45, y: 378, width: 100, height: 24)
-        absoluteMode.state = .on
-        absoluteMode.target = self
-        delayMode.target = self
-        absoluteMode.action = #selector(modeChanged(_:))
-        delayMode.action = #selector(modeChanged(_:))
-        content.addSubview(absoluteMode)
-        content.addSubview(delayMode)
+        content.addSubview(groupBox(frame: NSRect(x: 24, y: 344, width: 632, height: 194)))
+        content.addSubview(label("1. 何時執行？", frame: NSRect(x: 48, y: 493, width: 300, height: 24), size: 16, bold: true))
+        content.addSubview(label("選擇明確時間，或從現在開始倒數。", frame: NSRect(x: 48, y: 468, width: 420, height: 20), size: 13, color: .secondaryLabelColor))
 
-        targetDate.frame = NSRect(x: 170, y: 429, width: 270, height: 28)
+        timeMode.frame = NSRect(x: 48, y: 423, width: 250, height: 30)
+        timeMode.selectedSegment = 0
+        timeMode.target = self
+        timeMode.action = #selector(modeChanged(_:))
+        timeMode.accessibilityLabel = "時間模式"
+        content.addSubview(timeMode)
+
+        targetDate.frame = NSRect(x: 326, y: 421, width: 292, height: 30)
         targetDate.datePickerStyle = .textFieldAndStepper
         targetDate.datePickerElements = [.yearMonthDay, .hourMinuteSecond]
         targetDate.dateValue = Date().addingTimeInterval(60)
+        targetDate.accessibilityLabel = "指定執行時間"
         content.addSubview(targetDate)
 
-        configureNumericField(delayHours, frame: NSRect(x: 170, y: 374, width: 56, height: 28))
-        configureNumericField(delayMinutes, frame: NSRect(x: 275, y: 374, width: 56, height: 28))
-        configureNumericField(delaySeconds, frame: NSRect(x: 380, y: 374, width: 56, height: 28))
+        configureNumericField(delayHours, frame: NSRect(x: 326, y: 421, width: 56, height: 30), label: "倒數小時")
+        configureNumericField(delayMinutes, frame: NSRect(x: 421, y: 421, width: 56, height: 30), label: "倒數分鐘")
+        configureNumericField(delaySeconds, frame: NSRect(x: 516, y: 421, width: 56, height: 30), label: "倒數秒數")
         content.addSubview(delayHours)
         content.addSubview(delayMinutes)
         content.addSubview(delaySeconds)
-        content.addSubview(label("時", frame: NSRect(x: 232, y: 378, width: 24, height: 20)))
-        content.addSubview(label("分", frame: NSRect(x: 337, y: 378, width: 24, height: 20)))
-        content.addSubview(label("秒", frame: NSRect(x: 442, y: 378, width: 24, height: 20)))
-        content.addSubview(label("倒數最短 1 秒，最長 168 小時。", frame: NSRect(x: 170, y: 344, width: 300, height: 20), color: .secondaryLabelColor))
+        let hoursLabel = label("時", frame: NSRect(x: 388, y: 426, width: 24, height: 20))
+        let minutesLabel = label("分", frame: NSRect(x: 483, y: 426, width: 24, height: 20))
+        let secondsLabel = label("秒", frame: NSRect(x: 578, y: 426, width: 24, height: 20))
+        let delayHint = label("可設定 1 秒至 168 小時。", frame: NSRect(x: 326, y: 382, width: 292, height: 20), size: 12, color: .secondaryLabelColor)
+        [hoursLabel, minutesLabel, secondsLabel, delayHint].forEach { content.addSubview($0) }
+        delayViews = [delayHours, delayMinutes, delaySeconds, hoursLabel, minutesLabel, secondsLabel, delayHint]
 
-        content.addSubview(groupBox(title: "2. 選擇位置與點擊方式", frame: NSRect(x: 24, y: 177, width: 562, height: 138)))
-        captureButton.frame = NSRect(x: 44, y: 235, width: 205, height: 34)
+        content.addSubview(groupBox(frame: NSRect(x: 24, y: 190, width: 632, height: 136)))
+        content.addSubview(label("2. 要點哪裡？", frame: NSRect(x: 48, y: 281, width: 300, height: 24), size: 16, bold: true))
+        content.addSubview(label("擷取位置後，選擇單擊或雙擊。", frame: NSRect(x: 48, y: 256, width: 350, height: 20), size: 13, color: .secondaryLabelColor))
+        captureButton.frame = NSRect(x: 44, y: 211, width: 220, height: 34)
         captureButton.bezelStyle = .rounded
         captureButton.target = self
         captureButton.action = #selector(startCapture(_:))
-        positionLabel.frame = NSRect(x: 270, y: 242, width: 285, height: 22)
+        captureButton.toolTip = "按下後視窗會縮小，請在三秒內把滑鼠移到目標位置"
+        positionLabel.frame = NSRect(x: 282, y: 218, width: 175, height: 22)
         positionLabel.textColor = .secondaryLabelColor
         content.addSubview(captureButton)
         content.addSubview(positionLabel)
-        content.addSubview(label("點擊方式", frame: NSRect(x: 44, y: 197, width: 85, height: 22)))
-        clickType.frame = NSRect(x: 137, y: 194, width: 170, height: 28)
+        clickType.frame = NSRect(x: 468, y: 213, width: 150, height: 30)
         clickType.selectedSegment = 0
+        clickType.accessibilityLabel = "點擊方式"
         content.addSubview(clickType)
 
-        armButton.frame = NSRect(x: 24, y: 112, width: 271, height: 45)
+        armButton.frame = NSRect(x: 24, y: 125, width: 406, height: 46)
         armButton.bezelStyle = .rounded
         armButton.keyEquivalent = "\r"
         armButton.target = self
         armButton.action = #selector(armSchedule(_:))
-        cancelButton.frame = NSRect(x: 315, y: 112, width: 271, height: 45)
+        armButton.toolTip = "檢查設定並啟動一次性排程"
+        cancelButton.frame = NSRect(x: 446, y: 125, width: 210, height: 46)
         cancelButton.bezelStyle = .rounded
         cancelButton.target = self
         cancelButton.action = #selector(cancelSchedule(_:))
@@ -140,17 +161,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         content.addSubview(armButton)
         content.addSubview(cancelButton)
 
-        statusLabel.frame = NSRect(x: 36, y: 28, width: 538, height: 66)
+        let statusBox = groupBox(frame: NSRect(x: 24, y: 24, width: 632, height: 82))
+        content.addSubview(statusBox)
+        content.addSubview(label("狀態", frame: NSRect(x: 48, y: 72, width: 80, height: 20), size: 12, bold: true, color: .secondaryLabelColor))
+        statusLabel.frame = NSRect(x: 48, y: 38, width: 584, height: 34)
         statusLabel.font = NSFont.systemFont(ofSize: 14)
         statusLabel.textColor = .secondaryLabelColor
+        statusLabel.accessibilityLabel = "排程狀態"
         content.addSubview(statusLabel)
         updateModeState()
     }
 
-    private func groupBox(title: String, frame: NSRect) -> NSBox {
+    private func groupBox(frame: NSRect) -> NSBox {
         let box = NSBox(frame: frame)
-        box.title = title
-        box.boxType = .primary
+        box.boxType = .custom
+        box.titlePosition = .noTitle
+        box.borderType = .lineBorder
+        box.borderColor = .separatorColor
+        box.borderWidth = 1
+        box.cornerRadius = 12
         box.fillColor = .controlBackgroundColor
         return box
     }
@@ -163,23 +192,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return field
     }
 
-    private func configureNumericField(_ field: NSTextField, frame: NSRect) {
+    private func configureNumericField(_ field: NSTextField, frame: NSRect, label: String) {
         field.frame = frame
         field.alignment = .right
+        field.accessibilityLabel = label
     }
 
-    @objc private func modeChanged(_ sender: NSButton) {
-        absoluteMode.state = sender === absoluteMode ? .on : .off
-        delayMode.state = sender === delayMode ? .on : .off
+    @objc private func modeChanged(_ sender: NSSegmentedControl) {
         updateModeState()
     }
 
     private func updateModeState() {
-        targetDate.isEnabled = absoluteMode.state == .on
-        let delayEnabled = delayMode.state == .on
-        delayHours.isEnabled = delayEnabled
-        delayMinutes.isEnabled = delayEnabled
-        delaySeconds.isEnabled = delayEnabled
+        let useAbsoluteTime = timeMode.selectedSegment == 0
+        targetDate.isHidden = !useAbsoluteTime
+        targetDate.isEnabled = useAbsoluteTime
+        delayViews.forEach { $0.isHidden = useAbsoluteTime }
+        delayHours.isEnabled = !useAbsoluteTime
+        delayMinutes.isEnabled = !useAbsoluteTime
+        delaySeconds.isEnabled = !useAbsoluteTime
     }
 
     @objc private func startCapture(_ sender: Any?) {
@@ -229,7 +259,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        if absoluteMode.state == .on {
+        if timeMode.selectedSegment == 0 {
             plan = ScheduledClickPlan(targetDate: targetDate.dateValue, point: point, clickType: click, displaySnapshot: currentSnapshot)
         } else {
             guard let hours = boundedInteger(delayHours.stringValue, min: 0, max: 168),
@@ -350,8 +380,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func setInputsEnabled(_ enabled: Bool) {
-        absoluteMode.isEnabled = enabled
-        delayMode.isEnabled = enabled
+        timeMode.isEnabled = enabled
         captureButton.isEnabled = enabled
         clickType.isEnabled = enabled
         armButton.isEnabled = enabled
@@ -400,6 +429,43 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return "可按 F8（部分鍵盤需 Fn+F8）或取消排程停止。"
         }
         return "F8 監聽不可用，請用取消排程按鈕停止。"
+    }
+
+    private func validateUserInterface() -> Bool {
+        let originalMode = timeMode.selectedSegment
+        timeMode.selectedSegment = 0
+        updateModeState()
+        let absoluteModeIsValid = !targetDate.isHidden && delayViews.allSatisfy { $0.isHidden }
+        timeMode.selectedSegment = 1
+        updateModeState()
+        let delayModeIsValid = targetDate.isHidden && delayViews.allSatisfy { !$0.isHidden }
+        timeMode.selectedSegment = originalMode
+        updateModeState()
+
+        var readable = false
+        window.effectiveAppearance.performAsCurrentDrawingAppearance {
+            readable = contrastRatio(foreground: .labelColor, background: .windowBackgroundColor) >= 4.5
+                && contrastRatio(foreground: .secondaryLabelColor, background: .windowBackgroundColor) >= 3.0
+                && contrastRatio(foreground: .labelColor, background: .controlBackgroundColor) >= 4.5
+        }
+        return absoluteModeIsValid && delayModeIsValid && readable
+    }
+
+    private func contrastRatio(foreground: NSColor, background: NSColor) -> CGFloat {
+        guard let foreground = foreground.usingColorSpace(.sRGB),
+              let background = background.usingColorSpace(.sRGB) else { return 0 }
+        let lighter = max(relativeLuminance(foreground), relativeLuminance(background))
+        let darker = min(relativeLuminance(foreground), relativeLuminance(background))
+        return (lighter + 0.05) / (darker + 0.05)
+    }
+
+    private func relativeLuminance(_ color: NSColor) -> CGFloat {
+        func component(_ value: CGFloat) -> CGFloat {
+            value <= 0.04045 ? value / 12.92 : pow((value + 0.055) / 1.055, 2.4)
+        }
+        return 0.2126 * component(color.redComponent)
+            + 0.7152 * component(color.greenComponent)
+            + 0.0722 * component(color.blueComponent)
     }
 
     private func boundedInteger(_ value: String, min: Int, max: Int) -> Int? {

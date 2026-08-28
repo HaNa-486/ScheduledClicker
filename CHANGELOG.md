@@ -2,6 +2,22 @@
 
 本專案的重大變更會記錄在此。格式參考 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本採用 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [1.1.1] - 2026-08-28
+
+### Fixed
+
+- 修正 macOS 在深色外觀下因固定淺色背景搭配動態系統文字色，造成白字白底、欄位幾乎不可見的問題。
+
+### Changed
+
+- 重整 macOS 介面的標題、目前時間、時間模式、位置擷取、點擊方式、主要操作及狀態資訊層級。
+- 將時間模式改為分段選擇，並只顯示目前模式需要的指定時間或倒數欄位。
+- macOS 建置新增 Aqua 與 Dark Aqua 介面煙霧測試，檢查文字對比及兩種模式的欄位可見性。
+
+### Verified
+
+- 使用者已在 Windows 11 實機確認 v1.1.0 功能可用，並在 MacBook Air 確認 v1.1.0 的排程功能可用；macOS 深色模式介面缺陷由本版修正。
+
 ## [1.1.0] - 2026-08-26
 
 ### Added

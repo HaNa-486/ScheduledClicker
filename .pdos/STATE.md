@@ -3,15 +3,15 @@
 Keep this concise. Every fresh PDOS context reads it first.
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 11
+- State revision: 12
 - Updated: 2026-08-28
 - State confidence: high for source/build, cross-platform automated verification, user-reported Windows 11 and macOS click journeys, Aqua/Dark Aqua render evidence, and v1.1.2 three-digit clock animation on a physical MacBook Air
-- Phase: v1.1.2 published and public assets/pages verified
+- Phase: website navigation and download-contrast fix verified locally and ready for PR
 
 ## Repository identity
 
-- Branch: main
-- Observed commit: bee4fa37f37b2acf87faf0b6e2421c7c8233482a
+- Branch: codex/site-navigation-contrast
+- Observed commit: 71b9a72801ec1f9d15dd39d5ff89c0529d0e51b4
 
 ## Product anchors
 
@@ -22,25 +22,26 @@ Keep this concise. Every fresh PDOS context reads it first.
 
 ## Current work
 
-- Current slice: v1.1.2 published with macOS millisecond animation fix and eight focused, validated discovery pages
+- Current slice: consistent two-tier navigation and readable download calls to action across all eight discovery pages
 - Active workstreams: see `workstreams/`
-- Active review: `reviews/REV-20260828-clock-release-discovery.md` closed; independent release review found no remaining findings
-- Active remediations: F001 clock, F002 release formatting, and F003 discovery are verified
+- Active review: `reviews/REV-20260828-site-navigation-contrast.md` closed; independent final re-review found no remaining findings
+- Active remediations: navigation F001 and download-contrast F002 are verified
 - Blocking dependencies: macOS real pointer injection requires a Mac owner to grant Accessibility permission; Apple notarization requires an Apple Developer ID and owner credentials
 - Consequential open decisions: Apple Developer ID signing/notarization, external community promotion, and future Windows code signing remain owner-controlled
 
 ## Handoff
 
-- What changed: raised the macOS clock UI to about 30 Hz with cached formatters and sub-hundredth smoke validation; corrected v1.1.1 Release formatting and GitHub metadata; added platform, Codex, safety, download, FAQ, and changelog pages with real UI renders, schema, sitemap, and AI summaries
-- Verification evidence: VERIFICATION.md; candidate CI 33143381799/33143876718 and main CI 33155119817; Windows 10/10 and macOS 21/21; Aqua/Dark Aqua and clock-animation smoke tests; universal/codesign/archive/SHA-256; site validator; Defender; independent review no findings; public assets re-hashed; live Pages crawl 200
+- What changed: normalized both navigation tiers on every page, added accurate current-page/focus states, exposed every detailed destination at narrow widths, restored high-contrast download-button text, and extended static regression checks to URLs and `aria-current`.
+- Verification evidence: eight-page site validator; desktop and 375 px browser journeys; no page overflow; all seven detailed destinations visible; download buttons measured at 10.10:1 minimum contrast with visible focus outline; independent re-review no findings.
 - Not verified: every Windows mixed-DPI combination; Google index inclusion/ranking timing
 - Residual risks: Windows is unsigned and macOS is ad-hoc signed/not notarized; fixed coordinates can target changed content even when display geometry is stable; Windows UIPI blocks higher-integrity targets; sleeping/locked desktops cannot click
-- Next safe action: no release blocker remains; Google indexing/ranking is external and asynchronous, while commercial signing/notarization remains an optional owner decision
+- Next safe action: open a PR, require GitHub CI success, merge with branch deletion, and verify the deployed Pages site
 
 ## Read next
 
 - `AUTONOMY.md` - project decision boundaries
 - `specs/product.md` - product anchors and scope
 - `plans/active.md` - current implementation plan
-- `reviews/REV-20260828-clock-release-discovery.md` - verified findings and evidence
-- `remediations/REM-20260828-clock-release-discovery-F001.md` - verified clock fix lifecycle
+- `reviews/REV-20260828-site-navigation-contrast.md` - verified website findings and evidence
+- `remediations/REM-20260828-site-navigation-contrast-F001.md` - verified navigation lifecycle
+- `remediations/REM-20260828-site-navigation-contrast-F002.md` - verified contrast lifecycle

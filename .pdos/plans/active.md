@@ -9,3 +9,4 @@
 | macOS 深色模式 UX | v1.1.1 在 Aqua／Dark Aqua 都清楚可讀，並簡化時間模式與狀態層級 | 動態色彩、固定框架、實機視覺差異 | CI run 33139685219：兩種外觀啟動、對比／欄位可見性、實際 PNG 人工檢查；獨立審查無阻擋項目 | completed |
 | 跨平台文件與探索 | README、安全說明、網站與 AI/社群 metadata 正確反映雙平台 | 過度宣稱互動式實機證據 | CI 證據與未驗證項目分開揭露；Google metadata 靜態檢查 | completed |
 | v1.1.2 時鐘與探索維護 | macOS 三位毫秒自然更新；跨平台搜尋與 AI 文件完整 | UI timer 合併、搜尋過度宣稱 | CI 33143381799／33143876718、8 頁 validator、獨立 release review | completed |
+| 網站導覽與下載可讀性 | 8 個頁面使用一致導覽，下載按鈕在所有狀態清楚可讀 | 靜態頁面分散維護、CSS specificity | URL/current-page validator、桌面與 375 px 瀏覽器旅程、10.10:1 對比、獨立 re-review | completed |

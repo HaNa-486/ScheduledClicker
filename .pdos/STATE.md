@@ -3,15 +3,15 @@
 Keep this concise. Every fresh PDOS context reads it first.
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 7
+- State revision: 8
 - Updated: 2026-08-28
 - State confidence: high for source/build, cross-platform automated verification, user-reported Windows 11 and macOS click journeys, and Aqua/Dark Aqua render evidence; v1.1.1 physical-Mac visual confirmation remains pending
-- Phase: v1.1.1 macOS dark-mode UX patch verified and ready for authorized publication
+- Phase: v1.1.1 macOS dark-mode UX patch published
 
 ## Repository identity
 
-- Branch: codex/macos-ui-1.1.1
-- Observed commit: c6ed3e6f4a41aad3c15a34311adc5e02ccffaaa4
+- Branch: main
+- Observed commit: 94da9bc03a52baa9430cc5c1b6970eea34d05f00
 
 ## Product anchors
 
@@ -22,7 +22,7 @@ Keep this concise. Every fresh PDOS context reads it first.
 
 ## Current work
 
-- Current slice: v1.1.1 fixes the macOS Dark Aqua white-on-white defect, improves scheduling UX, and updates release/SEO evidence
+- Current slice: v1.1.1 release published with the macOS Dark Aqua fix, improved scheduling UX, appearance evidence, and updated SEO/AI metadata
 - Active workstreams: see `workstreams/`
 - Active review: `reviews/REV-20260828-macos-dark-mode-ux.md` verified
 - Active remediations: `remediations/REM-20260828-macos-dark-mode-ux-F001.md` verified
@@ -31,11 +31,11 @@ Keep this concise. Every fresh PDOS context reads it first.
 
 ## Handoff
 
-- What changed: replaced the fixed macOS light background with adaptive AppKit rendering, simplified the time-mode selector and conditional fields, improved hierarchy/status/accessibility, added Aqua/Dark Aqua contrast/visibility smoke tests and PNG capture, bumped v1.1.1 metadata, and updated README/CHANGELOG/site/AI metadata
-- Verification evidence: VERIFICATION.md; candidate CI run 33139685219; Windows 10/10 and macOS 21/21 tests; Aqua/Dark Aqua smoke tests and human PNG review; macOS self-test/plist/universal-architecture/ad-hoc-codesign/archive/SHA-256 checks; Defender no matching Windows threat; independent release review found no blocking issue
+- What changed: replaced the fixed macOS light background with adaptive AppKit rendering, simplified the time-mode selector and conditional fields, improved hierarchy/status/accessibility, added Aqua/Dark Aqua contrast/visibility smoke tests and PNG capture, published v1.1.1 assets, and updated README/CHANGELOG/site/AI metadata
+- Verification evidence: VERIFICATION.md; candidate CI run 33139685219 and main CI run 33139950734; Windows 10/10 and macOS 21/21 tests; Aqua/Dark Aqua smoke tests and human PNG review; universal/codesign/archive/SHA-256 checks; Defender no matching Windows threat; independent release review found no blocking issue; public assets downloaded and re-hashed
 - Not verified: v1.1.1 visual confirmation on the user's physical MacBook Air; every Windows mixed-DPI combination; Google index inclusion timing
 - Residual risks: Windows is unsigned and macOS is ad-hoc signed/not notarized; fixed coordinates can target changed content even when display geometry is stable; Windows UIPI blocks higher-integrity targets; sleeping/locked desktops cannot click
-- Next safe action: publish the user-authorized v1.1.1 release using the reviewed macOS artifact, then ask the user to confirm the new UI on the same MacBook Air
+- Next safe action: ask the user to download v1.1.1 and confirm both time modes and the new Dark appearance on the same MacBook Air
 
 ## Read next
 

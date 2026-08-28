@@ -45,3 +45,8 @@ SHA-256：`5215937ABDF90DB24167B217F199FCE221B275438F1F1B027AB8A787B0706C13`
 - CI runner 不會取得使用者的輔助使用權限，因此刻意不注入真實滑鼠點擊。既有 v1.1.0 互動式點擊已由使用者實機確認；v1.1.1 的新版介面仍需使用者在自己的 Mac 做最後視覺確認。
 
 結論：Windows 1.1.1 已通過本機建置、10/10 核心測試、啟動煙霧測試、靜態能力檢查與 Defender 掃描；macOS 1.1.1 已通過 21/21 核心測試、淺色／深色介面測試、安全自我檢查、universal 架構、plist、ad-hoc 簽章與封裝驗證。未簽章／未公證、固定座標誤點、尚未完整覆蓋的 Windows 混合 DPI 組合，以及新版 macOS 介面尚待實機視覺確認，都是已知限制。
+
+## 發布後核對
+
+- 公開 Release：[`v1.1.1`](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.1.1)，非草稿、非預發布版，標籤指向 commit `94da9bc03a52baa9430cc5c1b6970eea34d05f00`。
+- 已從公開 Release 重新下載三個資產；GitHub 資產 digest 與本機重算結果確認 Windows EXE SHA-256 為 `5215937ABDF90DB24167B217F199FCE221B275438F1F1B027AB8A787B0706C13`，macOS ZIP 為 `20090A3B1D2E8D823C3343031E530CA82FC1E0B3781BB5FCA2FCAC6A26CCF56B`。

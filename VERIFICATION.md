@@ -51,3 +51,10 @@ SHA-256：`53305CD519464945E31279DE2BB13ECF6B9E140408A8DD37A13F8A240CD42B97`
 
 - 公開 Release：[`v1.1.1`](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.1.1)，非草稿、非預發布版，標籤指向 commit `94da9bc03a52baa9430cc5c1b6970eea34d05f00`。
 - 已從公開 Release 重新下載三個資產；GitHub 資產 digest 與本機重算結果確認 Windows EXE SHA-256 為 `5215937ABDF90DB24167B217F199FCE221B275438F1F1B027AB8A787B0706C13`，macOS ZIP 為 `20090A3B1D2E8D823C3343031E530CA82FC1E0B3781BB5FCA2FCAC6A26CCF56B`。
+
+## v1.1.2 發布後核對
+
+- 公開 Release：[`v1.1.2`](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.1.2)，非草稿、非預發布版，標籤指向 commit `bee4fa37f37b2acf87faf0b6e2421c7c8233482a`。
+- main 正式 CI：[`Build and test` run 33155119817](https://github.com/HaNa-486/ScheduledClicker/actions/runs/33155119817)，Windows 與 macOS jobs 均成功。
+- 已從公開 Release 重新下載全部三個資產；GitHub asset digest 與本機 SHA-256 一致：Windows EXE `53305CD519464945E31279DE2BB13ECF6B9E140408A8DD37A13F8A240CD42B97`、macOS ZIP `B7513F075E235A876D3417D84E62CC5C1FF957C24C22004D7B4C4090E92DF0E2`、checksum 文字檔 `691605B4B4D5ABC29ECB0A56539036411EFDA6B63E605D4A707D7671E309A107`。
+- GitHub Pages run `33155119176` 成功；8 個 HTML 頁面、Sitemap、`llms.txt`、`llms-full.txt` 與三張真實介面圖的公開 URL 均回傳 HTTP 200，首頁版本為 1.1.2，Sitemap 包含 8 個 canonical URL。

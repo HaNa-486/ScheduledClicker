@@ -18,5 +18,5 @@
 
 - What changed: Implemented 30 Hz common-mode clock with sub-hundredth smoke validation; corrected public v1.1.1 notes and GitHub metadata; added seven focused discovery pages, real UI images, structured data, sitemap coverage, AI summaries, and a CI site validator.
 - Verification: Windows 10/10, launch smoke, static sensitive-capability scan, Defender, site validation, diff checks, macOS 21/21, Aqua/Dark Aqua, clock animation, universal architecture, signing, packaging, and independent review passed.
-- Residual risks: Search inclusion is not guaranteed; physical-Mac animation needs final confirmation.
+- Residual risks: Search inclusion is not guaranteed; unsigned Windows and non-notarized macOS downloads may show platform warnings.
 - Next safe action: Merge verified candidate to main and publish v1.1.2 only after final main CI passes.

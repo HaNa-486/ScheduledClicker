@@ -3,9 +3,9 @@
 Keep this concise. Every fresh PDOS context reads it first.
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 10
+- State revision: 11
 - Updated: 2026-08-28
-- State confidence: high for source/build, cross-platform automated verification, user-reported Windows 11 and macOS click journeys, and Aqua/Dark Aqua render evidence; v1.1.2 clock animation physical-Mac confirmation remains pending
+- State confidence: high for source/build, cross-platform automated verification, user-reported Windows 11 and macOS click journeys, Aqua/Dark Aqua render evidence, and v1.1.2 three-digit clock animation on a physical MacBook Air
 - Phase: v1.1.2 published and public assets/pages verified
 
 ## Repository identity
@@ -33,9 +33,9 @@ Keep this concise. Every fresh PDOS context reads it first.
 
 - What changed: raised the macOS clock UI to about 30 Hz with cached formatters and sub-hundredth smoke validation; corrected v1.1.1 Release formatting and GitHub metadata; added platform, Codex, safety, download, FAQ, and changelog pages with real UI renders, schema, sitemap, and AI summaries
 - Verification evidence: VERIFICATION.md; candidate CI 33143381799/33143876718 and main CI 33155119817; Windows 10/10 and macOS 21/21; Aqua/Dark Aqua and clock-animation smoke tests; universal/codesign/archive/SHA-256; site validator; Defender; independent review no findings; public assets re-hashed; live Pages crawl 200
-- Not verified: v1.1.2 clock animation on the user's physical MacBook Air; every Windows mixed-DPI combination; Google index inclusion/ranking timing
+- Not verified: every Windows mixed-DPI combination; Google index inclusion/ranking timing
 - Residual risks: Windows is unsigned and macOS is ad-hoc signed/not notarized; fixed coordinates can target changed content even when display geometry is stable; Windows UIPI blocks higher-integrity targets; sleeping/locked desktops cannot click
-- Next safe action: ask the user to test v1.1.2 clock animation on the same MacBook Air; Google indexing and ranking remain external and asynchronous
+- Next safe action: no release blocker remains; Google indexing/ranking is external and asynchronous, while commercial signing/notarization remains an optional owner decision
 
 ## Read next
 

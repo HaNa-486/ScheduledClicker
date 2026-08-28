@@ -5,6 +5,8 @@ $pages = @(Get-ChildItem -LiteralPath $docsRoot -Filter index.html -File -Recurs
 if ($pages.Count -ne 8) { throw "Expected 8 indexable HTML pages, found $($pages.Count)." }
 
 $canonicalUrls = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+$titles = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+$descriptions = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 foreach ($page in $pages) {
     $html = Get-Content -LiteralPath $page.FullName -Raw
     foreach ($requiredPattern in @(
@@ -20,6 +22,10 @@ foreach ($page in $pages) {
 
     $canonical = [regex]::Match($html, '<link rel="canonical" href="([^"]+)">').Groups[1].Value
     if (-not $canonicalUrls.Add($canonical)) { throw "Duplicate canonical URL: $canonical" }
+    $title = [regex]::Match($html, '<title>([^<]+)</title>').Groups[1].Value
+    if (-not $titles.Add($title)) { throw "Duplicate page title: $title" }
+    $description = [regex]::Match($html, '<meta name="description" content="([^"]+)">').Groups[1].Value
+    if (-not $descriptions.Add($description)) { throw "Duplicate meta description: $description" }
 
     foreach ($jsonMatch in [regex]::Matches($html, '<script type="application/ld\+json">(.+?)</script>', 'Singleline')) {
         $null = $jsonMatch.Groups[1].Value | ConvertFrom-Json

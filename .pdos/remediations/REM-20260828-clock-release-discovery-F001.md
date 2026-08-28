@@ -2,11 +2,11 @@
 
 - Remediation ID: REM-20260828-clock-release-discovery-F001
 - Review finding: reviews/REV-20260828-clock-release-discovery.md#F-001
-- Status: in_progress
+- Status: verified
 - Severity: medium
 - Autonomy class: auto-decide
 - Owner: Codex
-- Updated: 2026-08-28T04:35:00Z
+- Updated: 2026-08-28T05:04:12Z
 - Decision authority: User supplied physical-Mac evidence and requested all in-scope fixes.
 - Reason: Three displayed millisecond digits require a refresh cadence finer than 100 ms.
 - Revisit condition: Reopen if macOS CI fails or physical-Mac animation remains misleading.
@@ -21,10 +21,12 @@
 ## Evidence
 
 - Implementation: In progress.
-- Verification: Pending.
+- Verification: GitHub Actions run 33143381799 passed Windows and macOS jobs, including both appearance smoke tests, sub-hundredth clock variation, 21 macOS core tests, universal architecture, signature, archive, and SHA-256 checks.
 - Residual risk: Run-loop coalescing can still skip visual frames without affecting the scheduler.
 
 ## History
 
 - 2026-08-28T04:35:00Z in_progress: physical-Mac report accepted and fix started.
 
+- 2026-08-28T05:03:59Z implemented: Implemented a 30 Hz common-mode timer, cached formatters, and sub-hundredth animation smoke validation; candidate CI 33143381799 passed both Aqua and Dark Aqua UI tests..
+- 2026-08-28T05:04:12Z verified: GitHub Actions run 33143381799 passed Windows and macOS jobs, including both appearance smoke tests, sub-hundredth clock variation, 21 macOS core tests, universal architecture, signature, archive, and SHA-256 checks..

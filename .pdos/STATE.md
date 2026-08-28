@@ -3,15 +3,15 @@
 Keep this concise. Every fresh PDOS context reads it first.
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 8
+- State revision: 9
 - Updated: 2026-08-28
-- State confidence: high for source/build, cross-platform automated verification, user-reported Windows 11 and macOS click journeys, and Aqua/Dark Aqua render evidence; v1.1.1 physical-Mac visual confirmation remains pending
-- Phase: v1.1.1 macOS dark-mode UX patch published
+- State confidence: high for source/build, cross-platform automated verification, user-reported Windows 11 and macOS click journeys, and Aqua/Dark Aqua render evidence; v1.1.2 clock animation physical-Mac confirmation remains pending
+- Phase: v1.1.2 release candidate verified and ready to merge
 
 ## Repository identity
 
-- Branch: main
-- Observed commit: 94da9bc03a52baa9430cc5c1b6970eea34d05f00
+- Branch: codex/clock-seo-1.1.2
+- Observed commit: 12fd98cb89c11a12f63c0a8f5c2544e00c06fab5
 
 ## Product anchors
 
@@ -22,25 +22,25 @@ Keep this concise. Every fresh PDOS context reads it first.
 
 ## Current work
 
-- Current slice: v1.1.1 release published with the macOS Dark Aqua fix, improved scheduling UX, appearance evidence, and updated SEO/AI metadata
+- Current slice: v1.1.2 candidate fixes macOS millisecond animation and expands the project into eight focused, validated discovery pages
 - Active workstreams: see `workstreams/`
-- Active review: `reviews/REV-20260828-macos-dark-mode-ux.md` verified
-- Active remediations: `remediations/REM-20260828-macos-dark-mode-ux-F001.md` verified
+- Active review: `reviews/REV-20260828-clock-release-discovery.md` closed; independent release review found no remaining findings
+- Active remediations: F001 clock, F002 release formatting, and F003 discovery are verified
 - Blocking dependencies: macOS real pointer injection requires a Mac owner to grant Accessibility permission; Apple notarization requires an Apple Developer ID and owner credentials
 - Consequential open decisions: Apple Developer ID signing/notarization, external community promotion, and future Windows code signing remain owner-controlled
 
 ## Handoff
 
-- What changed: replaced the fixed macOS light background with adaptive AppKit rendering, simplified the time-mode selector and conditional fields, improved hierarchy/status/accessibility, added Aqua/Dark Aqua contrast/visibility smoke tests and PNG capture, published v1.1.1 assets, and updated README/CHANGELOG/site/AI metadata
-- Verification evidence: VERIFICATION.md; candidate CI run 33139685219 and main CI run 33139950734; Windows 10/10 and macOS 21/21 tests; Aqua/Dark Aqua smoke tests and human PNG review; universal/codesign/archive/SHA-256 checks; Defender no matching Windows threat; independent release review found no blocking issue; public assets downloaded and re-hashed
-- Not verified: v1.1.1 visual confirmation on the user's physical MacBook Air; every Windows mixed-DPI combination; Google index inclusion timing
+- What changed: raised the macOS clock UI to about 30 Hz with cached formatters and sub-hundredth smoke validation; corrected v1.1.1 Release formatting and GitHub metadata; added platform, Codex, safety, download, FAQ, and changelog pages with real UI renders, schema, sitemap, and AI summaries
+- Verification evidence: VERIFICATION.md; candidate CI runs 33143381799 and 33143876718; Windows 10/10 and macOS 21/21 tests; Aqua/Dark Aqua and clock-animation smoke tests; universal/codesign/archive/SHA-256 checks; site validator; Defender; independent release review no findings
+- Not verified: v1.1.2 clock animation on the user's physical MacBook Air; every Windows mixed-DPI combination; Google index inclusion/ranking timing
 - Residual risks: Windows is unsigned and macOS is ad-hoc signed/not notarized; fixed coordinates can target changed content even when display geometry is stable; Windows UIPI blocks higher-integrity targets; sleeping/locked desktops cannot click
-- Next safe action: ask the user to download v1.1.1 and confirm both time modes and the new Dark appearance on the same MacBook Air
+- Next safe action: merge to main, require final CI, publish the reviewed artifacts as v1.1.2, then verify public assets and live Pages URLs
 
 ## Read next
 
 - `AUTONOMY.md` - project decision boundaries
 - `specs/product.md` - product anchors and scope
 - `plans/active.md` - current implementation plan
-- `reviews/REV-20260828-macos-dark-mode-ux.md` - verified finding and evidence
-- `remediations/REM-20260828-macos-dark-mode-ux-F001.md` - verified fix lifecycle
+- `reviews/REV-20260828-clock-release-discovery.md` - verified findings and evidence
+- `remediations/REM-20260828-clock-release-discovery-F001.md` - verified clock fix lifecycle

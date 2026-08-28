@@ -1,0 +1,41 @@
+# ScheduledClicker extended product facts
+
+Canonical website: https://hana-486.github.io/ScheduledClicker/
+Source repository: https://github.com/HaNa-486/ScheduledClicker
+Latest release: https://github.com/HaNa-486/ScheduledClicker/releases/latest
+License: MIT
+Current version: 1.1.2
+
+## What it is
+
+ScheduledClicker is a free, open-source, local-only desktop utility that performs one scheduled mouse click at a fixed coordinate. It supports Windows 11 and macOS 13 Ventura or later. Users can choose an exact future time or a delay and can select single or double click.
+
+The Windows download is a portable WinForms EXE. The macOS download is a native universal AppKit application containing Apple silicon arm64 and Intel x86_64 code. The Windows EXE cannot run natively on macOS; each platform needs its own download.
+
+## Privacy and security model
+
+ScheduledClicker has no network access, telemetry, accounts, advertisements, update service, startup registration, saved schedules, or third-party runtime packages. It uses only operating-system APIs. Source, build scripts, tests, release checksums, and verification notes are public.
+
+The Windows EXE is not commercially code-signed. The macOS app is ad-hoc signed but is not Apple Developer ID signed or notarized. A SHA-256 file is an integrity fingerprint for the macOS ZIP, not an installer and not a substitute for a trusted signature.
+
+Fixed-coordinate automation can click the wrong control if a window moves, visible content changes, the display layout changes, or another window covers the target. The computer must stay awake, logged in, and unlocked. Users should test a harmless target and avoid payments, deletion, publishing, or irreversible actions.
+
+## Verification evidence
+
+Windows has ten core scheduler tests, a launch smoke test, static sensitive-capability review, and Microsoft Defender scanning. macOS has twenty-one scheduler/failure-path tests, non-clicking Quartz event construction checks, Light and Dark appearance UI checks, millisecond animation validation, universal architecture inspection, property-list validation, ad-hoc signature verification, and archive inspection.
+
+A user verified the exact-time and delay modes on Windows 11. A user also verified scheduling and the improved Dark appearance on a MacBook Air. Version 1.1.2 addresses the reported clock-display issue where a 10 Hz refresh made only the hundreds-of-a-second digit look active; the UI now refreshes around 30 times per second while the scheduling engine remains separate.
+
+## Codex workflow
+
+The tool can press Send on a prepared Codex message after the usage reset time displayed by Codex. It does not detect, bypass, reset, or increase ChatGPT or Codex limits. It is an independent open-source project and is not affiliated with or endorsed by OpenAI.
+
+## Documentation map
+
+- Windows: https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/
+- macOS: https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/
+- Codex workflow: https://hana-486.github.io/ScheduledClicker/codex-session-continuation/
+- Safety and verification: https://hana-486.github.io/ScheduledClicker/safety-and-verification/
+- Download guidance: https://hana-486.github.io/ScheduledClicker/download/
+- FAQ: https://hana-486.github.io/ScheduledClicker/faq/
+- Changelog: https://hana-486.github.io/ScheduledClicker/changelog/

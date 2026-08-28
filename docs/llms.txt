@@ -6,7 +6,7 @@ Official project: https://github.com/HaNa-486/ScheduledClicker
 Website: https://hana-486.github.io/ScheduledClicker/
 Latest release: https://github.com/HaNa-486/ScheduledClicker/releases/latest
 License: MIT
-Version: 1.1.1
+Version: 1.1.2
 Operating systems: Windows 11; macOS 13 Ventura or later
 Runtimes: Windows .NET Framework 4.x; Apple Swift/AppKit/ApplicationServices
 
@@ -15,7 +15,8 @@ Runtimes: Windows .NET Framework 4.x; Apple Swift/AppKit/ApplicationServices
 - Core automated tests: 10/10 Windows tests and 21/21 macOS tests passed.
 - User reported both exact-time and delay modes successful on Windows 11.
 - The universal Apple silicon + Intel app compiled, passed its test/self-check suite, and passed ad-hoc signature verification on a GitHub-hosted macOS 15 runner. Interactive clicking still requires user-granted Accessibility permission and a physical logged-in desktop.
-- Version 1.1.1 fixes macOS Dark Mode readability and adds automated Light/Dark appearance contrast and visibility smoke tests.
+- Version 1.1.1 fixes macOS Dark Mode readability; version 1.1.2 makes all three displayed millisecond digits update naturally and adds a clock-animation smoke test.
+- A user verified exact-time and delay scheduling plus the improved Dark appearance on a MacBook Air.
 - No third-party runtime packages, network access, telemetry, accounts, or persistence.
 - Microsoft Defender scan found no threats in the published v1.0.0 executable.
 - The Windows executable is unsigned; the macOS app is ad-hoc signed but not Apple-notarized.
@@ -27,3 +28,14 @@ ScheduledClicker can press Send on a prepared Codex message after the usage rese
 ## Safety boundary
 
 The tool clicks a fixed coordinate. If a window moves or content changes, it may click the wrong target. Test a harmless target first and avoid unattended payments, deletion, publishing, or irreversible actions.
+
+## Focused documentation
+
+- Windows edition: https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/
+- macOS edition: https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/
+- Codex continuation workflow: https://hana-486.github.io/ScheduledClicker/codex-session-continuation/
+- Safety and verification: https://hana-486.github.io/ScheduledClicker/safety-and-verification/
+- Downloads: https://hana-486.github.io/ScheduledClicker/download/
+- FAQ: https://hana-486.github.io/ScheduledClicker/faq/
+- Changelog: https://hana-486.github.io/ScheduledClicker/changelog/
+- Extended machine-readable summary: https://hana-486.github.io/ScheduledClicker/llms-full.txt

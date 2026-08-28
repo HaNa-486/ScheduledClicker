@@ -28,7 +28,7 @@ It was created for workflows such as sending a prepared Codex message after the 
 Download the latest Windows executable or universal macOS application from [GitHub Releases](https://github.com/HaNa-486/ScheduledClicker/releases/latest).
 
 - **Windows 11:** download `ScheduledClicker.exe`. It is not commercially code-signed, so Windows SmartScreen may show a warning.
-- **macOS 13 Ventura or later:** download `ScheduledClicker-macOS-universal.zip`. It supports both Apple silicon and Intel Macs, and version 1.1.1 adapts to both Light and Dark appearance. The app is ad-hoc signed but not Apple-notarized, so first launch may require Control-clicking the app, choosing **Open**, and confirming in **System Settings → Privacy & Security**.
+- **macOS 13 Ventura or later:** download `ScheduledClicker-macOS-universal.zip`. It supports both Apple silicon and Intel Macs, adapts to both Light and Dark appearance, and version 1.1.2 improves the three-digit millisecond clock animation. The app is ad-hoc signed but not Apple-notarized, so first launch may require Control-clicking the app, choosing **Open**, and confirming in **System Settings → Privacy & Security**.
 
 Compare downloaded files with the SHA-256 values in [`VERIFICATION.md`](VERIFICATION.md), or build directly from the published source.
 
@@ -95,7 +95,7 @@ Yes. The source and executable are published under the permissive MIT License.
 
 macOS 版需要 macOS 13 Ventura 或更新版本，並同時支援 Apple silicon 與 Intel Mac。程式必須保持開啟，Mac 也必須維持登入、未鎖定且未進入睡眠。
 
-v1.1.1 起介面會跟隨 macOS 的淺色或深色外觀，時間欄位也只會顯示目前選擇的模式。如果畫面仍有不可讀之處，請附上 macOS 版本、外觀設定與截圖回報。
+v1.1.1 起介面會跟隨 macOS 的淺色或深色外觀，時間欄位也只會顯示目前選擇的模式。v1.1.2 將三位毫秒時鐘的更新頻率由每秒 10 次提高到約 30 次，使後兩位數也會自然變動；排程引擎與點擊行為不受此畫面更新調整影響。
 
 ## 安全設計
 
@@ -104,7 +104,7 @@ v1.1.1 起介面會跟隨 macOS 的淺色或深色外觀，時間欄位也只會
 - 不連線網路、不讀寫個人檔案、不蒐集資料，也不需要系統管理員權限。
 - 啟動前會顯示時間、座標與點擊方式，需再次確認。
 - 排程期間會嘗試註冊全域 `F8`；若未被其他程式占用，可用它取消尚未執行的排程，否則畫面會提示改用取消按鈕。
-- Windows v1.1.0 已由使用者在 Windows 11 實機確認功能可用；macOS v1.1.0 也已由使用者在 MacBook Air 確認排程功能可用，並發現深色外觀介面缺陷。v1.1.1 加入淺色／深色介面自動檢查；完整建置、安全與實機證據見 [`VERIFICATION.md`](VERIFICATION.md)。
+- Windows v1.1.0 已由使用者在 Windows 11 實機確認功能可用；macOS 的指定時間、倒數延遲與 v1.1.1 深色模式介面也已由使用者在 MacBook Air 實機確認。v1.1.2 另加入毫秒動畫自動檢查；完整建置、安全與實機證據見 [`VERIFICATION.md`](VERIFICATION.md)。
 
 「安全」不代表完全沒有風險：本工具依固定螢幕座標點擊，如果視窗或頁面在排程期間移動，仍可能點到錯誤位置。請先用無風險目標測試，並避免拿它操作付款、刪除、發布或其他不可逆按鈕。Windows EXE 尚未使用商業憑證簽章；macOS app 也未使用 Apple Developer ID 公證。兩者都可能顯示系統安全提醒，可用 `VERIFICATION.md` 的 SHA-256 核對檔案。
 

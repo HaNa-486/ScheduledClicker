@@ -24,6 +24,9 @@ jobs:
       - name: Verify executable exists
         shell: pwsh
         run: if (-not (Test-Path -LiteralPath .\dist\ScheduledClicker.exe)) { throw 'Windows executable was not produced.' }
+      - name: Validate GitHub Pages metadata and links
+        shell: pwsh
+        run: .\scripts\validate-site.ps1
 
   macos:
     name: macOS universal build and tests

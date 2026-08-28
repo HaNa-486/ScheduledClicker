@@ -9,6 +9,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var activePlan: ScheduledClickPlan?
     private var globalKeyMonitor: Any?
     private var localKeyMonitor: Any?
+    private var smokeClockFractions = Set<String>()
+    private static let clockRefreshInterval: TimeInterval = 1.0 / 30.0
+
+    private lazy var clockFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd  HH:mm:ss.SSS"
+        return formatter
+    }()
+
+    private lazy var statusTimeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter
+    }()
 
     private let clockLabel = NSTextField(labelWithString: "")
     private let statusLabel = NSTextField(wrappingLabelWithString: "等待設定。")
@@ -34,9 +48,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         engine.onFailed = { [weak self] error in self?.setFailed(error) }
 
         updateClockAndStatus()
-        clockTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        let timer = Timer(timeInterval: Self.clockRefreshInterval, repeats: true) { [weak self] _ in
             self?.updateClockAndStatus()
         }
+        timer.tolerance = 0.005
+        RunLoop.main.add(timer, forMode: .common)
+        clockTimer = timer
 
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
@@ -399,20 +416,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func updateClockAndStatus() {
-        let clockFormatter = DateFormatter()
-        clockFormatter.dateFormat = "yyyy/MM/dd  HH:mm:ss.SSS"
-        clockLabel.stringValue = clockFormatter.string(from: Date())
+        let clockText = clockFormatter.string(from: Date())
+        clockLabel.stringValue = clockText
+        if CommandLine.arguments.contains("--ui-smoke-test"), let fraction = clockText.split(separator: ".").last {
+            smokeClockFractions.insert(String(fraction))
+        }
 
         guard let plan = activePlan, engine.isArmed, let remaining = engine.remainingNow() else { return }
         let safeRemaining = max(0, Int(remaining.rounded(.up)))
         let hours = safeRemaining / 3600
         let minutes = safeRemaining % 3600 / 60
         let seconds = safeRemaining % 60
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "HH:mm:ss"
         statusLabel.stringValue = String(
             format: "已排程：%@ 執行，剩餘 %02d:%02d:%02d。%@",
-            timeFormatter.string(from: plan.targetDate), hours, minutes, seconds, emergencyStopHint()
+            statusTimeFormatter.string(from: plan.targetDate), hours, minutes, seconds, emergencyStopHint()
         )
     }
 
@@ -452,7 +469,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 && contrastRatio(foreground: .secondaryLabelColor, background: .windowBackgroundColor) >= 3.0
                 && contrastRatio(foreground: .labelColor, background: .controlBackgroundColor) >= 4.5
         }
-        return absoluteModeIsValid && delayModeIsValid && readable
+        let clockRefreshIsSmooth = (clockTimer?.timeInterval ?? 1) <= 0.04
+        let changingSubHundredths = Set(smokeClockFractions.map { String($0.suffix(2)) }).count >= 2
+        return absoluteModeIsValid && delayModeIsValid && readable && clockRefreshIsSmooth && changingSubHundredths
     }
 
     private func saveSmokeScreenshotIfRequested() -> Bool {

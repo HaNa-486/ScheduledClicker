@@ -2,6 +2,23 @@
 
 本專案的重大變更會記錄在此。格式參考 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本採用 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [1.1.2] - 2026-08-28
+
+### Fixed
+
+- macOS 目前時間改為每秒約 30 次更新，讓三位毫秒正常變化；同時快取日期格式器並在控制項互動期間持續刷新。
+- 修正 v1.1.1 GitHub Release 說明把換行顯示成 `\\n` 文字的排版問題。
+
+### Changed
+
+- GitHub 專案描述與 Topics 補齊 macOS、Apple silicon、AppKit 與深色模式資訊。
+- GitHub Pages 新增 Windows、macOS、Codex 使用情境、安全驗證、下載、FAQ 與 Changelog 獨立頁面。
+- 首頁加入真實介面圖片、FAQ 結構化資料，並擴充軟體版本、截圖與發布資訊的 JSON-LD。
+
+### Verified
+
+- 使用者已在 MacBook Air 實機確認 v1.1.1 功能與深色模式介面可讀，並以螢幕錄影回報毫秒刷新問題。
+
 ## [1.1.1] - 2026-08-28
 
 ### Fixed

@@ -18,6 +18,13 @@ jobs:
       - name: Build
         shell: pwsh
         run: .\build.ps1
+      - name: Verify generated translations
+        run: python scripts/generate-localization.py --check
+      - name: Upload Windows UI evidence
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: Windows-ui-evidence
+          path: .artifacts/tests/*.png
       - name: Core tests
         shell: pwsh
         run: .\.artifacts\tests\SchedulerCoreTests.exe
@@ -44,8 +51,6 @@ jobs:
           path: |
             dist/ScheduledClicker-macOS-universal.zip
             dist/ScheduledClicker-macOS-universal.sha256
-            .artifacts/macos/ui-light.png
-            .artifacts/macos/ui-dark.png
-            .artifacts/macos/loop-light.png
-            .artifacts/macos/loop-dark.png
+            .artifacts/macos/ui-*.png
+            .artifacts/macos/loop-*.png
           if-no-files-found: error

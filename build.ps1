@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 $outputDirectory = Join-Path $projectRoot 'dist'
@@ -11,7 +11,7 @@ if (-not (Test-Path -LiteralPath $compiler)) {
 New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
 New-Item -ItemType Directory -Force -Path $testDirectory | Out-Null
 
-& $compiler /nologo /target:winexe /platform:anycpu /optimize+ /win32manifest:"$projectRoot\ScheduledClicker\app.manifest" /out:"$outputDirectory\ScheduledClicker.exe" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "$projectRoot\ScheduledClicker\AssemblyInfo.cs" "$projectRoot\ScheduledClicker\Program.cs" "$projectRoot\ScheduledClicker\SchedulerCore.cs" "$projectRoot\ScheduledClicker\LoopCore.cs" "$projectRoot\ScheduledClicker\LoopInput.cs" "$projectRoot\ScheduledClicker\LoopForm.cs"
+& $compiler /nologo /target:winexe /platform:anycpu /optimize+ /win32manifest:"$projectRoot\ScheduledClicker\app.manifest" /out:"$outputDirectory\ScheduledClicker.exe" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "$projectRoot\ScheduledClicker\AssemblyInfo.cs" "$projectRoot\ScheduledClicker\Program.cs" "$projectRoot\ScheduledClicker\SchedulerCore.cs" "$projectRoot\ScheduledClicker\LoopCore.cs" "$projectRoot\ScheduledClicker\LoopInput.cs" "$projectRoot\ScheduledClicker\LoopForm.cs" "$projectRoot\ScheduledClicker\Localization.cs" "$projectRoot\ScheduledClicker\LocalizationCatalog.cs"
 if ($LASTEXITCODE -ne 0) { throw '應用程式建置失敗。' }
 
 & $compiler /nologo /target:exe /platform:anycpu /optimize+ /out:"$testDirectory\SchedulerCoreTests.exe" /reference:System.dll /reference:System.Drawing.dll "$projectRoot\Tests\SchedulerCoreTests.cs" "$projectRoot\ScheduledClicker\SchedulerCore.cs"
@@ -28,8 +28,13 @@ if ($LASTEXITCODE -ne 0) { throw '循環測試建置失敗。' }
 if ($LASTEXITCODE -ne 0) { throw '循環測試失敗。' }
 
 foreach ($testName in @('LoopUiTests', 'LoopIntegrationTest')) {
-    & $compiler /nologo /target:exe /win32manifest:"$projectRoot\ScheduledClicker\app.manifest" /out:"$testDirectory\$testName.exe" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "$projectRoot\Tests\$testName.cs" "$projectRoot\ScheduledClicker\SchedulerCore.cs" "$projectRoot\ScheduledClicker\LoopCore.cs" "$projectRoot\ScheduledClicker\LoopInput.cs" "$projectRoot\ScheduledClicker\LoopForm.cs"
+    & $compiler /nologo /target:exe /win32manifest:"$projectRoot\ScheduledClicker\app.manifest" /out:"$testDirectory\$testName.exe" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "$projectRoot\Tests\$testName.cs" "$projectRoot\ScheduledClicker\SchedulerCore.cs" "$projectRoot\ScheduledClicker\LoopCore.cs" "$projectRoot\ScheduledClicker\LoopInput.cs" "$projectRoot\ScheduledClicker\LoopForm.cs" "$projectRoot\ScheduledClicker\Localization.cs" "$projectRoot\ScheduledClicker\LocalizationCatalog.cs"
     if ($LASTEXITCODE -ne 0) { throw "$testName 建置失敗。" }
 }
 & "$testDirectory\LoopUiTests.exe" "$testDirectory\loop-windows.png"
 if ($LASTEXITCODE -ne 0) { throw '循環介面測試失敗。' }
+
+& $compiler /nologo /target:exe /main:LocalizationTests /win32manifest:"$projectRoot\ScheduledClicker\app.manifest" /out:"$testDirectory\LocalizationTests.exe" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "$projectRoot\Tests\LocalizationTests.cs" "$projectRoot\ScheduledClicker\Program.cs" "$projectRoot\ScheduledClicker\SchedulerCore.cs" "$projectRoot\ScheduledClicker\LoopCore.cs" "$projectRoot\ScheduledClicker\LoopInput.cs" "$projectRoot\ScheduledClicker\LoopForm.cs" "$projectRoot\ScheduledClicker\Localization.cs" "$projectRoot\ScheduledClicker\LocalizationCatalog.cs"
+if ($LASTEXITCODE -ne 0) { throw 'Localization test build failed.' }
+& "$testDirectory\LocalizationTests.exe" "$testDirectory"
+if ($LASTEXITCODE -ne 0) { throw 'Localization tests failed.' }

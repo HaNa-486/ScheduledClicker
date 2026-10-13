@@ -1,8 +1,8 @@
 # Workstream: Add bounded recurring prompt input and send workflows on Windows and macOS
 
-- Status: blocked
+- Status: paused
 - Started: 2026-10-13T06:53:46Z
-- Updated: 2026-10-13T08:12:17Z
+- Updated: 2026-10-13T09:14:40Z
 - Branch: codex/recurring-prompt-loop
 - Base commit: c69f207a4bbda0d8fa1e18a07390ba71cd7e41c1
 - Scope: Add bounded recurring prompt input and send workflows on Windows and macOS
@@ -16,7 +16,7 @@
 
 ## Handoff
 
-- What changed: Added fixed clock and return-to-simple on both platforms; retains in-memory settings and stops loop on return.
-- Verification: Windows 40 loop and 10 original core tests; live-clock/navigation/reopen UI tests and renders passed; independent lifecycle review found no actionable issues; macOS unrun.
-- Next safe action: Await owner answer to public feature-branch CI approval request, then build macOS test ZIP.
-- Residual risks: macOS compilation and native acceptance pending public branch CI approval.
+- What changed: Five-language simple/loop UI and fixed visible notices implemented; test-only confirmation focus failure corrected; macOS status overlap corrected by source review.
+- Verification: Windows build; 1166 localization checks; 40 loop and 10 original core tests; navigation clock regression and five-language renders passed. Independent privacy review completed. Mac source only.
+- Next safe action: Owner tests Windows multilingual candidate and completes review; wait for an explicit later request before Mac build or public push.
+- Residual risks: macOS build/runtime and all-platform release remain unverified; no push or Mac CI authorized now.

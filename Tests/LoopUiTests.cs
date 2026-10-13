@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -16,10 +16,13 @@ internal static class LoopUiTests
     }
     [STAThread] private static void Main(string[] args)
     {
+        L.Select("zh");
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
         Application.EnableVisualStyles();
         using (var form = new LoopForm())
         using (var verifyClock = new Timer { Interval = 180 })
         {
+            form.Opacity = 0; form.ShowInTaskbar = false;
             int visit = 0;
             string clockBefore = null;
             form.VisibleChanged += delegate

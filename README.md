@@ -25,6 +25,14 @@ It was created for workflows such as sending a prepared Codex message after the 
 - Run as a portable Windows executable or native universal macOS app with no installer.
 - Review the complete C# source, security notes, tests, and SHA-256 report.
 
+## Languages in the local development candidate
+
+Both simple and loop modes support Traditional Chinese, English, Japanese, Korean and German. Startup follows the system UI language: all `zh-*` locales (including Simplified Chinese) use Traditional Chinese; `ja-*`, `ko-*` and `de-*` use their respective translations; other locales use English. Each window has a language selector, shared for the current session. Restarting uses the system language again. Switching preserves prompts, caret selection, settings and active schedules.
+
+Loop notices now stay visible in a fixed footer above the action buttons, including at minimum window size. Settings scroll independently. The shared catalog and development checks are described in [`localization/README.md`](localization/README.md).
+
+These changes are **unreleased**. Windows is available as a local review candidate; macOS source is updated, but builds and public CI are deferred until the owner finishes Windows testing and requests them.
+
 ## Download
 
 Download the latest Windows executable or universal macOS application from [GitHub Releases](https://github.com/HaNa-486/ScheduledClicker/releases/latest).

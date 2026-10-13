@@ -80,6 +80,11 @@ final class LanguagePicker: NSObject {
 final class LocalizedView {
     private var updates: [() -> Void] = []
     private var observer: NSObjectProtocol?
+    init(root: NSView, excluding: [NSView]) {
+        bind(root, excluded: Set(excluding.map(ObjectIdentifier.init)))
+        observer = NotificationCenter.default.addObserver(forName: L.changed, object: nil, queue: .main) { [weak self] _ in self?.refresh() }
+        refresh()
+    }
     init(window: NSWindow, excluding: [NSView]) {
         let title = window.title
         updates.append { [weak window] in window?.title = L.t(title) }

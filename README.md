@@ -27,9 +27,9 @@ It was created for workflows such as sending a prepared Codex message after the 
 
 ## Languages in the local development candidate
 
-Both simple and loop modes support Traditional Chinese, English, Japanese, Korean and German. Startup follows the system UI language: all `zh-*` locales (including Simplified Chinese) use Traditional Chinese; `ja-*`, `ko-*` and `de-*` use their respective translations; other locales use English. Each window has a language selector, shared for the current session. Restarting uses the system language again. Switching preserves prompts, caret selection, settings and active schedules.
+Both simple and loop modes support Traditional Chinese, English, Japanese, Korean and German. Startup follows the system UI language: all `zh-*` locales (including Simplified Chinese) use Traditional Chinese; `ja-*`, `ko-*` and `de-*` use their respective translations; other locales use English. The shared window has a language selector for both modes in the current session. Restarting uses the system language again. Switching preserves prompts, caret selection, settings and active schedules.
 
-Loop notices now stay visible in a fixed footer above the action buttons, including at minimum window size. Settings scroll independently. The shared catalog and development checks are described in [`localization/README.md`](localization/README.md).
+Both modes share one window, clock, language selector and mode buttons. Loop timing is on the left and position capture on the right, with prompts underneath and fixed notices, actions and status below. All settings fit the initial/minimum window without page scrolling; long prompt text can scroll inside its editor. Stop an active schedule or capture before switching modes; idle switching preserves configuration. The shared catalog and development checks are described in [`localization/README.md`](localization/README.md).
 
 These changes are **unreleased**. Windows is available as a local review candidate; macOS source is updated, but builds and public CI are deferred until the owner finishes Windows testing and requests them.
 
@@ -111,9 +111,9 @@ v1.1.1 起介面會跟隨 macOS 的淺色或深色外觀，時間欄位也只會
 
 ### 循環輸入與點擊（開發中，尚未發布）
 
-從主畫面選擇「循環輸入與點擊…」，開啟獨立設定視窗。原本的一次性排程與循環模式不能同時啟動。
+在同一個視窗頂端選擇「簡單模式」或「循環模式」，共用即時時鐘與語言選單。原本的一次性排程與循環模式不能同時啟動。
 
-循環頁頂端固定顯示即時數位時間與「返回簡單模式」。返回時會停止循環或位置擷取；執行中按鈕會顯示「停止並返回簡單模式」。再次進入時保留本次程式開啟期間的提示詞、座標及設定，不會自動重啟排程；完全結束程式後仍不保存設定。
+循環頁上方左側是時間與停止條件，右側是兩個位置擷取，下方是提示詞。設定、注意事項、操作按鈕與狀態皆在初始／最小視窗完整可見，整頁不需捲動；較長的提示詞可在編輯框內捲動。執行、暫停或擷取期間須先停止目前操作，才能切換模式。切換保留本次開啟期間的提示詞、座標及設定，不會自動重啟排程；完全結束程式後仍不保存設定。
 
 1. 設定**首次執行時間**、**循環間隔**及步驟等待秒數。間隔從上一輪送出點擊操作結束後起算；與服務額度重設無自動連動。
 2. 勾選**最多輪次**或**截止時間**，至少一項。若兩者都設定，先達到者停止。
@@ -123,7 +123,7 @@ v1.1.1 起介面會跟隨 macOS 的淺色或深色外觀，時間欄位也只會
 6. 先用無風險目標「試跑一輪」：確認後五秒執行，**真的會輸入並點擊送出**。確認行為正確後再啟動正式循環。
 7. 保持電腦喚醒、不鎖屏，目標視窗位置、聊天與輸入框布局固定。工具不偵測 Codex 的忙碌、完成、額度或訊息是否送達。
 
-等待下一輪時可暫停／恢復；恢復後繼續剩餘等待時間，截止時間不延後。若已開始點擊／貼上，停止會取消尚未執行的步驟，**已發生的輸入無法撤回**，須檢查草稿後重新排程。F8（Mac 部分鍵盤為 Fn+F8）、取消或關閉循環視窗可停止。Windows 循環模式要求 F8 註冊成功才能啟動。
+等待下一輪時可暫停／恢復；恢復後繼續剩餘等待時間，截止時間不延後。若已開始點擊／貼上，停止會取消尚未執行的步驟，**已發生的輸入無法撤回**，須檢查草稿後重新排程。F8（Mac 部分鍵盤為 Fn+F8）、取消或關閉程式視窗可停止。Windows 循環模式要求 F8 註冊成功才能啟動。
 
 每輪依序「點輸入框 → 等待 → 貼上 → 等待 → 點送出」。若目標視窗不可用、螢幕配置改變、步驟遲到超過五秒或輸入 API 回報錯誤，停止且不重試、不補送。介面所列輪數是**已執行送出點擊的輪數**，不等於成功送達的訊息數。程式不保存排程或提示詞，重新開啟後需重新設定。
 

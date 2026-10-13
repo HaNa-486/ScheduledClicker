@@ -1,7 +1,11 @@
 import Cocoa
 
-final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
+final class LoopWindow: NSObject, NSTextViewDelegate {
     let window: NSWindow
+    let view = ModeContentView(frame: NSRect(x: 0, y: 0, width: 1040, height: 600))
+    var busy: Bool { engine.active || captureKind != 0 }
+    var onBusyChanged: (() -> Void)?
+    private var lastBusy = false
     private let input = NativeLoopInput()
     private lazy var engine = LoopEngine(actions: input, completionClock: { ProcessInfo.processInfo.systemUptime })
     private var timer: Timer?
@@ -13,7 +17,6 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
     private var prompts = [L.t("繼續")]
     private var editingIndex = 0
     private var loading = false
-    private let language = LanguagePicker()
     private var localized: LocalizedView?
     private var languageObserver: NSObjectProtocol?
     private let notice = NSTextField(wrappingLabelWithString: "執行時保持喚醒、不鎖屏，目標視窗與聊天固定。\n使用剪貼簿貼上，會覆寫剪貼簿；不判斷 AI 狀態或送達結果。\n試跑會真的輸入並點送出。中途停止後請檢查草稿，避免重複。\n兩個停止條件同時勾選時，先達到者停止。關閉本視窗也會取消。")
@@ -41,28 +44,16 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
     private let pause = NSButton(title: "暫停", target: nil, action: nil)
     private let cancel = NSButton(title: "取消 / 停止", target: nil, action: nil)
     private let status = NSTextField(wrappingLabelWithString: "等待設定。")
-    private let clockLabel = NSTextField(labelWithString: "")
-    private var firstClockText: String?
-    private let back = NSButton(title: "返回簡單模式", target: nil, action: nil)
-    var onReturnToSimple: (() -> Void)?
-    private let clockFormatter: DateFormatter = {
-        let formatter = DateFormatter(); formatter.dateFormat = "yyyy/MM/dd  HH:mm:ss.SSS"; return formatter
-    }()
     private static var mono: TimeInterval { ProcessInfo.processInfo.systemUptime }
 
-    override init() {
-        window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 840, height: 800), styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
+    init(window: NSWindow) {
+        self.window = window
         super.init()
-        window.title = "循環輸入與點擊"
-        window.minSize = NSSize(width: 840, height: 680)
-        window.isReleasedWhenClosed = false
-        window.delegate = self
-        window.center()
         build()
-        localized = LocalizedView(window: window, excluding: [clockLabel, status, back, pause, inputLabel, sendLabel, entries, editor, language.view])
+        localized = LocalizedView(root: view, excluding: [status, pause, inputLabel, sendLabel, entries, editor])
         languageObserver = NotificationCenter.default.addObserver(forName: L.changed, object: nil, queue: .main) { [weak self] _ in self?.languageChanged() }
         refreshEntries(selected: 0)
-        startTimer()
+        view.isHidden = true
         sleepObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in
             self?.stop("電腦即將睡眠，排程已停止，不補送。")
         }
@@ -80,82 +71,67 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         let tick = Timer(timeInterval: 0.05, repeats: true) { [weak self] _ in self?.tick() }
         RunLoop.main.add(tick, forMode: .common); timer = tick
     }
-    func show() { startTimer(); refresh(); window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true) }
-    func windowWillClose(_ notification: Notification) {
-        captureKind = 0; stop("已返回簡單模式；循環已停止。"); timer?.invalidate(); timer = nil
-        onReturnToSimple?()
-    }
-    @objc private func returnToSimple() { window.close() }
+    func show() { view.isHidden = false; startTimer(); refresh() }
+    func hide() { guard !busy else { return }; view.isHidden = true; timer?.invalidate(); timer = nil }
+    func shutdown() { captureKind = 0; stop("程式已結束。"); timer?.invalidate(); timer = nil; removeKeys() }
     func stop(_ message: String) { engine.stop(message); refresh() }
 
     private func build() {
-        guard let root = window.contentView else { return }
-        let header = NSView(frame: NSRect(x: 0, y: 700, width: 840, height: 100))
-        header.autoresizingMask = [.width, .minYMargin]
-        let caption = NSTextField(labelWithString: "目前時間"); caption.frame = NSRect(x: 20, y: 76, width: 200, height: 20)
-        caption.textColor = .secondaryLabelColor; header.addSubview(caption)
-        clockLabel.frame = NSRect(x: 20, y: 40, width: 440, height: 30)
-        clockLabel.font = .monospacedDigitSystemFont(ofSize: 22, weight: .semibold); clockLabel.textColor = .systemBlue
-        clockLabel.setAccessibilityLabel("目前時間"); header.addSubview(clockLabel)
-        back.frame = NSRect(x: 520, y: 50, width: 300, height: 34); back.autoresizingMask = [.minXMargin]
-        back.bezelStyle = .rounded; back.target = self; back.action = #selector(returnToSimple); header.addSubview(back)
-        let languageCaption = NSTextField(labelWithString: "語言"); languageCaption.frame = NSRect(x: 20, y: 5, width: 115, height: 24)
-        language.view.frame = NSRect(x: 140, y: 2, width: 160, height: 30)
-        header.addSubview(languageCaption); header.addSubview(language.view); root.addSubview(header)
-        let scroll = NSScrollView(frame: NSRect(x: 0, y: 275, width: 840, height: 425))
-        scroll.autoresizingMask = [.width, .height]; scroll.hasVerticalScroller = true
-        let doc = LoopFlippedView(frame: NSRect(x: 0, y: 0, width: 810, height: 635))
-        scroll.documentView = doc; root.addSubview(scroll)
-        func label(_ text: String, _ x: CGFloat, _ y: CGFloat, _ width: CGFloat = 235) {
-            let field = NSTextField(labelWithString: text); field.frame = NSRect(x: x, y: y, width: width, height: 24); doc.addSubview(field)
+        let root = view
+        root.addSubview(NativeUI.card("", frame: NSRect(x: 16, y: 0, width: 596, height: 200)))
+        root.addSubview(NativeUI.card("", frame: NSRect(x: 624, y: 0, width: 400, height: 200)))
+        root.addSubview(NativeUI.card("", frame: NSRect(x: 16, y: 208, width: 1008, height: 194)))
+        func label(_ text: String, _ x: CGFloat, _ y: CGFloat, _ width: CGFloat = 205, heading: Bool = false) {
+            root.addSubview(NativeUI.label(text, frame: NSRect(x: x, y: y, width: width, height: 22), heading: heading))
         }
         func place(_ control: NSControl, _ x: CGFloat, _ y: CGFloat, _ width: CGFloat) {
-            control.frame = NSRect(x: x, y: y, width: width, height: 30); doc.addSubview(control); controls.append(control)
+            control.frame = NSRect(x: x, y: y, width: width, height: 28); root.addSubview(control); controls.append(control)
         }
-        label("首次時間與循環間隔", 20, 15, 500)
+        label("首次時間與循環間隔", 28, 7, 560, heading: true)
+        label("位置擷取", 636, 7, 370, heading: true)
         for date in [first, deadline] { date.datePickerStyle = .textFieldAndStepper; date.datePickerElements = [.yearMonthDay, .hourMinuteSecond] }
         first.dateValue = Date().addingTimeInterval(60); deadline.dateValue = Date().addingTimeInterval(86400)
         first.setAccessibilityLabel("首次執行时间"); deadline.setAccessibilityLabel("截止時間")
-        label("首次執行", 20, 50); place(first, 270, 45, 320)
-        label("每輪結束後等", 20, 90); place(hours, 270, 85, 60); label("時", 335, 90, 50)
-        place(minutes, 390, 85, 60); label("分", 455, 90, 50); place(seconds, 510, 85, 60); label("秒", 575, 90, 50)
+        label("首次執行", 28, 38); place(first, 240, 32, 300)
+        label("每輪結束後等", 28, 72); place(hours, 240, 66, 54); label("時", 300, 72, 40)
+        place(minutes, 348, 66, 54); label("分", 408, 72, 40); place(seconds, 456, 66, 54); label("秒", 516, 72, 50)
         hours.setAccessibilityLabel("循環間隔小時"); minutes.setAccessibilityLabel("循環間隔分鐘"); seconds.setAccessibilityLabel("循環間隔秒數")
-        label("點擊／貼上之間等待", 20, 130); place(wait, 270, 125, 60); label("秒（1–10）", 350, 130)
+        label("點擊／貼上之間等待", 28, 106); place(wait, 240, 100, 60); label("秒（1–10）", 310, 106)
         wait.setAccessibilityLabel("步驟等待秒數")
-        countBound.state = .on; place(countBound, 20, 165, 235); place(count, 270, 165, 80); label("輪", 365, 170)
+        countBound.state = .on; place(countBound, 28, 134, 205); place(count, 240, 134, 80); label("輪", 330, 140)
         count.setAccessibilityLabel("最多執行輪次")
-        place(timeBound, 20, 205, 235); place(deadline, 270, 205, 320)
+        place(timeBound, 28, 170, 205); place(deadline, 240, 170, 300)
         countBound.target = self; countBound.action = #selector(optionsChanged)
         timeBound.target = self; timeBound.action = #selector(optionsChanged)
-        label("提示詞", 20, 250)
-        mode.addItems(withTitles: ["每輪相同", "依輪次設定"]); place(mode, 270, 245, 260)
-        mode.target = self; mode.action = #selector(modeChanged)
-        place(entries, 20, 285, 165); entries.target = self; entries.action = #selector(entryChanged)
-        place(add, 200, 285, 180); add.target = self; add.action = #selector(addPrompt)
-        place(remove, 390, 285, 180); remove.target = self; remove.action = #selector(removePrompt)
-        let textScroll = NSScrollView(frame: NSRect(x: 20, y: 330, width: 770, height: 140))
-        textScroll.hasVerticalScroller = true; textScroll.borderType = .bezelBorder
-        editor.frame = NSRect(x: 0, y: 0, width: 750, height: 140)
-        editor.isRichText = false; editor.isAutomaticQuoteSubstitutionEnabled = false; editor.isAutomaticDashSubstitutionEnabled = false
-        editor.font = .systemFont(ofSize: 14); editor.delegate = self; editor.autoresizingMask = [.width]
-        editor.isVerticallyResizable = true; editor.textContainer?.widthTracksTextView = true
-        editor.setAccessibilityLabel("目前輪次提示詞")
-        textScroll.documentView = editor; doc.addSubview(textScroll)
-        place(repeatLast, 20, 480, 770); place(replace, 20, 515, 770)
+        label("請擷取同一視窗內的兩個位置", 636, 36, 370)
         let inputButton = NSButton(title: "擷取輸入框（3 秒）", target: self, action: #selector(captureInput))
         let sendButton = NSButton(title: "擷取送出鈕（3 秒）", target: self, action: #selector(captureSend))
-        place(inputButton, 20, 555, 260); place(inputLabel, 295, 555, 480)
-        place(sendButton, 20, 595, 260); place(sendLabel, 295, 595, 480)
-        notice.frame = NSRect(x: 20, y: 135, width: 800, height: 130)
-        notice.font = .systemFont(ofSize: 12.5); notice.autoresizingMask = [.width]
-        notice.drawsBackground = true; notice.backgroundColor = .controlBackgroundColor
-        root.addSubview(notice)
+        inputButton.bezelStyle = .rounded; sendButton.bezelStyle = .rounded
+        place(inputButton, 636, 65, 285); place(inputLabel, 640, 98, 355)
+        place(sendButton, 636, 133, 285); place(sendLabel, 640, 166, 355)
+        label("提示詞", 28, 213, 180, heading: true)
+        mode.addItems(withTitles: ["每輪相同", "依輪次設定"]); place(mode, 28, 237, 240)
+        mode.target = self; mode.action = #selector(modeChanged)
+        place(entries, 28, 274, 160); entries.target = self; entries.action = #selector(entryChanged)
+        place(add, 278, 237, 175); add.target = self; add.action = #selector(addPrompt)
+        place(remove, 463, 237, 175); remove.target = self; remove.action = #selector(removePrompt)
+        let textScroll = NSScrollView(frame: NSRect(x: 196, y: 272, width: 812, height: 72))
+        textScroll.hasVerticalScroller = true; textScroll.borderType = .bezelBorder
+        editor.frame = NSRect(x: 0, y: 0, width: 792, height: 72)
+        editor.isRichText = false; editor.isAutomaticQuoteSubstitutionEnabled = false; editor.isAutomaticDashSubstitutionEnabled = false
+        editor.font = .systemFont(ofSize: 13); editor.delegate = self; editor.autoresizingMask = [.width]
+        editor.isVerticallyResizable = true; editor.textContainer?.widthTracksTextView = true
+        editor.setAccessibilityLabel("目前輪次提示詞"); textScroll.documentView = editor; root.addSubview(textScroll)
+        place(repeatLast, 28, 346, 970); place(replace, 28, 372, 970)
+        notice.frame = NSRect(x: 16, y: 410, width: 1008, height: 74)
+        notice.font = .systemFont(ofSize: 12.5); notice.drawsBackground = true; notice.backgroundColor = .controlBackgroundColor; root.addSubview(notice)
         for (index, button) in [start, trial, pause, cancel].enumerated() {
-            button.frame = NSRect(x: CGFloat(20 + index * 205), y: 92, width: 190, height: 32)
+            button.frame = NSRect(x: CGFloat(16 + index * 205), y: 490, width: 195, height: 34)
             button.bezelStyle = .rounded; button.target = self; root.addSubview(button)
         }
+        start.bezelColor = .systemBlue
         start.action = #selector(startLoop); trial.action = #selector(trialLoop); pause.action = #selector(togglePause); cancel.action = #selector(cancelLoop)
-        status.frame = NSRect(x: 20, y: 10, width: 800, height: 76); status.autoresizingMask = [.width]; root.addSubview(status)
+        status.frame = NSRect(x: 20, y: 530, width: 1000, height: 68); status.font = .systemFont(ofSize: 12.5); root.addSubview(status)
     }
 
     private func languageChanged() {
@@ -246,10 +222,7 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         }
     }
     private func refresh() {
-        clockLabel.stringValue = clockFormatter.string(from: Date())
-        if firstClockText == nil { firstClockText = clockLabel.stringValue }
         let busy = engine.active || captureKind != 0
-        back.title = L.t(busy ? "停止並返回簡單模式" : "返回簡單模式")
         controls.forEach { $0.isEnabled = !busy }; editor.isEditable = !busy
         let sequence = mode.indexOfSelectedItem == 1
         entries.isEnabled = !busy && sequence; add.isEnabled = !busy && sequence && prompts.count < 10000
@@ -261,6 +234,7 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         status.stringValue = captureKind != 0 ? "請把滑鼠移到目標位置，倒數 \(Int(max(0, (captureDue - Self.mono).rounded(.up)))) 秒。" : "已執行送出點擊 \(engine.completed) 輪\(left)\n\(engine.status)" + (engine.active ? " F8（或 Fn+F8）可停止。" : "")
         status.stringValue = L.t(status.stringValue)
         if !engine.active { removeKeys() }
+        if lastBusy != busy { lastBusy = busy; onBusyChanged?() }
     }
     private func installKeys() {
         removeKeys()
@@ -278,8 +252,7 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
     }
 
     // No native input: exercise editor state and render both appearances in CI.
-    func smokeTest(screenshot: String?) -> Bool {
-        guard clockLabel.stringValue != firstClockText, back.superview?.bounds.contains(back.frame) == true else { return false }
+    func smokeTest(screenshot: String?, switchMode: (Bool) -> Bool) -> Bool {
         mode.selectItem(at: 1); modeChanged()
         addPrompt(); editor.string = "第二輪：繼續\n保留進度 😀"; textDidChange(Notification(name: NSText.didChangeNotification))
         mode.selectItem(at: 0); modeChanged()
@@ -294,27 +267,22 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         for code in L.codes {
             L.select(code)
             guard editor.string == prompt, editor.selectedRange() == NSRange(location: 1, length: 2), entries.indexOfSelectedItem == 1 else { return false }
-            guard language.view.indexOfSelectedItem == L.codes.firstIndex(of: code) else { return false }
             window.setFrame(NSRect(origin: window.frame.origin, size: window.minSize), display: true)
-            guard notice.superview === window.contentView, window.contentView?.bounds.contains(notice.frame) == true else { return false }
+            guard notice.superview === view, view.bounds.contains(notice.frame), controls.allSatisfy({ view.bounds.contains($0.frame) }) else { return false }
             let required = NSAttributedString(string: notice.stringValue, attributes: [.font: notice.font!]).boundingRect(with: NSSize(width: notice.bounds.width - 6, height: .greatestFiniteMagnitude), options: [.usesLineFragmentOrigin, .usesFontLeading]).height
             guard required + 4 <= notice.bounds.height else { return false }
             window.setFrame(NSRect(origin: window.frame.origin, size: originalSize), display: true)
         }
         L.select(originalLanguage)
-        var returned = false
-        let originalReturn = onReturnToSimple
-        onReturnToSimple = { returned = true }
+        let windowNumber = window.windowNumber
+        guard switchMode(false), switchMode(true), window.windowNumber == windowNumber, editor.string == prompt else { return false }
         do {
             try engine.start(LoopPlan(firstTime: Date().addingTimeInterval(600), interval: 60, maxRounds: 1, prompts: ["test"]), wall: Date(), mono: Self.mono)
         } catch { return false }
         refresh()
-        guard back.title == L.t("停止並返回簡單模式") else { return false }
-        back.performClick(nil)
-        onReturnToSimple = originalReturn
-        guard returned, !engine.active, captureKind == 0, timer == nil else { return false }
-        show()
-        guard timer?.isValid == true, editor.string.hasPrefix("第二輪"), prompts.count == 2 else { return false }
+        guard !switchMode(false), engine.active else { return false }
+        stop("已用 F8 緊急停止。")
+        guard switchMode(false), switchMode(true), timer?.isValid == true, editor.string == prompt else { return false }
         guard let screenshot else { return true }
         guard let content = window.contentView, let bitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds) else { return false }
         content.cacheDisplay(in: content.bounds, to: bitmap)
@@ -323,5 +291,3 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         catch { return false }
     }
 }
-
-private final class LoopFlippedView: NSView { override var isFlipped: Bool { true } }

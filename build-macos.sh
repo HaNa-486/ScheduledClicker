@@ -28,6 +28,7 @@ swiftc -O \
   "$project_root/macOS/Sources/SchedulerCore.swift" \
   "$project_root/macOS/Sources/LoopCore.swift" \
   "$project_root/macOS/Sources/LoopInput.swift" \
+  "$project_root/macOS/Sources/NativeUI.swift" \
   "$project_root/macOS/Sources/LoopWindow.swift" \
   "$project_root/macOS/Sources/Localization.swift" \
   "$project_root/macOS/Sources/LocalizationCatalog.swift" \
@@ -41,6 +42,7 @@ swiftc -O \
   "$project_root/macOS/Sources/SchedulerCore.swift" \
   "$project_root/macOS/Sources/LoopCore.swift" \
   "$project_root/macOS/Sources/LoopInput.swift" \
+  "$project_root/macOS/Sources/NativeUI.swift" \
   "$project_root/macOS/Sources/LoopWindow.swift" \
   "$project_root/macOS/Sources/Localization.swift" \
   "$project_root/macOS/Sources/LocalizationCatalog.swift" \

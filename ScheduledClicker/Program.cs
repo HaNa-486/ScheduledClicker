@@ -57,7 +57,31 @@ namespace ScheduledClicker
         private int captureCountdown;
         private bool hotkeyRegistered;
         private bool closing;
-        private LoopForm loopForm;
+        private readonly LoopForm loopForm = new LoopForm();
+        private readonly Panel simpleContent = new Panel { Dock = DockStyle.Fill, Padding = new Padding(16, 0, 16, 8) };
+        private readonly Button simpleModeButton = Ui.Button("簡單模式");
+        private readonly Button loopModeButton = Ui.Button("循環模式");
+        private readonly Label switchHint = new Label { AutoSize = true };
+        private bool loopSelected;
+        internal bool SwitchMode(bool loop)
+        {
+            if (loopSelected == loop) return true;
+            if (schedule.IsArmed || schedule.IsExecuting || captureTimer.Enabled || loopForm.Busy) return false;
+            loopSelected = loop;
+            simpleContent.Visible = !loop; loopForm.Visible = loop;
+            if (loop) loopForm.BringToFront(); else simpleContent.BringToFront();
+            UpdateNavigation(); return true;
+        }
+        private void UpdateNavigation()
+        {
+            bool busy = schedule.IsArmed || schedule.IsExecuting || captureTimer.Enabled || loopForm.Busy;
+            simpleModeButton.Enabled = !busy || !loopSelected; loopModeButton.Enabled = !busy || loopSelected;
+            simpleModeButton.BackColor = !loopSelected ? Color.FromArgb(42, 116, 214) : Color.White;
+            simpleModeButton.ForeColor = !loopSelected ? Color.White : ForeColor;
+            loopModeButton.BackColor = loopSelected ? Color.FromArgb(42, 116, 214) : Color.White;
+            loopModeButton.ForeColor = loopSelected ? Color.White : ForeColor;
+            switchHint.Text = busy ? L.T("請先停止目前操作，再切換模式。") : "";
+        }
         private LocalizedView localized;
         private readonly ComboBox language = L.Picker();
         private string statusSource = "等待設定。排程啟動後可按 F8 緊急停止。";
@@ -73,19 +97,18 @@ namespace ScheduledClicker
             Text = "定時滑鼠點擊器";
             Font = new Font("Microsoft JhengHei UI", 10F);
             StartPosition = FormStartPosition.CenterScreen;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
-            ClientSize = new Size(750, 650);
+            ClientSize = new Size(1040, 680);
+            MinimumSize = Size;
             BackColor = Color.FromArgb(247, 249, 252);
 
             BuildInterface();
-            localized = new LocalizedView(this, clockLabel, positionLabel, statusLabel, language);
+            localized = new LocalizedView(this, loopForm, clockLabel, positionLabel, statusLabel, language, switchHint);
             L.Changed += LanguageChanged; LanguageChanged();
             UpdateModeState();
             UpdateClock();
 
             clockTimer.Interval = 100;
-            clockTimer.Tick += delegate { UpdateClock(); UpdateCountdownStatus(); };
+            clockTimer.Tick += delegate { UpdateClock(); UpdateCountdownStatus(); UpdateNavigation(); };
             clockTimer.Start();
 
             captureTimer.Interval = 1000;
@@ -93,7 +116,7 @@ namespace ScheduledClicker
 
             schedule.Executed += delegate(ClickPlan plan) { PostToUi(delegate { SetCompleted(plan); }); };
             schedule.Failed += delegate(Exception ex) { PostToUi(delegate { SetFailed(ex); }); };
-            FormClosing += delegate { closing = true; L.Changed -= LanguageChanged; localized.Dispose(); schedule.Dispose(); clockTimer.Dispose(); captureTimer.Dispose(); if (loopForm != null) loopForm.Dispose(); };
+            FormClosing += delegate { closing = true; L.Changed -= LanguageChanged; localized.Dispose(); schedule.Dispose(); clockTimer.Dispose(); captureTimer.Dispose(); loopForm.Dispose(); };
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -119,104 +142,51 @@ namespace ScheduledClicker
 
         private void BuildInterface()
         {
-            var loopButton = new Button { Text = "循環輸入與點擊…", Location = new Point(450, 20), Size = new Size(276, 36) };
-            loopButton.Click += delegate
-            {
-                if (schedule.IsArmed || schedule.IsExecuting || captureTimer.Enabled)
-                { LocalizedDialog.Show(this, "請先取消目前排程或完成位置擷取。"); return; }
-                Hide();
-                try
-                {
-                    if (loopForm == null || loopForm.IsDisposed) loopForm = new LoopForm();
-                    loopForm.ShowDialog(this);
-                }
-                finally { Show(); Activate(); }
-            };
-            Controls.Add(loopButton);
-            language.Location = new Point(581, 68); Controls.Add(language);
-            Controls.Add(NewLabel("語言", 475, 73));
-            var title = new Label { Text = "定時滑鼠點擊器", Font = new Font(Font.FontFamily, 18F, FontStyle.Bold), ForeColor = Color.FromArgb(28, 45, 70), AutoSize = true, Location = new Point(24, 20) };
-            clockLabel.Font = new Font("Consolas", 16F, FontStyle.Bold);
-            clockLabel.ForeColor = Color.FromArgb(32, 106, 196);
-            clockLabel.AutoSize = true;
-            clockLabel.Location = new Point(26, 62);
-            Controls.Add(title);
-            Controls.Add(clockLabel);
+            Controls.Add(simpleContent); Controls.Add(loopForm); loopForm.Visible = false;
+            loopForm.BusyChanged += UpdateNavigation;
+            var header = new Panel { Dock = DockStyle.Top, Height = 80 };
+            var caption = NewLabel("目前時間", 18, 9); header.Controls.Add(caption);
+            clockLabel.Font = new Font("Consolas", 16F, FontStyle.Bold); clockLabel.ForeColor = Color.FromArgb(32, 106, 196);
+            clockLabel.AutoSize = true; clockLabel.Location = new Point(18, 34); header.Controls.Add(clockLabel);
+            simpleModeButton.AutoSize = loopModeButton.AutoSize = false;
+            simpleModeButton.SetBounds(365, 16, 200, 36); loopModeButton.SetBounds(567, 16, 210, 36);
+            simpleModeButton.Click += delegate { SwitchMode(false); }; loopModeButton.Click += delegate { SwitchMode(true); };
+            header.Controls.Add(simpleModeButton); header.Controls.Add(loopModeButton);
+            switchHint.Location = new Point(365, 55); switchHint.ForeColor = Color.FromArgb(140, 78, 15); header.Controls.Add(switchHint);
+            var languageLabel = NewLabel("語言", 835, 9); languageLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            language.SetBounds(835, 33, 185, 28); language.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            header.Width = ClientSize.Width; header.Controls.Add(languageLabel); header.Controls.Add(language); Controls.Add(header);
 
-            var timeGroup = NewGroup("1. 選擇執行時間", 24, 108, 702, 172);
-            absoluteMode.Text = "指定時間";
-            absoluteMode.Checked = true;
-            absoluteMode.Location = new Point(18, 31);
-            absoluteMode.AutoSize = true;
+            var columns = Ui.Columns(60, 40); simpleContent.Controls.Add(columns);
+            var timeGroup = Ui.Card("1. 選擇執行時間"); var pointGroup = Ui.Card("2. 選擇位置與點擊方式");
+            columns.Controls.Add(timeGroup, 0, 0); columns.Controls.Add(pointGroup, 1, 0);
+            absoluteMode.Text = "指定時間"; absoluteMode.Checked = true; absoluteMode.AutoSize = true; absoluteMode.Location = new Point(18, 36);
             absoluteMode.CheckedChanged += delegate { UpdateModeState(); };
-            targetTime.Format = DateTimePickerFormat.Custom;
-            targetTime.CustomFormat = "yyyy/MM/dd  HH:mm:ss";
-            targetTime.ShowUpDown = true;
-            targetTime.Width = 235;
-            targetTime.Location = new Point(220, 28);
-            targetTime.Value = DateTime.Now.AddMinutes(1);
-
-            delayMode.Text = "倒數延遲";
-            delayMode.Location = new Point(18, 82);
-            delayMode.AutoSize = true;
-            delayHours.Minimum = 0; delayHours.Maximum = 168; delayHours.Width = 58; delayHours.Location = new Point(220, 79);
-            delayMinutes.Minimum = 0; delayMinutes.Maximum = 59; delayMinutes.Width = 58; delayMinutes.Location = new Point(340, 79);
-            delaySeconds.Minimum = 0; delaySeconds.Maximum = 59; delaySeconds.Value = 10; delaySeconds.Width = 58; delaySeconds.Location = new Point(460, 79);
-            timeGroup.Controls.Add(absoluteMode); timeGroup.Controls.Add(targetTime); timeGroup.Controls.Add(delayMode);
-            timeGroup.Controls.Add(delayHours); timeGroup.Controls.Add(NewLabel("時", 282, 84));
-            timeGroup.Controls.Add(delayMinutes); timeGroup.Controls.Add(NewLabel("分", 402, 84));
-            timeGroup.Controls.Add(delaySeconds); timeGroup.Controls.Add(NewLabel("秒", 522, 84));
-            timeGroup.Controls.Add(NewLabel("倒數最短 1 秒，最長 168 小時。", 220, 119));
-
-            var pointGroup = NewGroup("2. 選擇位置與點擊方式", 24, 294, 702, 133);
-            captureButton.Text = "3 秒後擷取滑鼠位置";
-            captureButton.Size = new Size(295, 39);
-            captureButton.Location = new Point(18, 32);
-            captureButton.Click += StartCapture;
-            positionLabel.Text = "尚未選擇位置";
-            positionLabel.AutoSize = true;
-            positionLabel.ForeColor = Color.FromArgb(94, 101, 115);
-            positionLabel.Location = new Point(340, 42);
-            clickKind.DropDownStyle = ComboBoxStyle.DropDownList;
-            clickKind.Items.Add("單擊");
-            clickKind.Items.Add("雙擊");
-            clickKind.SelectedIndex = 0;
-            clickKind.Location = new Point(150, 86);
-            clickKind.Width = 185;
-            pointGroup.Controls.Add(captureButton); pointGroup.Controls.Add(positionLabel);
-            pointGroup.Controls.Add(NewLabel("點擊方式", 18, 91)); pointGroup.Controls.Add(clickKind);
-
-            armButton.Text = "啟動排程";
-            armButton.Font = new Font(Font.FontFamily, 11F, FontStyle.Bold);
-            armButton.BackColor = Color.FromArgb(42, 116, 214);
-            armButton.ForeColor = Color.White;
-            armButton.FlatStyle = FlatStyle.Flat;
-            armButton.FlatAppearance.BorderSize = 0;
-            armButton.Size = new Size(340, 48);
-            armButton.Location = new Point(24, 447);
-            armButton.Click += ArmSchedule;
-            cancelButton.Text = "取消排程";
-            cancelButton.Size = new Size(340, 48);
-            cancelButton.Location = new Point(386, 447);
-            cancelButton.Enabled = false;
-            cancelButton.Click += delegate { CancelSchedule("排程已取消。", false); };
-            Controls.Add(armButton); Controls.Add(cancelButton);
-
+            targetTime.Format = DateTimePickerFormat.Custom; targetTime.CustomFormat = "yyyy/MM/dd  HH:mm:ss"; targetTime.ShowUpDown = true;
+            targetTime.SetBounds(210, 32, 250, 26); targetTime.Value = DateTime.Now.AddMinutes(1);
+            delayMode.Text = "倒數延遲"; delayMode.AutoSize = true; delayMode.Location = new Point(18, 90);
+            delayHours.Minimum = 0; delayHours.Maximum = 168; delayHours.SetBounds(210, 87, 58, 26);
+            delayMinutes.Minimum = 0; delayMinutes.Maximum = 59; delayMinutes.SetBounds(328, 87, 58, 26);
+            delaySeconds.Minimum = 0; delaySeconds.Maximum = 59; delaySeconds.Value = 10; delaySeconds.SetBounds(446, 87, 58, 26);
+            timeGroup.Controls.AddRange(new Control[] { absoluteMode, targetTime, delayMode, delayHours, delayMinutes, delaySeconds,
+                NewLabel("時", 274, 91), NewLabel("分", 392, 91), NewLabel("秒", 510, 91), NewLabel("倒數最短 1 秒，最長 168 小時。", 18, 142) });
+            captureButton.Text = "3 秒後擷取滑鼠位置"; captureButton.SetBounds(16, 32, 340, 36); captureButton.Click += StartCapture;
+            positionLabel.Text = "尚未選擇位置"; positionLabel.AutoSize = true; positionLabel.Location = new Point(18, 80);
+            positionLabel.ForeColor = Color.FromArgb(32, 106, 196);
+            clickKind.DropDownStyle = ComboBoxStyle.DropDownList; clickKind.Items.AddRange(new object[] { "單擊", "雙擊" }); clickKind.SelectedIndex = 0;
+            clickKind.SetBounds(160, 120, 185, 28);
+            pointGroup.Controls.AddRange(new Control[] { captureButton, positionLabel, NewLabel("點擊方式", 18, 125), clickKind });
+            var note = new Label { Text = "在指定時間安全地執行一次滑鼠單擊或雙擊\n請保持目標視窗／聊天不變。未驗證 AI 狀態或送達。\n等待設定。排程啟動後可按 F8 緊急停止。", Dock = DockStyle.Bottom, Height = 84, Padding = new Padding(10, 4, 10, 4), BackColor = Ui.Notice };
+            var actions = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 42, WrapContents = false };
+            armButton.Text = "啟動排程"; armButton.AutoSize = true; armButton.Padding = new Padding(12, 3, 12, 3); armButton.Height = 34;
+            Ui.Primary(armButton); armButton.Click += ArmSchedule;
+            cancelButton.Text = "取消排程"; cancelButton.AutoSize = true; cancelButton.Padding = new Padding(12, 3, 12, 3); cancelButton.Height = 34;
+            cancelButton.Enabled = false; cancelButton.Click += delegate { CancelSchedule("排程已取消。", false); };
+            actions.Controls.Add(armButton); actions.Controls.Add(cancelButton);
             SetStatus("等待設定。排程啟動後可按 F8 緊急停止。");
-            statusLabel.AutoEllipsis = false;
-            statusLabel.Size = new Size(702, 110);
-            statusLabel.Location = new Point(24, 514);
-            statusLabel.Padding = new Padding(12, 10, 12, 8);
-            statusLabel.BackColor = Color.White;
-            statusLabel.ForeColor = Color.FromArgb(57, 66, 82);
-            Controls.Add(statusLabel);
-        }
-
-        private GroupBox NewGroup(string text, int x, int y, int width, int height)
-        {
-            var group = new GroupBox { Text = text, Location = new Point(x, y), Size = new Size(width, height), BackColor = Color.White };
-            Controls.Add(group);
-            return group;
+            statusLabel.Dock = DockStyle.Bottom; statusLabel.Height = 74; statusLabel.Padding = new Padding(12, 6, 12, 4); statusLabel.BackColor = Color.White;
+            simpleContent.Controls.Add(note); simpleContent.Controls.Add(actions); simpleContent.Controls.Add(statusLabel);
+            UpdateNavigation();
         }
 
         private static Label NewLabel(string text, int x, int y)
@@ -231,7 +201,7 @@ namespace ScheduledClicker
             clickKind.Items[0] = L.T("單擊"); clickKind.Items[1] = L.T("雙擊");
             clickKind.SelectedIndex = selected;
             if (!capturedPoint.HasValue) positionLabel.Text = L.T("尚未選擇位置");
-            SetStatus(statusSource);
+            SetStatus(statusSource); UpdateNavigation();
         }
 
         private void UpdateClock()
@@ -253,7 +223,7 @@ namespace ScheduledClicker
             captureButton.Enabled = false;
             SetStatus("請在 3 秒內將滑鼠移到要點擊的位置…");
             WindowState = FormWindowState.Minimized;
-            captureTimer.Start();
+            captureTimer.Start(); UpdateNavigation();
         }
 
         private void CaptureTimerTick(object sender, EventArgs e)
@@ -272,7 +242,7 @@ namespace ScheduledClicker
             captureButton.Enabled = true;
             WindowState = FormWindowState.Normal;
             Activate();
-            SetStatus("位置已擷取。確認時間後即可啟動排程。");
+            SetStatus("位置已擷取。確認時間後即可啟動排程。"); UpdateNavigation();
         }
 
         private void ArmSchedule(object sender, EventArgs e)
@@ -325,6 +295,7 @@ namespace ScheduledClicker
                 return;
             }
 
+            if (loopSelected || loopForm.Busy) return;
             schedule.Arm(plan);
             hotkeyRegistered = RegisterHotKey(Handle, HotkeyId, 0, (uint)Keys.F8);
             armButton.Enabled = false;
@@ -332,7 +303,7 @@ namespace ScheduledClicker
             SetInputsEnabled(false);
             statusLabel.ForeColor = Color.FromArgb(32, 106, 196);
             statusLabel.Tag = plan;
-            UpdateCountdownStatus();
+            UpdateCountdownStatus(); UpdateNavigation();
         }
 
         private void UpdateCountdownStatus()
@@ -360,7 +331,7 @@ namespace ScheduledClicker
             cancelButton.Enabled = false;
             SetInputsEnabled(true);
             statusLabel.ForeColor = emergency ? Color.FromArgb(190, 55, 55) : Color.FromArgb(57, 66, 82);
-            SetStatus(message);
+            SetStatus(message); UpdateNavigation();
         }
 
         private void SetCompleted(ClickPlan plan)

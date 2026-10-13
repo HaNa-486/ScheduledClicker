@@ -207,5 +207,10 @@ new string[] { "啟動", "Start", "開始", "시작", "Starten" },
 new string[] { "取消", "Cancel", "キャンセル", "취소", "Abbrechen" },
 new string[] { "確定", "OK", "OK", "확인", "OK" },
 new string[] { "繼續", "Continue", "続けて", "계속", "Weiter" },
+new string[] { "簡單模式", "Simple mode", "シンプルモード", "기본 모드", "Einfacher Modus" },
+new string[] { "循環模式", "Loop mode", "繰り返しモード", "반복 모드", "Wiederholungsmodus" },
+new string[] { "位置擷取", "Capture positions", "位置の取得", "위치 지정", "Positionen erfassen" },
+new string[] { "請擷取同一視窗內的兩個位置", "Capture both points in one window.", "同じウィンドウ内の2か所を取得します。", "같은 창 안의 두 지점을 지정하세요.", "Beide Punkte im selben Fenster erfassen." },
+new string[] { "請先停止目前操作，再切換模式。", "Stop the current action before switching modes.", "モードの切り替え前に操作を停止してください。", "현재 동작을 중지한 후 모드를 전환하세요.", "Vor dem Moduswechsel die aktuelle Aktion stoppen." },
 };
 } }

@@ -1,87 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using ScheduledClicker;
 
 internal static class LoopUiTests
 {
-    private static T Field<T>(object instance, string name) { return (T)instance.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(instance); }
-    private static void Save(Form form, string path)
-    {
-        using (var bitmap = new Bitmap(form.Width, form.Height))
-        { form.DrawToBitmap(bitmap, new Rectangle(Point.Empty, form.Size)); bitmap.Save(path, ImageFormat.Png); }
-    }
+    private static T Field<T>(object item, string name) { return (T)item.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(item); }
+    private static void Set(object item, string name, object value) { item.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).SetValue(item, value); }
+    private static void Call(object item, string name, params object[] values) { item.GetType().GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic).Invoke(item, values); }
+    private static void Check(bool condition, string message) { if (!condition) throw new Exception(message); }
     [STAThread] private static void Main(string[] args)
     {
-        L.Select("zh");
-        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
-        Application.EnableVisualStyles();
-        using (var form = new LoopForm())
-        using (var verifyClock = new Timer { Interval = 180 })
+        try
         {
-            form.Opacity = 0; form.ShowInTaskbar = false;
-            int visit = 0;
-            string clockBefore = null;
-            form.VisibleChanged += delegate
+            L.Select("zh"); Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException); Application.EnableVisualStyles();
+            using (var shell = new MainForm())
             {
-                if (!form.Visible) return;
-                try
+                shell.Opacity = 0; shell.ShowInTaskbar = false; shell.Show(); Application.DoEvents();
+                IntPtr handle = shell.Handle; Rectangle bounds = shell.Bounds;
+                var loop = Field<LoopForm>(shell, "loopForm"); var engine = Field<LoopEngine>(loop, "engine");
+                Check(Application.OpenForms.Count == 1, "More than one top-level window");
+                Check(shell.SwitchMode(true), "Cannot enter loop"); Application.DoEvents();
+                var editor = Field<TextBox>(loop, "editor"); var mode = Field<ComboBox>(loop, "mode");
+                mode.SelectedIndex = 1; Field<Button>(loop, "add").PerformClick(); editor.Text = "第二輪：繼續\r\n保留進度 😀";
+                mode.SelectedIndex = 0; editor.Text = "第一輪提示"; mode.SelectedIndex = 1; Field<ListBox>(loop, "entries").SelectedIndex = 1;
+                Check(Field<List<string>>(loop, "prompts").Count == 2 && editor.Text.Contains("第二輪"), "Prompt sequence lost");
+                editor.Select(2, 3);
+                for (int i = 0; i < 3; i++)
                 {
-                    var mode = Field<ComboBox>(form, "mode"); var editor = Field<TextBox>(form, "editor");
-                    var prompts = Field<List<string>>(form, "prompts");
-                    if (visit == 0)
-                    {
-                        mode.SelectedIndex = 1;
-                        Field<Button>(form, "add").PerformClick(); editor.Text = "第二輪：繼續\r\n保留進度 😀";
-                        mode.SelectedIndex = 0; editor.Text = "第一輪提示";
-                        if (prompts.Count != 2 || prompts[0] != "第一輪提示" || !prompts[1].Contains("第二輪")) throw new Exception("Prompt editing lost data");
-                        mode.SelectedIndex = 1; Field<ListBox>(form, "entries").SelectedIndex = 1;
-                    }
-                    else
-                    {
-                        if (!editor.Text.Contains("第二輪") || prompts.Count != 2) throw new Exception("Navigation lost prompt settings");
-                        if (Field<LoopEngine>(form, "engine").Active || Field<int>(form, "captureKind") != 0) throw new Exception("Navigation left active work");
-                    }
-                    clockBefore = Field<Label>(form, "clockLabel").Text;
-                    verifyClock.Start();
+                    Check(shell.SwitchMode(false) && shell.SwitchMode(true), "Mode switching failed");
+                    Check(shell.Handle == handle && shell.Bounds == bounds && Application.OpenForms.Count == 1, "Mode switch changed window");
+                    Check(editor.Text.Contains("第二輪") && editor.SelectionStart == 2 && editor.SelectionLength == 3, "Mode switch lost editor state");
                 }
-                catch (Exception ex) { Console.WriteLine("FAIL: " + ex.Message); Environment.ExitCode = 1; form.BeginInvoke(new Action(form.Close)); }
-            };
-            verifyClock.Tick += delegate
-            {
-                verifyClock.Stop();
-                try
-                {
-                    var clock = Field<Label>(form, "clockLabel");
-                    if (clock.Text == clockBefore || clock.Text.Length < 23) throw new Exception("Digital clock did not advance");
-                    var settings = Field<FlowLayoutPanel>(form, "settings");
-                    var back = Field<Button>(form, "back");
-                    if (!back.Visible || !back.Parent.ClientRectangle.Contains(back.Bounds)) throw new Exception("Return button outside visible header");
-                    settings.AutoScrollPosition = Point.Empty;
-                    Save(form, args[0]);
-                    settings.ScrollControlIntoView(settings.Controls[settings.Controls.Count - 1]);
-                    if (!clock.Visible || clock.Parent == settings) throw new Exception("Clock scrolls with settings");
-                    Save(form, args[0].Replace(".png", "-bottom.png"));
-                    if (visit == 0)
-                    {
-                        Field<LoopEngine>(form, "engine").Start(new LoopPlan { FirstTime = DateTime.Now.AddMinutes(10), Interval = TimeSpan.FromMinutes(1), MaxRounds = 1, Prompts = new[] { "test" } }, DateTime.Now, 0);
-                        typeof(LoopForm).GetMethod("RefreshStatus", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(form, null);
-                        if (!Field<Button>(form, "back").Text.Contains("停止")) throw new Exception("Active return lacks stop label");
-                    }
-                    Field<Button>(form, "back").PerformClick();
-                }
-                catch (Exception ex) { Console.WriteLine("FAIL: " + ex.Message); Environment.ExitCode = 1; form.Close(); }
-            };
-            form.ShowDialog();
-            if (Environment.ExitCode != 0) return;
-            if (Field<LoopEngine>(form, "engine").Active) throw new Exception("Return did not cancel active loop");
-            visit = 1;
-            Field<FlowLayoutPanel>(form, "settings").AutoScrollPosition = Point.Empty;
-            form.ShowDialog();
-            if (Environment.ExitCode == 0) Console.WriteLine("PASS: prompt editing, live fixed clock, return cancels, reopen retains settings and timer, UI rendering");
+                string before = Field<Label>(shell, "clockLabel").Text;
+                Thread.Sleep(150); Application.DoEvents(); Check(Field<Label>(shell, "clockLabel").Text != before, "Shared clock stopped");
+                engine.Start(new LoopPlan { FirstTime = DateTime.Now.AddHours(1), Interval = TimeSpan.FromMinutes(1), MaxRounds = 1, Prompts = new[] { "fixture" } }, DateTime.Now, 0);
+                Application.DoEvents(); Check(!shell.SwitchMode(false) && engine.Active, "Switch hid or cancelled active work");
+                Message hotkey = Message.Create(loop.Handle, 0x312, new IntPtr(0x4C50), IntPtr.Zero);
+                Call(loop, "WndProc", hotkey); Check(!engine.Active, "Embedded loop F8 route failed");
+                Set(loop, "captureKind", 1); Set(loop, "captureDue", double.MaxValue);
+                Check(!shell.SwitchMode(false), "Switch allowed during capture"); Field<Button>(loop, "cancel").Enabled = true; Field<Button>(loop, "cancel").PerformClick();
+                Check(shell.SwitchMode(false), "Switch unavailable after cancelling capture");
+                var service = Field<ScheduleService>(shell, "schedule");
+                service.Arm(new ClickPlan(DateTime.Now.AddHours(1), new Point(1, 1), ClickKind.Single));
+                Check(!shell.SwitchMode(true), "Switch allowed during simple schedule"); Call(shell, "CancelSchedule", "排程已取消。", false);
+                Check(shell.SwitchMode(true), "Cannot switch after cancelling simple schedule");
+                engine.Start(new LoopPlan { FirstTime = DateTime.Now.AddHours(1), Interval = TimeSpan.FromMinutes(1), MaxRounds = 1, Prompts = new[] { "fixture" } }, DateTime.Now, 0);
+                shell.Close(); Check(!engine.Active && loop.IsDisposed, "Closing shell left loop alive");
+            }
+            Console.WriteLine("PASS: one window, retained mode state, shared clock, busy/capture guards, embedded F8 routing and close cancellation.");
         }
+        catch (Exception ex) { Console.WriteLine("FAIL: " + ex); Environment.ExitCode = 1; }
     }
 }

@@ -7,12 +7,12 @@ using System.Windows.Forms;
 
 namespace ScheduledClicker
 {
-    internal sealed class LoopForm : Form
+    internal sealed class LoopForm : UserControl
     {
         private readonly NativeLoopInput input = new NativeLoopInput();
         private readonly LoopEngine engine;
         private readonly Timer timer = new Timer { Interval = 50 };
-        private readonly FlowLayoutPanel settings = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoScroll = true, FlowDirection = FlowDirection.TopDown, WrapContents = false, Padding = new Padding(16) };
+        private readonly TableLayoutPanel settings = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 1, Padding = new Padding(0), Margin = new Padding(0) };
         private readonly DateTimePicker first = DatePicker(DateTime.Now.AddMinutes(1));
         private readonly DateTimePicker deadline = DatePicker(DateTime.Now.AddDays(1));
         private readonly NumericUpDown hours = Number(0, 8760, 5);
@@ -38,10 +38,10 @@ namespace ScheduledClicker
         private readonly Button trial = Button("試跑一輪");
         private readonly Button pause = Button("暫停");
         private readonly Button cancel = Button("取消 / 停止");
-        private readonly Button back = Button("返回簡單模式");
-        private readonly Label clockLabel = new Label { AutoSize = true, Font = new Font("Consolas", 16F, FontStyle.Bold), ForeColor = Color.FromArgb(32, 106, 196), Location = new Point(16, 28) };
-        private readonly Label status = new Label { Dock = DockStyle.Bottom, Height = 85, Padding = new Padding(16, 8, 16, 4), BackColor = Color.White };
-        private readonly ComboBox language = L.Picker();
+        private readonly Label status = new Label { Dock = DockStyle.Bottom, Height = 74, Padding = new Padding(12, 6, 12, 4), BackColor = Color.White };
+        internal event Action BusyChanged;
+        internal bool Busy { get { return engine.Active || captureKind != 0; } }
+        private bool lastBusy;
         private readonly Label notice = Label("執行時保持喚醒、不鎖屏，目標視窗與聊天固定。\n使用剪貼簿貼上，會覆寫剪貼簿；不判斷 AI 狀態或送達結果。\n試跑會真的輸入並點送出。中途停止後請檢查草稿，避免重複。\n兩個停止條件同時勾選時，先達到者停止。關閉本視窗也會取消。");
         private readonly LocalizedView localized;
         private int captureKind;
@@ -56,35 +56,51 @@ namespace ScheduledClicker
         internal LoopForm()
         {
             engine = new LoopEngine(input, delegate { return Mono; });
-            Text = "循環輸入與點擊"; Font = new Font("Microsoft JhengHei UI", 10);
-            ClientSize = new Size(800, 800); MinimumSize = new Size(800, 660); StartPosition = FormStartPosition.CenterParent;
+            Dock = DockStyle.Fill; Font = new Font("Microsoft JhengHei UI", 10);
+            BackColor = Ui.Background; Padding = new Padding(16, 0, 16, 8);
             Controls.Add(settings);
-            var actions = Row(start, trial, pause, cancel); actions.Dock = DockStyle.Bottom; actions.Height = 44; actions.Padding = new Padding(12, 0, 0, 0);
-            notice.AutoSize = false; notice.Dock = DockStyle.Bottom; notice.Padding = new Padding(16, 8, 16, 6); notice.BackColor = Color.FromArgb(255, 249, 230);
+            var actions = Row(start, trial, pause, cancel); actions.Dock = DockStyle.Bottom; actions.Height = 42;
+            Ui.Primary(start);
+            notice.AutoSize = false; notice.Dock = DockStyle.Bottom; notice.Padding = new Padding(10, 4, 10, 4); notice.BackColor = Ui.Notice;
             Controls.Add(notice); Controls.Add(actions); Controls.Add(status);
-            var header = new Panel { Dock = DockStyle.Top, Height = 100, Width = ClientSize.Width };
-            var caption = Label("目前時間"); caption.Location = new Point(16, 3);
-            back.AutoSize = false; back.Size = new Size(280, 36); back.Location = new Point(504, 12); back.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            var languageCaption = Label("語言"); languageCaption.Location = new Point(16, 61);
-            language.Location = new Point(125, 64);
-            header.Controls.Add(languageCaption); header.Controls.Add(language);
-            header.Controls.Add(caption); header.Controls.Add(clockLabel); header.Controls.Add(back); Controls.Add(header);
-            back.Click += delegate { Close(); };
-            settings.Controls.Add(Label("首次時間與循環間隔", true));
-            settings.Controls.Add(Row(Label("首次執行"), first));
-            settings.Controls.Add(Row(Label("每輪結束後等"), hours, Label("時"), minutes, Label("分"), seconds, Label("秒")));
-            settings.Controls.Add(Row(Label("點擊／貼上之間等待"), wait, Label("秒（1–10）")));
-            settings.Controls.Add(Row(countBound, count, Label("輪")));
-            settings.Controls.Add(Row(timeBound, deadline));
-            settings.Controls.Add(Label("提示詞", true));
+            settings.RowStyles.Add(new RowStyle(SizeType.Absolute, 200));
+            settings.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            var top = Ui.Columns(60, 40);
+            var timing = Ui.Card("首次時間與循環間隔");
+            var positions = Ui.Card("位置擷取");
+            top.Controls.Add(timing, 0, 0); top.Controls.Add(positions, 1, 0); settings.Controls.Add(top, 0, 0);
+            var times = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 5, Padding = new Padding(8, 4, 8, 4) };
+            times.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); times.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            foreach (int i in new int[5]) times.RowStyles.Add(new RowStyle(SizeType.Percent, 20));
+            first.Width = deadline.Width = 248;
+            hours.Width = minutes.Width = seconds.Width = 58;
+            times.Controls.Add(Label("首次執行"), 0, 0); times.Controls.Add(first, 1, 0);
+            times.Controls.Add(Label("每輪結束後等"), 0, 1); times.Controls.Add(Row(hours, Label("時"), minutes, Label("分"), seconds, Label("秒")), 1, 1);
+            times.Controls.Add(Label("點擊／貼上之間等待"), 0, 2); times.Controls.Add(Row(wait, Label("秒（1–10）")), 1, 2);
+            times.Controls.Add(countBound, 0, 3); times.Controls.Add(Row(count, Label("輪")), 1, 3);
+            times.Controls.Add(timeBound, 0, 4); times.Controls.Add(deadline, 1, 4); timing.Controls.Add(times);
+            var points = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(10, 3, 10, 6) };
+            points.RowStyles.Add(new RowStyle(SizeType.Absolute, 28)); points.RowStyles.Add(new RowStyle(SizeType.Percent, 50)); points.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            var hint = Label("請擷取同一視窗內的兩個位置"); hint.Dock = DockStyle.Fill; hint.AutoSize = false;
+            points.Controls.Add(hint, 0, 0);
+            var inputRow = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, Margin = new Padding(0) };
+            inputRow.Controls.Add(captureInput); inputRow.Controls.Add(inputLabel);
+            var sendRow = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, Margin = new Padding(0) };
+            sendRow.Controls.Add(captureSend); sendRow.Controls.Add(sendLabel);
+            points.Controls.Add(inputRow, 0, 1); points.Controls.Add(sendRow, 0, 2); positions.Controls.Add(points);
+            var promptCard = Ui.Card("提示詞"); settings.Controls.Add(promptCard, 0, 1);
+            var promptLayout = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 4, ColumnCount = 1, Padding = new Padding(8, 0, 8, 2) };
+            promptLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 36)); promptLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            promptLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 25)); promptLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 25));
             mode.Items.AddRange(new object[] { "每輪相同", "依輪次設定" }); mode.SelectedIndex = 0;
-            settings.Controls.Add(Row(mode, add, remove));
-            settings.Controls.Add(Row(entries, editor));
-            settings.Controls.Add(repeatLast); settings.Controls.Add(replace);
-            settings.Controls.Add(Label("位置：請擷取同一視窗內的兩個位置", true));
-            settings.Controls.Add(Row(captureInput, inputLabel));
-            settings.Controls.Add(Row(captureSend, sendLabel));
-            settings.Controls.Add(new Panel { Width = 10, Height = 20 });
+            promptLayout.Controls.Add(Row(mode, add, remove), 0, 0);
+            var editRow = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1, Margin = new Padding(0) };
+            editRow.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            editRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140)); editRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            entries.Dock = editor.Dock = DockStyle.Fill; entries.IntegralHeight = false;
+            editRow.Controls.Add(entries, 0, 0); editRow.Controls.Add(editor, 1, 0);
+            promptLayout.Controls.Add(editRow, 0, 1); promptLayout.Controls.Add(repeatLast, 0, 2); promptLayout.Controls.Add(replace, 0, 3);
+            promptCard.Controls.Add(promptLayout);
             entries.SelectedIndexChanged += delegate { LoadPrompt(); };
             editor.TextChanged += delegate { if (!loading && entries.SelectedIndex >= 0) prompts[entries.SelectedIndex] = editor.Text; };
             mode.SelectedIndexChanged += delegate { if (!loading) { entries.SelectedIndex = 0; UpdatePromptMode(); } };
@@ -94,11 +110,10 @@ namespace ScheduledClicker
             timeBound.CheckedChanged += delegate { UpdatePromptMode(); };
             captureInput.Click += delegate { BeginCapture(1); }; captureSend.Click += delegate { BeginCapture(2); };
             start.Click += delegate { Arm(false); }; trial.Click += delegate { Arm(true); };
-            pause.Click += delegate { engine.TogglePause(DateTime.Now, Mono); RefreshStatus(); if (engine.Active && !engine.Paused) WindowState = FormWindowState.Minimized; };
+            pause.Click += delegate { engine.TogglePause(DateTime.Now, Mono); RefreshStatus(); if (engine.Active && !engine.Paused) FindForm().WindowState = FormWindowState.Minimized; };
             cancel.Click += delegate { captureKind = 0; engine.Stop("已取消排程。"); RefreshStatus(); };
             timer.Tick += delegate { Tick(); }; timer.Start();
-            FormClosed += delegate { captureKind = 0; timer.Stop(); engine.Stop("已返回簡單模式；循環已停止。"); ReleaseKey(); };
-            localized = new LocalizedView(this, status, clockLabel, inputLabel, sendLabel, back, pause, language);
+            localized = new LocalizedView(this, status, inputLabel, sendLabel, pause);
             L.Changed += LanguageChanged;
             Resize += delegate { LayoutNotice(); };
             RefreshEntries(0); LanguageChanged();
@@ -107,28 +122,28 @@ namespace ScheduledClicker
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
-            if (Visible) { timer.Start(); RefreshStatus(); }
+            if (engine != null) { if (Visible) timer.Start(); else if (!Busy) timer.Stop(); RefreshStatus(); }
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) { L.Changed -= LanguageChanged; if (localized != null) localized.Dispose(); timer.Stop(); timer.Dispose(); ReleaseKey(); }
+            if (disposing) { captureKind = 0; engine.Stop("程式已結束。"); L.Changed -= LanguageChanged; if (localized != null) localized.Dispose(); timer.Stop(); timer.Dispose(); ReleaseKey(); }
             base.Dispose(disposing);
         }
 
         private static NumericUpDown Number(int min, int max, int value) { return new NumericUpDown { Minimum = min, Maximum = max, Value = value, Width = 65 }; }
         private static DateTimePicker DatePicker(DateTime value) { return new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy/MM/dd HH:mm:ss", ShowUpDown = true, Width = 250, Value = value }; }
-        private static Button Button(string text) { return new Button { Text = text, AutoSize = true, Height = 34, Padding = new Padding(5, 2, 5, 2) }; }
+        private static Button Button(string text) { return Ui.Button(text); }
         private static Label Label(string text) { return Label(text, false); }
-        private static Label Label(string text, bool bold) { return new Label { Text = text, AutoSize = true, Margin = new Padding(3, 8, 3, 6), Font = new Font("Microsoft JhengHei UI", bold ? 12 : 10, bold ? FontStyle.Bold : FontStyle.Regular) }; }
+        private static Label Label(string text, bool bold) { return new Label { Text = text, AutoSize = true, Margin = new Padding(3, 4, 3, 2), Font = new Font("Microsoft JhengHei UI", bold ? 12 : 10, bold ? FontStyle.Bold : FontStyle.Regular) }; }
         private static FlowLayoutPanel Row(params Control[] controls)
         {
-            var row = new FlowLayoutPanel { AutoSize = true, WrapContents = false, Margin = new Padding(0, 3, 0, 3) };
+            var row = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, WrapContents = false, Margin = new Padding(0) };
             row.Controls.AddRange(controls); return row;
         }
         private void LayoutNotice()
         {
-            int width = Math.Max(100, ClientSize.Width - notice.Padding.Horizontal);
+            int width = Math.Max(100, ClientSize.Width - Padding.Horizontal - notice.Padding.Horizontal);
             notice.Height = TextRenderer.MeasureText(notice.Text, notice.Font, new Size(width, Int32.MaxValue), TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + notice.Padding.Vertical + 4;
         }
         private void LanguageChanged()
@@ -161,7 +176,7 @@ namespace ScheduledClicker
         }
         private void BeginCapture(int kind)
         {
-            captureKind = kind; captureDue = Mono + 3; RefreshStatus(); WindowState = FormWindowState.Minimized;
+            captureKind = kind; captureDue = Mono + 3; RefreshStatus(); FindForm().WindowState = FormWindowState.Minimized;
         }
         private void Tick()
         {
@@ -177,7 +192,7 @@ namespace ScheduledClicker
                     engine.Stop("位置已擷取。");
                 }
                 catch (Exception ex) { engine.Stop(ex.Message); }
-                captureKind = 0; WindowState = FormWindowState.Normal; Activate();
+                captureKind = 0; FindForm().WindowState = FormWindowState.Normal; FindForm().Activate();
             }
             engine.Tick(DateTime.Now, Mono); RefreshStatus();
         }
@@ -199,25 +214,24 @@ namespace ScheduledClicker
                     + "\n輸入框：" + input.Input.Point + "；送出鈕：" + input.Submit.Point
                     + "\n\n將真的輸入並點擊送出，會覆寫剪貼簿。\n" + (plan.ReplaceDraft ? "會取代輸入框原有文字。" : "會在游標位置插入，請先檢查草稿。")
                     + "\n請保持目標視窗／聊天不變。未驗證 AI 狀態或送達。";
-                if (LocalizedDialog.Show(this, message, "確認循環操作", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK) return;
+                if (LocalizedDialog.Show(FindForm(), message, "確認循環操作", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK) return;
                 if (test) plan.FirstTime = DateTime.Now.AddSeconds(5);
                 registered = RegisterHotKey(Handle, Hotkey, 0, (uint)Keys.F8);
                 if (!registered) throw new InvalidOperationException("F8 已被占用，請先釋放快捷鍵後再啟動。");
-                engine.Start(plan, DateTime.Now, Mono); RefreshStatus(); WindowState = FormWindowState.Minimized;
+                engine.Start(plan, DateTime.Now, Mono); RefreshStatus(); FindForm().WindowState = FormWindowState.Minimized;
             }
-            catch (Exception ex) { ReleaseKey(); LocalizedDialog.Show(this, ex.Message, "無法啟動", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            catch (Exception ex) { ReleaseKey(); LocalizedDialog.Show(FindForm(), ex.Message, "無法啟動", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }
         private void RefreshStatus()
         {
-            clockLabel.Text = DateTime.Now.ToString("yyyy/MM/dd  HH:mm:ss.fff");
             bool busy = engine.Active || captureKind != 0;
-            back.Text = L.T(busy ? "停止並返回簡單模式" : "返回簡單模式");
             settings.Enabled = !busy; start.Enabled = trial.Enabled = !busy; pause.Enabled = engine.Active; cancel.Enabled = busy;
             pause.Text = L.T(engine.Paused ? "恢復" : (engine.BetweenRounds ? "暫停" : "停止本輪"));
             string left = engine.Active && !engine.Paused ? "；下個步驟剩 " + Math.Max(0, Math.Ceiling(engine.Remaining(DateTime.Now, Mono))) + " 秒" : "";
             status.Text = captureKind != 0 ? "請把滑鼠移到目標位置，倒數 " + Math.Max(0, Math.Ceiling(captureDue - Mono)) + " 秒。" : "已執行送出點擊 " + engine.Completed + " 輪" + left + "\n" + engine.Status + (engine.Active ? " F8 可停止。" : "");
             status.Text = L.T(status.Text);
             if (!engine.Active) ReleaseKey();
+            if (lastBusy != busy) { lastBusy = busy; if (BusyChanged != null) BusyChanged(); }
         }
         private void ReleaseKey() { if (registered) UnregisterHotKey(Handle, Hotkey); registered = false; }
         protected override void WndProc(ref Message message)

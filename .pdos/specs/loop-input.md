@@ -6,8 +6,8 @@ User explicitly requests a generic coordinate-based input/send loop on Windows a
 
 ## Decisions
 
-- Keep one-shot click intact; open a separate loop setup window, mutually exclusive with one-shot execution.
-- Both platforms show a fixed live digital clock and explicit return-to-simple button above scrolling settings. Returning or closing stops active capture/loop; reopening retains in-memory settings and restarts the display timer. Active return is labeled as stopping the loop.
+- Keep one-shot click intact; switch simple/loop content within one shared top-level window, mutually exclusive with one-shot execution.
+- Both platforms share a fixed live digital clock, language picker and simple/loop mode switch. Idle switching preserves in-memory settings and window identity. Execution, pause or capture blocks switching until stopped. Closing the shared window cancels either mode and pending capture callbacks. See `unified-window.md` for the no-page-scroll layout.
 - First execution uses an absolute date/time. Subsequent intervals run from completion of the preceding input/send sequence, using elapsed time. No catch-up runs.
 - Same-prompt mode uses the first entry. Sequence mode uses entries in order, then stops unless explicitly configured to repeat the final entry.
 - Require at least one bound: total attempted rounds (1–10000) or an absolute deadline (up to 365 days). If both are set, the first reached wins. A round counts only after the send click has been injected; this does not confirm message delivery.

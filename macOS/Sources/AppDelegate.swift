@@ -1,6 +1,6 @@
 import Cocoa
 
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var window: NSWindow!
     private let engine = ScheduleEngine()
     private var clockTimer: Timer?
@@ -11,6 +11,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var localKeyMonitor: Any?
     private var smokeClockFractions = Set<String>()
     private var loopWindow: LoopWindow?
+    private let simpleContent = ModeContentView(frame: NSRect(x: 0, y: 0, width: 1040, height: 600))
+    private let modeSelector = NSSegmentedControl(labels: ["簡單模式", "循環模式"], trackingMode: .selectOne, target: nil, action: nil)
+    private let switchHint = NSTextField(labelWithString: "")
+    private var loopSelected = false
+    private var closing = false
     private let language = LanguagePicker()
     private var localized: LocalizedView?
     private var languageObserver: NSObjectProtocol?
@@ -46,7 +51,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         buildMenu()
         buildWindow()
-        localized = LocalizedView(window: window, excluding: [clockLabel, statusLabel, positionLabel, language.view])
+        localized = LocalizedView(window: window, excluding: [clockLabel, statusLabel, positionLabel, language.view, switchHint, loopWindow!.view])
         languageObserver = NotificationCenter.default.addObserver(forName: L.changed, object: nil, queue: .main) { [weak self] _ in self?.languageChanged() }
         languageChanged()
         installEmergencyKeyMonitors()
@@ -67,13 +72,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
 
         if CommandLine.arguments.contains("--loop-ui-smoke-test") {
-            window.orderOut(nil)
-            loopWindow = LoopWindow(); loopWindow?.show()
+            _ = switchMode(true)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 let args = CommandLine.arguments
                 let index = args.firstIndex(of: "--screenshot")
                 let path = index.flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil }
-                guard self?.loopWindow?.smokeTest(screenshot: path) == true else {
+                guard let self, self.loopWindow?.smokeTest(screenshot: path, switchMode: { self.switchMode($0) }) == true else {
                     fputs("macOS loop UI smoke test failed.\n", stderr); exit(1)
                 }
                 print("macOS loop UI smoke test passed."); NSApp.terminate(nil)
@@ -94,11 +98,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         if let languageObserver { NotificationCenter.default.removeObserver(languageObserver) }
-        loopWindow?.stop("程式已結束。")
+        loopWindow?.shutdown()
         _ = engine.cancel()
         clockTimer?.invalidate()
         if let globalKeyMonitor { NSEvent.removeMonitor(globalKeyMonitor) }
         if let localKeyMonitor { NSEvent.removeMonitor(localKeyMonitor) }
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        closing = true; captureRemaining = 0; loopWindow?.shutdown(); _ = engine.cancel(); clockTimer?.invalidate()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
@@ -114,113 +122,52 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func buildWindow() {
-        window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 840, height: 720),
-            styleMask: [.titled, .closable, .miniaturizable],
-            backing: .buffered,
-            defer: false
-        )
-        window.title = "ScheduledClicker — 定時滑鼠點擊器"
-        window.center()
-        window.isReleasedWhenClosed = false
-        // Never combine a fixed light background with dynamic system text colors.
-        // Semantic colors keep the entire window readable in both Aqua and Dark Aqua.
-        window.backgroundColor = .windowBackgroundColor
-
-        let content = AppearanceBackgroundView(frame: window.contentView?.bounds ?? .zero)
-        content.autoresizingMask = [.width, .height]
-        window.contentView = content
-        let title = label("定時滑鼠點擊器", frame: NSRect(x: 32, y: 654, width: 490, height: 34), size: 24, bold: true)
-        let subtitle = label("在指定時間安全地執行一次滑鼠單擊或雙擊", frame: NSRect(x: 32, y: 625, width: 776, height: 22), color: .secondaryLabelColor)
-        let clockCaption = label("目前時間", frame: NSRect(x: 34, y: 590, width: 180, height: 20), size: 12, bold: true, color: .secondaryLabelColor)
-        clockLabel.frame = NSRect(x: 32, y: 552, width: 455, height: 34)
-        clockLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 23, weight: .semibold)
-        clockLabel.textColor = .systemBlue
-        clockLabel.setAccessibilityLabel("目前時間")
-        content.addSubview(title)
-        content.addSubview(subtitle)
-        content.addSubview(clockCaption)
-        content.addSubview(clockLabel)
-        let loopButton = NSButton(title: "循環輸入與點擊…", target: self, action: #selector(openLoop))
-        loopButton.frame = NSRect(x: 505, y: 550, width: 315, height: 32)
-        loopButton.bezelStyle = .rounded
-        content.addSubview(loopButton)
-        content.addSubview(label("語言", frame: NSRect(x: 555, y: 661, width: 100, height: 22)))
-        language.view.frame = NSRect(x: 660, y: 657, width: 160, height: 30); content.addSubview(language.view)
-
-        content.addSubview(groupBox(frame: NSRect(x: 24, y: 344, width: 792, height: 194)))
-        content.addSubview(label("1. 何時執行？", frame: NSRect(x: 48, y: 493, width: 300, height: 24), size: 16, bold: true))
-        content.addSubview(label("選擇明確時間，或從現在開始倒數。", frame: NSRect(x: 48, y: 468, width: 740, height: 20), size: 13, color: .secondaryLabelColor))
-
-        timeMode.frame = NSRect(x: 48, y: 423, width: 360, height: 30)
-        timeMode.selectedSegment = 0
-        timeMode.target = self
-        timeMode.action = #selector(modeChanged(_:))
-        timeMode.setAccessibilityLabel("時間模式")
-        content.addSubview(timeMode)
-
-        targetDate.frame = NSRect(x: 446, y: 421, width: 340, height: 30)
-        targetDate.datePickerStyle = .textFieldAndStepper
-        targetDate.datePickerElements = [.yearMonthDay, .hourMinuteSecond]
-        targetDate.dateValue = Date().addingTimeInterval(60)
-        targetDate.setAccessibilityLabel("指定執行時間")
-        content.addSubview(targetDate)
-
-        configureNumericField(delayHours, frame: NSRect(x: 446, y: 421, width: 56, height: 30), label: "倒數小時")
-        configureNumericField(delayMinutes, frame: NSRect(x: 556, y: 421, width: 56, height: 30), label: "倒數分鐘")
-        configureNumericField(delaySeconds, frame: NSRect(x: 666, y: 421, width: 56, height: 30), label: "倒數秒數")
-        content.addSubview(delayHours)
-        content.addSubview(delayMinutes)
-        content.addSubview(delaySeconds)
-        let hoursLabel = label("時", frame: NSRect(x: 508, y: 426, width: 48, height: 20))
-        let minutesLabel = label("分", frame: NSRect(x: 618, y: 426, width: 48, height: 20))
-        let secondsLabel = label("秒", frame: NSRect(x: 728, y: 426, width: 48, height: 20))
-        let delayHint = label("可設定 1 秒至 168 小時。", frame: NSRect(x: 446, y: 382, width: 340, height: 20), size: 12, color: .secondaryLabelColor)
-        [hoursLabel, minutesLabel, secondsLabel, delayHint].forEach { content.addSubview($0) }
-        delayViews = [delayHours, delayMinutes, delaySeconds, hoursLabel, minutesLabel, secondsLabel, delayHint]
-
-        content.addSubview(groupBox(frame: NSRect(x: 24, y: 190, width: 792, height: 136)))
-        content.addSubview(label("2. 要點哪裡？", frame: NSRect(x: 48, y: 281, width: 300, height: 24), size: 16, bold: true))
-        content.addSubview(label("擷取位置後，選擇單擊或雙擊。", frame: NSRect(x: 48, y: 256, width: 740, height: 20), size: 13, color: .secondaryLabelColor))
-        captureButton.frame = NSRect(x: 44, y: 211, width: 295, height: 34)
-        captureButton.bezelStyle = .rounded
-        captureButton.target = self
-        captureButton.action = #selector(startCapture(_:))
-        captureButton.toolTip = "按下後視窗會縮小，請在三秒內把滑鼠移到目標位置"
-        positionLabel.frame = NSRect(x: 350, y: 218, width: 215, height: 22)
-        positionLabel.textColor = .secondaryLabelColor
-        content.addSubview(captureButton)
-        content.addSubview(positionLabel)
-        clickType.frame = NSRect(x: 580, y: 213, width: 210, height: 30)
-        clickType.selectedSegment = 0
-        clickType.setAccessibilityLabel("點擊方式")
-        content.addSubview(clickType)
-
-        armButton.frame = NSRect(x: 24, y: 125, width: 406, height: 46)
-        armButton.bezelStyle = .rounded
-        armButton.keyEquivalent = "\r"
-        armButton.target = self
-        armButton.action = #selector(armSchedule(_:))
-        armButton.toolTip = "檢查設定並啟動一次性排程"
-        cancelButton.frame = NSRect(x: 446, y: 125, width: 370, height: 46)
-        cancelButton.bezelStyle = .rounded
-        cancelButton.bezelColor = .controlBackgroundColor
-        cancelButton.contentTintColor = .secondaryLabelColor
-        cancelButton.target = self
-        cancelButton.action = #selector(cancelSchedule(_:))
-        cancelButton.isEnabled = false
-        content.addSubview(armButton)
-        content.addSubview(cancelButton)
-
-        let statusBox = groupBox(frame: NSRect(x: 24, y: 24, width: 792, height: 96))
-        content.addSubview(statusBox)
-        content.addSubview(label("狀態", frame: NSRect(x: 48, y: 96, width: 100, height: 18), size: 12, bold: true, color: .secondaryLabelColor))
-        statusLabel.frame = NSRect(x: 48, y: 34, width: 744, height: 56)
-        statusLabel.font = NSFont.systemFont(ofSize: 14)
-        statusLabel.textColor = .secondaryLabelColor
-        statusLabel.setAccessibilityLabel("排程狀態")
-        content.addSubview(statusLabel)
-        updateModeState()
+        window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1040, height: 680), styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
+        window.title = "ScheduledClicker — 定時滑鼠點擊器"; window.isReleasedWhenClosed = false; window.delegate = self
+        window.contentMinSize = NSSize(width: 1040, height: 680); window.center(); window.backgroundColor = .windowBackgroundColor
+        let content = AppearanceBackgroundView(frame: window.contentView?.bounds ?? .zero); window.contentView = content
+        content.addSubview(simpleContent)
+        loopWindow = LoopWindow(window: window); content.addSubview(loopWindow!.view)
+        loopWindow?.onBusyChanged = { [weak self] in self?.updateNavigation() }
+        content.addSubview(label("目前時間", frame: NSRect(x: 18, y: 651, width: 230, height: 20), size: 12, color: .secondaryLabelColor))
+        clockLabel.frame = NSRect(x: 18, y: 619, width: 335, height: 28); clockLabel.font = .monospacedDigitSystemFont(ofSize: 20, weight: .semibold)
+        clockLabel.textColor = .systemBlue; clockLabel.setAccessibilityLabel("目前時間"); content.addSubview(clockLabel)
+        modeSelector.frame = NSRect(x: 365, y: 625, width: 435, height: 34); modeSelector.selectedSegment = 0
+        modeSelector.target = self; modeSelector.action = #selector(changeMode); content.addSubview(modeSelector)
+        switchHint.frame = NSRect(x: 365, y: 601, width: 465, height: 20); switchHint.font = .systemFont(ofSize: 11); switchHint.textColor = .secondaryLabelColor; content.addSubview(switchHint)
+        content.addSubview(label("語言", frame: NSRect(x: 835, y: 651, width: 180, height: 20), size: 12, color: .secondaryLabelColor))
+        language.view.frame = NSRect(x: 835, y: 619, width: 185, height: 28); content.addSubview(language.view)
+        let root = simpleContent
+        root.addSubview(NativeUI.card("", frame: NSRect(x: 16, y: 0, width: 596, height: 402)))
+        root.addSubview(NativeUI.card("", frame: NSRect(x: 624, y: 0, width: 400, height: 402)))
+        root.addSubview(NativeUI.label("1. 選擇執行時間", frame: NSRect(x: 28, y: 7, width: 565, height: 22), heading: true))
+        root.addSubview(NativeUI.label("2. 選擇位置與點擊方式", frame: NSRect(x: 636, y: 7, width: 370, height: 22), heading: true))
+        timeMode.frame = NSRect(x: 28, y: 40, width: 410, height: 30); timeMode.selectedSegment = 0; timeMode.target = self; timeMode.action = #selector(modeChanged(_:))
+        timeMode.setAccessibilityLabel("時間模式"); root.addSubview(timeMode)
+        targetDate.frame = NSRect(x: 28, y: 88, width: 340, height: 30); targetDate.datePickerStyle = .textFieldAndStepper
+        targetDate.datePickerElements = [.yearMonthDay, .hourMinuteSecond]; targetDate.dateValue = Date().addingTimeInterval(60)
+        targetDate.setAccessibilityLabel("指定執行時間"); root.addSubview(targetDate)
+        configureNumericField(delayHours, frame: NSRect(x: 28, y: 88, width: 56, height: 30), label: "倒數小時")
+        configureNumericField(delayMinutes, frame: NSRect(x: 158, y: 88, width: 56, height: 30), label: "倒數分鐘")
+        configureNumericField(delaySeconds, frame: NSRect(x: 288, y: 88, width: 56, height: 30), label: "倒數秒數")
+        let hoursLabel = NativeUI.label("時", frame: NSRect(x: 90, y: 94, width: 60, height: 22))
+        let minutesLabel = NativeUI.label("分", frame: NSRect(x: 220, y: 94, width: 60, height: 22))
+        let secondsLabel = NativeUI.label("秒", frame: NSRect(x: 350, y: 94, width: 60, height: 22))
+        let delayHint = NativeUI.label("可設定 1 秒至 168 小時。", frame: NSRect(x: 28, y: 137, width: 550, height: 22))
+        delayViews = [delayHours, delayMinutes, delaySeconds, hoursLabel, minutesLabel, secondsLabel, delayHint]; delayViews.forEach { root.addSubview($0) }
+        captureButton.frame = NSRect(x: 636, y: 40, width: 370, height: 34); captureButton.bezelStyle = .rounded
+        captureButton.target = self; captureButton.action = #selector(startCapture(_:)); captureButton.toolTip = "按下後視窗會縮小，請在三秒內把滑鼠移到目標位置"; root.addSubview(captureButton)
+        positionLabel.frame = NSRect(x: 640, y: 89, width: 350, height: 24); positionLabel.textColor = .systemBlue; root.addSubview(positionLabel)
+        root.addSubview(NativeUI.label("點擊方式", frame: NSRect(x: 640, y: 139, width: 340, height: 22)))
+        clickType.frame = NSRect(x: 636, y: 165, width: 370, height: 30); clickType.selectedSegment = 0; clickType.setAccessibilityLabel("點擊方式"); root.addSubview(clickType)
+        let note = NSTextField(wrappingLabelWithString: "在指定時間安全地執行一次滑鼠單擊或雙擊\n請保持目標視窗／聊天不變。未驗證 AI 狀態或送達。\n等待設定。排程啟動後可按 F8 緊急停止。")
+        note.frame = NSRect(x: 16, y: 410, width: 1008, height: 74); note.font = .systemFont(ofSize: 12.5); note.drawsBackground = true; note.backgroundColor = .controlBackgroundColor; root.addSubview(note)
+        armButton.frame = NSRect(x: 16, y: 490, width: 195, height: 34); armButton.bezelStyle = .rounded; armButton.bezelColor = .systemBlue
+        armButton.target = self; armButton.action = #selector(armSchedule(_:)); root.addSubview(armButton)
+        cancelButton.frame = NSRect(x: 221, y: 490, width: 195, height: 34); cancelButton.bezelStyle = .rounded
+        cancelButton.target = self; cancelButton.action = #selector(cancelSchedule(_:)); cancelButton.isEnabled = false; root.addSubview(cancelButton)
+        statusLabel.frame = NSRect(x: 20, y: 530, width: 1000, height: 68); statusLabel.font = .systemFont(ofSize: 12.5); statusLabel.setAccessibilityLabel("排程狀態"); root.addSubview(statusLabel)
+        updateModeState(); updateNavigation()
     }
 
     private func groupBox(frame: NSRect) -> NSBox {
@@ -272,7 +219,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func runCaptureCountdown() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            guard let self else { return }
+            guard let self, !self.closing, self.captureRemaining > 0 else { return }
             self.captureRemaining -= 1
             if self.captureRemaining > 0 {
                 self.setStatus("請在 \(self.captureRemaining) 秒內將滑鼠移到要點擊的位置…")
@@ -295,8 +242,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func armSchedule(_ sender: Any?) {
-        if loopWindow?.window.isVisible == true || loopWindow?.window.isMiniaturized == true {
-            showAlert(title: "循環模式已開啟", message: "請先關閉循環視窗，再啟動一次性排程。", style: .informational)
+        if loopSelected || loopWindow?.busy == true {
+            showAlert(title: "循環模式已開啟", message: "請先停止目前操作，再切換模式。", style: .informational)
             return
         }
         guard let point = capturedPoint else {
@@ -454,10 +401,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func languageChanged() {
         targetDate.locale = Locale(identifier: L.language == "zh" ? "zh-Hant" : L.language)
         if capturedPoint == nil { positionLabel.stringValue = L.t("尚未選擇位置") }
-        setStatus(statusSource); buildMenu()
+        setStatus(statusSource); buildMenu(); updateNavigation()
     }
 
     private func updateClockAndStatus() {
+        updateNavigation()
         let clockText = clockFormatter.string(from: Date())
         clockLabel.stringValue = clockText
         if CommandLine.arguments.contains("--ui-smoke-test"), let fraction = clockText.split(separator: ".").last {
@@ -477,32 +425,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func installEmergencyKeyMonitors() {
         globalKeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard event.keyCode == 100 else { return }
+            guard event.keyCode == 100, self?.loopSelected == false else { return }
             DispatchQueue.main.async { self?.cancelSchedule(message: "已用 F8 緊急停止。", emergency: true) }
         }
         localKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard event.keyCode == 100 else { return event }
+            guard event.keyCode == 100, self?.loopSelected == false else { return event }
             self?.cancelSchedule(message: "已用 F8 緊急停止。", emergency: true)
-            return self?.loopWindow?.window.isVisible == true || self?.loopWindow?.window.isMiniaturized == true ? event : nil
+            return nil
         }
     }
 
-    @objc private func openLoop() {
-        if engine.isArmed || engine.isExecuting || captureRemaining > 0 {
-            showAlert(title: "已有操作進行中", message: "請先取消目前排程或完成位置擷取。", style: .informational)
-            return
-        }
-        if loopWindow == nil {
-            loopWindow = LoopWindow()
-            loopWindow?.onReturnToSimple = { [weak self] in
-                self?.window.deminiaturize(nil)
-                self?.window.makeKeyAndOrderFront(nil)
-                NSApp.activate(ignoringOtherApps: true)
-            }
-        }
-        window.miniaturize(nil)
-        loopWindow?.window.deminiaturize(nil)
-        loopWindow?.show()
+    @objc private func changeMode() {
+        if !switchMode(modeSelector.selectedSegment == 1) { modeSelector.selectedSegment = loopSelected ? 1 : 0 }
+    }
+    @discardableResult private func switchMode(_ loop: Bool) -> Bool {
+        if loopSelected == loop { return true }
+        guard !engine.isArmed, !engine.isExecuting, captureRemaining == 0, loopWindow?.busy != true else { return false }
+        window.makeFirstResponder(nil)
+        loopSelected = loop; simpleContent.isHidden = loop
+        if loop { loopWindow?.show() } else { loopWindow?.hide() }
+        modeSelector.selectedSegment = loop ? 1 : 0; updateNavigation(); return true
+    }
+    private func updateNavigation() {
+        let busy = engine.isArmed || engine.isExecuting || captureRemaining > 0 || loopWindow?.busy == true
+        modeSelector.isEnabled = !busy
+        switchHint.stringValue = busy ? L.t("請先停止目前操作，再切換模式。") : ""
     }
 
     private func emergencyStopHint() -> String {
@@ -513,6 +460,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func validateUserInterface() -> Bool {
+        let originalWindowNumber = window.windowNumber
+        let originalFrame = window.frame
+        guard switchMode(true), switchMode(false), window.windowNumber == originalWindowNumber, window.frame == originalFrame else { return false }
         let originalLanguage = L.language
         let originalDate = targetDate.dateValue
         let originalClick = clickType.selectedSegment

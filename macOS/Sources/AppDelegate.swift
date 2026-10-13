@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var globalKeyMonitor: Any?
     private var localKeyMonitor: Any?
     private var smokeClockFractions = Set<String>()
+    private var loopWindow: LoopWindow?
     private static let clockRefreshInterval: TimeInterval = 1.0 / 30.0
 
     private lazy var clockFormatter: DateFormatter = {
@@ -58,6 +59,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
 
+        if CommandLine.arguments.contains("--loop-ui-smoke-test") {
+            window.orderOut(nil)
+            loopWindow = LoopWindow(); loopWindow?.show()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                let args = CommandLine.arguments
+                let index = args.firstIndex(of: "--screenshot")
+                let path = index.flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil }
+                guard self?.loopWindow?.smokeTest(screenshot: path) == true else {
+                    fputs("macOS loop UI smoke test failed.\n", stderr); exit(1)
+                }
+                print("macOS loop UI smoke test passed."); NSApp.terminate(nil)
+            }
+        }
+
         if CommandLine.arguments.contains("--ui-smoke-test") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self, self.validateUserInterface(), self.saveSmokeScreenshotIfRequested() else {
@@ -71,6 +86,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        loopWindow?.stop("程式已結束。")
         _ = engine.cancel()
         clockTimer?.invalidate()
         if let globalKeyMonitor { NSEvent.removeMonitor(globalKeyMonitor) }
@@ -117,6 +133,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         content.addSubview(subtitle)
         content.addSubview(clockCaption)
         content.addSubview(clockLabel)
+        let loopButton = NSButton(title: "循環輸入與點擊…", target: self, action: #selector(openLoop))
+        loopButton.frame = NSRect(x: 450, y: 658, width: 205, height: 32)
+        loopButton.bezelStyle = .rounded
+        content.addSubview(loopButton)
 
         content.addSubview(groupBox(frame: NSRect(x: 24, y: 344, width: 632, height: 194)))
         content.addSubview(label("1. 何時執行？", frame: NSRect(x: 48, y: 493, width: 300, height: 24), size: 16, bold: true))
@@ -265,6 +285,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func armSchedule(_ sender: Any?) {
+        if loopWindow?.window.isVisible == true || loopWindow?.window.isMiniaturized == true {
+            showAlert(title: "循環模式已開啟", message: "請先關閉循環視窗，再啟動一次性排程。", style: .informational)
+            return
+        }
         guard let point = capturedPoint else {
             showAlert(title: "尚未選擇位置", message: "請先擷取要點擊的滑鼠位置。", style: .informational)
             return
@@ -441,8 +465,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         localKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard event.keyCode == 100 else { return event }
             self?.cancelSchedule(message: "已用 F8 緊急停止。", emergency: true)
-            return nil
+            return self?.loopWindow?.window.isVisible == true || self?.loopWindow?.window.isMiniaturized == true ? event : nil
         }
+    }
+
+    @objc private func openLoop() {
+        if engine.isArmed || engine.isExecuting || captureRemaining > 0 {
+            showAlert(title: "已有操作進行中", message: "請先取消目前排程或完成位置擷取。", style: .informational)
+            return
+        }
+        if loopWindow?.window.isVisible != true && loopWindow?.window.isMiniaturized != true { loopWindow = LoopWindow() }
+        window.miniaturize(nil)
+        loopWindow?.window.deminiaturize(nil)
+        loopWindow?.show()
     }
 
     private func emergencyStopHint() -> String {

@@ -15,6 +15,8 @@ It was created for workflows such as sending a prepared Codex message after the 
 
 ## Key features
 
+**Unreleased source feature:** bounded recurring input/send workflows are being added to both editions. Windows local build, UI and native-input tests are documented in [`VERIFICATION.md`](VERIFICATION.md); macOS build and hardware verification are pending. Released v1.1.2 downloads still provide the one-shot workflow below.
+
 - Schedule one click at an exact future date and time.
 - Schedule one click after a seconds, minutes, or hours delay.
 - Choose single click or double click at a captured screen coordinate.
@@ -98,6 +100,22 @@ macOS 版需要 macOS 13 Ventura 或更新版本，並同時支援 Apple silicon
 v1.1.1 起介面會跟隨 macOS 的淺色或深色外觀，時間欄位也只會顯示目前選擇的模式。v1.1.2 將三位毫秒時鐘的更新頻率由每秒 10 次提高到約 30 次，使後兩位數也會自然變動；排程引擎與點擊行為不受此畫面更新調整影響。
 
 ## 安全設計
+
+### 循環輸入與點擊（開發中，尚未發布）
+
+從主畫面選擇「循環輸入與點擊…」，開啟獨立設定視窗。原本的一次性排程與循環模式不能同時啟動。
+
+1. 設定**首次執行時間**、**循環間隔**及步驟等待秒數。間隔從上一輪送出點擊操作結束後起算；與服務額度重設無自動連動。
+2. 勾選**最多輪次**或**截止時間**，至少一項。若兩者都設定，先達到者停止。
+3. 選擇「每輪相同」或「依輪次設定」。後者可逐筆新增／刪除多行提示詞；預設用完停止，也可勾選之後重複最後一筆。同一模式切換不會丟失已編輯的其他輪次。
+4. 分別擷取同一目標視窗的**輸入框**與**送出按鈕**。擷取時工具縮小，三秒後記錄滑鼠位置。
+5. 預設在輸入游標處插入文字；若勾選「取代輸入框原有文字」，會先全選欄位內容。**貼上會覆寫系統剪貼簿**，原剪貼簿不會自動還原，系統剪貼簿歷程亦可能保留提示詞。
+6. 先用無風險目標「試跑一輪」：確認後五秒執行，**真的會輸入並點擊送出**。確認行為正確後再啟動正式循環。
+7. 保持電腦喚醒、不鎖屏，目標視窗位置、聊天與輸入框布局固定。工具不偵測 Codex 的忙碌、完成、額度或訊息是否送達。
+
+等待下一輪時可暫停／恢復；恢復後繼續剩餘等待時間，截止時間不延後。若已開始點擊／貼上，停止會取消尚未執行的步驟，**已發生的輸入無法撤回**，須檢查草稿後重新排程。F8（Mac 部分鍵盤為 Fn+F8）、取消或關閉循環視窗可停止。Windows 循環模式要求 F8 註冊成功才能啟動。
+
+每輪依序「點輸入框 → 等待 → 貼上 → 等待 → 點送出」。若目標視窗不可用、螢幕配置改變、步驟遲到超過五秒或輸入 API 回報錯誤，停止且不重試、不補送。介面所列輪數是**已執行送出點擊的輪數**，不等於成功送達的訊息數。程式不保存排程或提示詞，重新開啟後需重新設定。
 
 - 從零撰寫，沒有引用任何第三方套件或網路專案。
 - Windows 版只使用 Windows 內建的 .NET Framework、WinForms 與 `user32.dll`；macOS 版只使用 Apple 內建的 Swift、AppKit、Quartz 與 Accessibility API。

@@ -2,6 +2,19 @@
 
 本專案的重大變更會記錄在此。格式參考 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本採用 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [Unreleased]
+
+### Added
+
+- Windows 與 macOS 原生循環輸入／送出設定介面：首次時間、循環間隔、相同或依輪次提示詞、序列用完停止或重複最後一筆、次數及截止時間。
+- 中文與多行剪貼簿貼上、可選取代草稿、兩個位置擷取、五秒後真實試跑、等待期間暫停／恢復、F8／取消與關閉停止。
+- 目標視窗與焦點／螢幕配置檢查，逾期或失敗停止、不補送；明確區分送出點擊與送達結果。
+- 兩平台循環核心回歸測試與 UI 煙霧測試，Windows 拋棄式視窗原生輸入整合測試。
+
+### Verification status
+
+- Windows 已完成本機建置、核心、介面與中文多行原生輸入測試；macOS 建置、雙外觀與實機輸入驗證待完成。此功能尚未發布。
+
 ## [1.1.2] - 2026-08-28
 
 ### Fixed

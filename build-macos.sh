@@ -26,6 +26,9 @@ swiftc -O \
   -target "arm64-apple-macos${deployment_target}" -sdk "$sdk_path" \
   -framework AppKit -framework ApplicationServices \
   "$project_root/macOS/Sources/SchedulerCore.swift" \
+  "$project_root/macOS/Sources/LoopCore.swift" \
+  "$project_root/macOS/Sources/LoopInput.swift" \
+  "$project_root/macOS/Sources/LoopWindow.swift" \
   "$project_root/macOS/Sources/AppDelegate.swift" \
   "$project_root/macOS/Sources/main.swift" \
   -o "$build_root/ScheduledClicker-arm64"
@@ -34,6 +37,9 @@ swiftc -O \
   -target "x86_64-apple-macos${deployment_target}" -sdk "$sdk_path" \
   -framework AppKit -framework ApplicationServices \
   "$project_root/macOS/Sources/SchedulerCore.swift" \
+  "$project_root/macOS/Sources/LoopCore.swift" \
+  "$project_root/macOS/Sources/LoopInput.swift" \
+  "$project_root/macOS/Sources/LoopWindow.swift" \
   "$project_root/macOS/Sources/AppDelegate.swift" \
   "$project_root/macOS/Sources/main.swift" \
   -o "$build_root/ScheduledClicker-x86_64"
@@ -49,9 +55,14 @@ swiftc \
   -o "$test_executable"
 
 "$test_executable"
+cp "$project_root/macOS/Tests/LoopCoreTests.swift" "$build_root/main.swift"
+swiftc "$project_root/macOS/Sources/LoopCore.swift" "$build_root/main.swift" -o "$build_root/LoopCoreTests"
+"$build_root/LoopCoreTests"
 "$executable" --self-test
 "$executable" --ui-smoke-test --appearance light --screenshot "$build_root/ui-light.png"
 "$executable" --ui-smoke-test --appearance dark --screenshot "$build_root/ui-dark.png"
+"$executable" --loop-ui-smoke-test --appearance light --screenshot "$build_root/loop-light.png"
+"$executable" --loop-ui-smoke-test --appearance dark --screenshot "$build_root/loop-dark.png"
 plutil -lint "$app_root/Contents/Info.plist"
 test "$(lipo -archs "$executable")" = "x86_64 arm64" || test "$(lipo -archs "$executable")" = "arm64 x86_64"
 

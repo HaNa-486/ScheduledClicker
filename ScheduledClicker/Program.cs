@@ -113,6 +113,16 @@ namespace ScheduledClicker
 
         private void BuildInterface()
         {
+            var loopButton = new Button { Text = "循環輸入與點擊…", Location = new Point(360, 20), Size = new Size(186, 36) };
+            loopButton.Click += delegate
+            {
+                if (schedule.IsArmed || schedule.IsExecuting || captureTimer.Enabled)
+                { MessageBox.Show(this, "請先取消目前排程或完成位置擷取。"); return; }
+                Hide();
+                try { using (var loop = new LoopForm()) loop.ShowDialog(this); }
+                finally { Show(); Activate(); }
+            };
+            Controls.Add(loopButton);
             var title = new Label { Text = "定時滑鼠點擊器", Font = new Font(Font.FontFamily, 18F, FontStyle.Bold), ForeColor = Color.FromArgb(28, 45, 70), AutoSize = true, Location = new Point(24, 20) };
             clockLabel.Font = new Font("Consolas", 16F, FontStyle.Bold);
             clockLabel.ForeColor = Color.FromArgb(32, 106, 196);

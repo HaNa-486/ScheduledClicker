@@ -46,4 +46,6 @@ jobs:
             dist/ScheduledClicker-macOS-universal.sha256
             .artifacts/macos/ui-light.png
             .artifacts/macos/ui-dark.png
+            .artifacts/macos/loop-light.png
+            .artifacts/macos/loop-dark.png
           if-no-files-found: error

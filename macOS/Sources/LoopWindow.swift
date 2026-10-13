@@ -37,6 +37,13 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
     private let pause = NSButton(title: "暫停", target: nil, action: nil)
     private let cancel = NSButton(title: "取消 / 停止", target: nil, action: nil)
     private let status = NSTextField(wrappingLabelWithString: "等待設定。")
+    private let clockLabel = NSTextField(labelWithString: "")
+    private var firstClockText: String?
+    private let back = NSButton(title: "返回簡單模式", target: nil, action: nil)
+    var onReturnToSimple: (() -> Void)?
+    private let clockFormatter: DateFormatter = {
+        let formatter = DateFormatter(); formatter.dateFormat = "yyyy/MM/dd  HH:mm:ss.SSS"; return formatter
+    }()
     private static var mono: TimeInterval { ProcessInfo.processInfo.systemUptime }
 
     override init() {
@@ -49,8 +56,7 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         window.center()
         build()
         refreshEntries(selected: 0)
-        let tick = Timer(timeInterval: 0.05, repeats: true) { [weak self] _ in self?.tick() }
-        RunLoop.main.add(tick, forMode: .common); timer = tick
+        startTimer()
         sleepObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in
             self?.stop("電腦即將睡眠，排程已停止，不補送。")
         }
@@ -62,13 +68,31 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         if let sleepObserver { NSWorkspace.shared.notificationCenter.removeObserver(sleepObserver) }
     }
 
-    func show() { window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true) }
-    func windowWillClose(_ notification: Notification) { captureKind = 0; stop("視窗已關閉。"); timer?.invalidate() }
+    private func startTimer() {
+        guard timer?.isValid != true else { return }
+        let tick = Timer(timeInterval: 0.05, repeats: true) { [weak self] _ in self?.tick() }
+        RunLoop.main.add(tick, forMode: .common); timer = tick
+    }
+    func show() { startTimer(); refresh(); window.makeKeyAndOrderFront(nil); NSApp.activate(ignoringOtherApps: true) }
+    func windowWillClose(_ notification: Notification) {
+        captureKind = 0; stop("已返回簡單模式；循環已停止。"); timer?.invalidate(); timer = nil
+        onReturnToSimple?()
+    }
+    @objc private func returnToSimple() { window.close() }
     func stop(_ message: String) { engine.stop(message); refresh() }
 
     private func build() {
         guard let root = window.contentView else { return }
-        let scroll = NSScrollView(frame: NSRect(x: 0, y: 135, width: 720, height: 625))
+        let header = NSView(frame: NSRect(x: 0, y: 690, width: 720, height: 70))
+        header.autoresizingMask = [.width, .minYMargin]
+        let caption = NSTextField(labelWithString: "目前時間"); caption.frame = NSRect(x: 20, y: 46, width: 150, height: 20)
+        caption.textColor = .secondaryLabelColor; header.addSubview(caption)
+        clockLabel.frame = NSRect(x: 20, y: 10, width: 440, height: 30)
+        clockLabel.font = .monospacedDigitSystemFont(ofSize: 22, weight: .semibold); clockLabel.textColor = .systemBlue
+        clockLabel.setAccessibilityLabel("目前時間"); header.addSubview(clockLabel)
+        back.frame = NSRect(x: 490, y: 17, width: 210, height: 34); back.autoresizingMask = [.minXMargin]
+        back.bezelStyle = .rounded; back.target = self; back.action = #selector(returnToSimple); header.addSubview(back); root.addSubview(header)
+        let scroll = NSScrollView(frame: NSRect(x: 0, y: 135, width: 720, height: 555))
         scroll.autoresizingMask = [.width, .height]; scroll.hasVerticalScroller = true
         let doc = LoopFlippedView(frame: NSRect(x: 0, y: 0, width: 690, height: 735))
         scroll.documentView = doc; root.addSubview(scroll)
@@ -200,7 +224,10 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         }
     }
     private func refresh() {
+        clockLabel.stringValue = clockFormatter.string(from: Date())
+        if firstClockText == nil { firstClockText = clockLabel.stringValue }
         let busy = engine.active || captureKind != 0
+        back.title = busy ? "停止並返回簡單模式" : "返回簡單模式"
         controls.forEach { $0.isEnabled = !busy }; editor.isEditable = !busy
         let sequence = mode.indexOfSelectedItem == 1
         entries.isEnabled = !busy && sequence; add.isEnabled = !busy && sequence && prompts.count < 10000
@@ -229,6 +256,7 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
 
     // No native input: exercise editor state and render both appearances in CI.
     func smokeTest(screenshot: String?) -> Bool {
+        guard clockLabel.stringValue != firstClockText, back.superview?.bounds.contains(back.frame) == true else { return false }
         mode.selectItem(at: 1); modeChanged()
         addPrompt(); editor.string = "第二輪：繼續\n保留進度 😀"; textDidChange(Notification(name: NSText.didChangeNotification))
         mode.selectItem(at: 0); modeChanged()
@@ -236,6 +264,19 @@ final class LoopWindow: NSObject, NSWindowDelegate, NSTextViewDelegate {
         guard prompts.count == 2, prompts[0] == "第一輪提示", prompts[1].hasPrefix("第二輪"), !entries.isEnabled else { return false }
         mode.selectItem(at: 1); modeChanged(); entries.selectItem(at: 1); entryChanged()
         guard editor.string.hasPrefix("第二輪"), entries.isEnabled, add.isEnabled, !pause.isEnabled, !cancel.isEnabled else { return false }
+        var returned = false
+        let originalReturn = onReturnToSimple
+        onReturnToSimple = { returned = true }
+        do {
+            try engine.start(LoopPlan(firstTime: Date().addingTimeInterval(600), interval: 60, maxRounds: 1, prompts: ["test"]), wall: Date(), mono: Self.mono)
+        } catch { return false }
+        refresh()
+        guard back.title.contains("停止") else { return false }
+        back.performClick(nil)
+        onReturnToSimple = originalReturn
+        guard returned, !engine.active, captureKind == 0, timer == nil else { return false }
+        show()
+        guard timer?.isValid == true, editor.string.hasPrefix("第二輪"), prompts.count == 2 else { return false }
         guard let screenshot else { return true }
         guard let content = window.contentView, let bitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds) else { return false }
         content.cacheDisplay(in: content.bounds, to: bitmap)

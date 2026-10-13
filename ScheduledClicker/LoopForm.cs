@@ -38,6 +38,8 @@ namespace ScheduledClicker
         private readonly Button trial = Button("試跑一輪");
         private readonly Button pause = Button("暫停");
         private readonly Button cancel = Button("取消 / 停止");
+        private readonly Button back = Button("返回簡單模式");
+        private readonly Label clockLabel = new Label { AutoSize = true, Font = new Font("Consolas", 16F, FontStyle.Bold), ForeColor = Color.FromArgb(32, 106, 196), Location = new Point(16, 28) };
         private readonly Label status = new Label { Dock = DockStyle.Bottom, Height = 85, Padding = new Padding(16, 8, 16, 4), BackColor = Color.White };
         private int captureKind;
         private double captureDue;
@@ -56,6 +58,11 @@ namespace ScheduledClicker
             Controls.Add(settings);
             var actions = Row(start, trial, pause, cancel); actions.Dock = DockStyle.Bottom; actions.Height = 50;
             Controls.Add(actions); Controls.Add(status);
+            var header = new Panel { Dock = DockStyle.Top, Height = 72, Width = ClientSize.Width };
+            var caption = Label("目前時間"); caption.Location = new Point(16, 3);
+            back.AutoSize = false; back.Size = new Size(205, 38); back.Location = new Point(459, 18); back.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            header.Controls.Add(caption); header.Controls.Add(clockLabel); header.Controls.Add(back); Controls.Add(header);
+            back.Click += delegate { Close(); };
             settings.Controls.Add(Label("首次時間與循環間隔", true));
             settings.Controls.Add(Row(Label("首次執行"), first));
             settings.Controls.Add(Row(Label("每輪結束後等"), hours, Label("時"), minutes, Label("分"), seconds, Label("秒")));
@@ -85,8 +92,20 @@ namespace ScheduledClicker
             pause.Click += delegate { engine.TogglePause(DateTime.Now, Mono); RefreshStatus(); if (engine.Active && !engine.Paused) WindowState = FormWindowState.Minimized; };
             cancel.Click += delegate { captureKind = 0; engine.Stop("已取消排程。"); RefreshStatus(); };
             timer.Tick += delegate { Tick(); }; timer.Start();
-            FormClosed += delegate { timer.Stop(); timer.Dispose(); engine.Stop("視窗已關閉。"); ReleaseKey(); };
+            FormClosed += delegate { captureKind = 0; timer.Stop(); engine.Stop("已返回簡單模式；循環已停止。"); ReleaseKey(); };
             RefreshEntries(0); RefreshStatus();
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            if (Visible) { timer.Start(); RefreshStatus(); }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) { timer.Stop(); timer.Dispose(); ReleaseKey(); }
+            base.Dispose(disposing);
         }
 
         private static NumericUpDown Number(int min, int max, int value) { return new NumericUpDown { Minimum = min, Maximum = max, Value = value, Width = 65 }; }
@@ -162,7 +181,9 @@ namespace ScheduledClicker
         }
         private void RefreshStatus()
         {
+            clockLabel.Text = DateTime.Now.ToString("yyyy/MM/dd  HH:mm:ss.fff");
             bool busy = engine.Active || captureKind != 0;
+            back.Text = busy ? "停止並返回簡單模式" : "返回簡單模式";
             settings.Enabled = !busy; start.Enabled = trial.Enabled = !busy; pause.Enabled = engine.Active; cancel.Enabled = busy;
             pause.Text = engine.Paused ? "恢復" : (engine.BetweenRounds ? "暫停" : "停止本輪");
             string left = engine.Active && !engine.Paused ? "；下個步驟剩 " + Math.Max(0, Math.Ceiling(engine.Remaining(DateTime.Now, Mono))) + " 秒" : "";

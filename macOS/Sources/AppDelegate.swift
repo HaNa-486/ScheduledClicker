@@ -474,7 +474,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             showAlert(title: "已有操作進行中", message: "請先取消目前排程或完成位置擷取。", style: .informational)
             return
         }
-        if loopWindow?.window.isVisible != true && loopWindow?.window.isMiniaturized != true { loopWindow = LoopWindow() }
+        if loopWindow == nil {
+            loopWindow = LoopWindow()
+            loopWindow?.onReturnToSimple = { [weak self] in
+                self?.window.deminiaturize(nil)
+                self?.window.makeKeyAndOrderFront(nil)
+                NSApp.activate(ignoringOtherApps: true)
+            }
+        }
         window.miniaturize(nil)
         loopWindow?.window.deminiaturize(nil)
         loopWindow?.show()

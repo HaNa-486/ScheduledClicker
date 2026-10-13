@@ -57,6 +57,7 @@ namespace ScheduledClicker
         private int captureCountdown;
         private bool hotkeyRegistered;
         private bool closing;
+        private LoopForm loopForm;
 
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr windowHandle, int id, uint modifiers, uint virtualKey);
@@ -87,7 +88,7 @@ namespace ScheduledClicker
 
             schedule.Executed += delegate(ClickPlan plan) { PostToUi(delegate { SetCompleted(plan); }); };
             schedule.Failed += delegate(Exception ex) { PostToUi(delegate { SetFailed(ex); }); };
-            FormClosing += delegate { closing = true; schedule.Dispose(); };
+            FormClosing += delegate { closing = true; schedule.Dispose(); if (loopForm != null) loopForm.Dispose(); };
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -119,7 +120,11 @@ namespace ScheduledClicker
                 if (schedule.IsArmed || schedule.IsExecuting || captureTimer.Enabled)
                 { MessageBox.Show(this, "請先取消目前排程或完成位置擷取。"); return; }
                 Hide();
-                try { using (var loop = new LoopForm()) loop.ShowDialog(this); }
+                try
+                {
+                    if (loopForm == null || loopForm.IsDisposed) loopForm = new LoopForm();
+                    loopForm.ShowDialog(this);
+                }
                 finally { Show(); Activate(); }
             };
             Controls.Add(loopButton);

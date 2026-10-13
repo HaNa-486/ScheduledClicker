@@ -1,7 +1,7 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 14
+- State revision: 15
 - Updated: 2026-10-13
 - State confidence: high for Windows loop source/build/core/UI/native-input evidence; macOS loop source reviewed but uncompiled and runtime unverified
 - Phase: bounded recurring input implemented locally; macOS verification pending
@@ -9,7 +9,7 @@
 ## Repository identity
 
 - Branch: codex/recurring-prompt-loop
-- Observed commit: c69f207a4bbda0d8fa1e18a07390ba71cd7e41c1
+- Observed commit: 5f05ffe
 
 ## Product anchors
 
@@ -21,7 +21,7 @@
 
 ## Current work
 
-- Current slice: recurring input on both native platforms; user confirmed scope in four response annotations
+- Current slice: recurring input plus user-requested return-to-simple navigation and fixed live digital clock on both native platforms
 - Active workstream: `workstreams/2026-10-13-loop-input.md`
 - Active review: `reviews/REV-20261013-loop-input.md`; independent re-review found no further definite source defects
 - Active remediations: F001 focused macOS window and F002 completion-clock timing implemented; not marked verified across platforms
@@ -30,8 +30,8 @@
 
 ## Handoff
 
-- What changed: native loop setup windows and cancellable main-thread step engines, two prompt modes, clipboard paste with explicit overwrite disclosure, optional draft replacement, window/display/focus checks, bounded stop conditions, one-round trial, tests and documentation
-- Verification evidence: Windows build; 40/40 loop core tests; 10/10 original core tests; prompt editor and UI render smoke; disposable local target received two rounds of Chinese/multiline/emoji paste, draft replacement and send; site validator 8 pages; independent source review/re-review
+- What changed: loop windows now have a fixed live clock and explicit return button; returning stops capture/loop and restores simple UI; reopening retains in-memory configuration and restarts timer. Prior loop capabilities retained.
+- Verification evidence: Windows build; 40/40 loop core and 10/10 original tests; UI test verifies visible return button, advancing fixed clock, return cancellation, retained settings and timer on modal reopen; updated renders inspected; independent lifecycle review found no actionable defects. Prior two-round native input evidence remains applicable; no input-engine changes this follow-up.
 - Not verified: macOS compilation, 40 Swift tests, new Aqua/Dark Aqua loop renders, native clipboard/paste/send/F8 and wrong-sibling-window rejection; all mixed-DPI scenarios
 - Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input; unsigned/ad-hoc-signed distribution
 - Release assessment: not-ready for cross-platform release; Windows candidate available locally; existing tracked release executable preserved

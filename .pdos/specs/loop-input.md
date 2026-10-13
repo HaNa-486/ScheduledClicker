@@ -7,6 +7,7 @@ User explicitly requests a generic coordinate-based input/send loop on Windows a
 ## Decisions
 
 - Keep one-shot click intact; open a separate loop setup window, mutually exclusive with one-shot execution.
+- Both platforms show a fixed live digital clock and explicit return-to-simple button above scrolling settings. Returning or closing stops active capture/loop; reopening retains in-memory settings and restarts the display timer. Active return is labeled as stopping the loop.
 - First execution uses an absolute date/time. Subsequent intervals run from completion of the preceding input/send sequence, using elapsed time. No catch-up runs.
 - Same-prompt mode uses the first entry. Sequence mode uses entries in order, then stops unless explicitly configured to repeat the final entry.
 - Require at least one bound: total attempted rounds (1–10000) or an absolute deadline (up to 365 days). If both are set, the first reached wins. A round counts only after the send click has been injected; this does not confirm message delivery.

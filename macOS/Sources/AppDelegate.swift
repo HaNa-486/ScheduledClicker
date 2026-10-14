@@ -13,7 +13,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var loopWindow: LoopWindow?
     private let simpleContent = ModeContentView(frame: NSRect(x: 0, y: 0, width: 1040, height: 600))
     private let modeSelector = NSSegmentedControl(labels: ["簡單模式", "循環模式"], trackingMode: .selectOne, target: nil, action: nil)
-    private let switchHint = NSTextField(labelWithString: "")
+    private let themeButton = NSButton(title: "", target: nil, action: nil)
+    private let switchHint = NSTextField(wrappingLabelWithString: "")
     private var loopSelected = false
     private var closing = false
     private let language = LanguagePicker()
@@ -49,9 +50,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var delayViews: [NSView] = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Snapshot the current system appearance at launch; manual choice lasts this session.
+        NSApp.appearance = NSAppearance(named: NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? .darkAqua : .aqua)
         buildMenu()
         buildWindow()
-        localized = LocalizedView(window: window, excluding: [clockLabel, statusLabel, positionLabel, language.view, switchHint, loopWindow!.view])
+        localized = LocalizedView(window: window, excluding: [clockLabel, statusLabel, positionLabel, language.view, switchHint, themeButton, loopWindow!.view])
         languageObserver = NotificationCenter.default.addObserver(forName: L.changed, object: nil, queue: .main) { [weak self] _ in self?.languageChanged() }
         languageChanged()
         installEmergencyKeyMonitors()
@@ -132,9 +135,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         content.addSubview(label("目前時間", frame: NSRect(x: 18, y: 651, width: 230, height: 20), size: 12, color: .secondaryLabelColor))
         clockLabel.frame = NSRect(x: 18, y: 619, width: 335, height: 28); clockLabel.font = .monospacedDigitSystemFont(ofSize: 20, weight: .semibold)
         clockLabel.textColor = .systemBlue; clockLabel.setAccessibilityLabel("目前時間"); content.addSubview(clockLabel)
-        modeSelector.frame = NSRect(x: 365, y: 625, width: 435, height: 34); modeSelector.selectedSegment = 0
+        modeSelector.frame = NSRect(x: 365, y: 641, width: 435, height: 34); modeSelector.selectedSegment = 0
         modeSelector.target = self; modeSelector.action = #selector(changeMode); content.addSubview(modeSelector)
-        switchHint.frame = NSRect(x: 365, y: 601, width: 465, height: 20); switchHint.font = .systemFont(ofSize: 11); switchHint.textColor = .secondaryLabelColor; content.addSubview(switchHint)
+        themeButton.frame = NSRect(x: 365, y: 605, width: 200, height: 30); themeButton.bezelStyle = .rounded
+        themeButton.target = self; themeButton.action = #selector(toggleAppearance); content.addSubview(themeButton)
+        switchHint.frame = NSRect(x: 575, y: 601, width: 250, height: 36); switchHint.maximumNumberOfLines = 2; switchHint.font = .systemFont(ofSize: 11); switchHint.textColor = .secondaryLabelColor; content.addSubview(switchHint)
         content.addSubview(label("語言", frame: NSRect(x: 835, y: 651, width: 180, height: 20), size: 12, color: .secondaryLabelColor))
         language.view.frame = NSRect(x: 835, y: 619, width: 185, height: 28); content.addSubview(language.view)
         let root = simpleContent
@@ -398,7 +403,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     private func setStatus(_ source: String) { statusSource = source; statusLabel.stringValue = L.t(source) }
+    @objc private func toggleAppearance() {
+        let dark = window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+        NSApp.appearance = NSAppearance(named: dark ? .aqua : .darkAqua)
+        updateThemeButton(); window.contentView?.needsDisplay = true
+    }
+    private func updateThemeButton() {
+        let dark = window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+        themeButton.title = L.t(dark ? "切換為淺色模式" : "切換為深色模式")
+        themeButton.setAccessibilityLabel(themeButton.title)
+    }
     private func languageChanged() {
+        updateThemeButton()
         targetDate.locale = Locale(identifier: L.language == "zh" ? "zh-Hant" : L.language)
         if capturedPoint == nil { positionLabel.stringValue = L.t("尚未選擇位置") }
         setStatus(statusSource); buildMenu(); updateNavigation()
@@ -463,6 +479,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let originalWindowNumber = window.windowNumber
         let originalFrame = window.frame
         guard switchMode(true), switchMode(false), window.windowNumber == originalWindowNumber, window.frame == originalFrame else { return false }
+        let originalAppearance = window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua])
+        toggleAppearance()
+        guard window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) != originalAppearance else { return false }
+        toggleAppearance()
+        guard window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == originalAppearance else { return false }
         let originalLanguage = L.language
         let originalDate = targetDate.dateValue
         let originalClick = clickType.selectedSegment

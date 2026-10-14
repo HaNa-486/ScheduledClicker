@@ -61,6 +61,7 @@ namespace ScheduledClicker
         private readonly Panel simpleContent = new Panel { Dock = DockStyle.Fill, Padding = new Padding(16, 0, 16, 8) };
         private readonly Button simpleModeButton = Ui.Button("簡單模式");
         private readonly Button loopModeButton = Ui.Button("循環模式");
+        private readonly Button themeButton = Ui.Button("");
         private readonly Label switchHint = new Label { AutoSize = true };
         private bool loopSelected;
         internal bool SwitchMode(bool loop)
@@ -76,10 +77,7 @@ namespace ScheduledClicker
         {
             bool busy = schedule.IsArmed || schedule.IsExecuting || captureTimer.Enabled || loopForm.Busy;
             simpleModeButton.Enabled = !busy || !loopSelected; loopModeButton.Enabled = !busy || loopSelected;
-            simpleModeButton.BackColor = !loopSelected ? Color.FromArgb(42, 116, 214) : Color.White;
-            simpleModeButton.ForeColor = !loopSelected ? Color.White : ForeColor;
-            loopModeButton.BackColor = loopSelected ? Color.FromArgb(42, 116, 214) : Color.White;
-            loopModeButton.ForeColor = loopSelected ? Color.White : ForeColor;
+            Ui.Selected(simpleModeButton, !loopSelected); Ui.Selected(loopModeButton, loopSelected);
             switchHint.Text = busy ? L.T("請先停止目前操作，再切換模式。") : "";
         }
         private LocalizedView localized;
@@ -102,8 +100,8 @@ namespace ScheduledClicker
             BackColor = Color.FromArgb(247, 249, 252);
 
             BuildInterface();
-            localized = new LocalizedView(this, loopForm, clockLabel, positionLabel, statusLabel, language, switchHint);
-            L.Changed += LanguageChanged; LanguageChanged();
+            localized = new LocalizedView(this, loopForm, clockLabel, positionLabel, statusLabel, language, switchHint, themeButton);
+            L.Changed += LanguageChanged; Ui.Changed += ThemeChanged; LanguageChanged(); ThemeChanged();
             UpdateModeState();
             UpdateClock();
 
@@ -116,12 +114,12 @@ namespace ScheduledClicker
 
             schedule.Executed += delegate(ClickPlan plan) { PostToUi(delegate { SetCompleted(plan); }); };
             schedule.Failed += delegate(Exception ex) { PostToUi(delegate { SetFailed(ex); }); };
-            FormClosing += delegate { closing = true; L.Changed -= LanguageChanged; localized.Dispose(); schedule.Dispose(); clockTimer.Dispose(); captureTimer.Dispose(); loopForm.Dispose(); };
+            FormClosing += delegate { closing = true; L.Changed -= LanguageChanged; Ui.Changed -= ThemeChanged; localized.Dispose(); schedule.Dispose(); clockTimer.Dispose(); captureTimer.Dispose(); loopForm.Dispose(); };
         }
 
         protected override void OnHandleCreated(EventArgs e)
         {
-            base.OnHandleCreated(e);
+            base.OnHandleCreated(e); Ui.TitleBar(this);
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
@@ -146,14 +144,17 @@ namespace ScheduledClicker
             loopForm.BusyChanged += UpdateNavigation;
             var header = new Panel { Dock = DockStyle.Top, Height = 80 };
             var caption = NewLabel("目前時間", 18, 9); header.Controls.Add(caption);
-            clockLabel.Font = new Font("Consolas", 16F, FontStyle.Bold); clockLabel.ForeColor = Color.FromArgb(32, 106, 196);
+            clockLabel.Font = new Font("Consolas", 16F, FontStyle.Bold); Ui.Tone(clockLabel, Ui.Role.Accent);
             // Clock text changes every 100 ms; keep it from relaying out the header.
             clockLabel.AutoSize = false; clockLabel.SetBounds(18, 34, 335, 28); header.Controls.Add(clockLabel);
             simpleModeButton.AutoSize = loopModeButton.AutoSize = false;
-            simpleModeButton.SetBounds(365, 16, 200, 36); loopModeButton.SetBounds(567, 16, 210, 36);
+            simpleModeButton.SetBounds(365, 5, 200, 34); loopModeButton.SetBounds(567, 5, 210, 34);
             simpleModeButton.Click += delegate { SwitchMode(false); }; loopModeButton.Click += delegate { SwitchMode(true); };
             header.Controls.Add(simpleModeButton); header.Controls.Add(loopModeButton);
-            switchHint.Location = new Point(365, 55); switchHint.ForeColor = Color.FromArgb(140, 78, 15); header.Controls.Add(switchHint);
+            themeButton.AutoSize = false; themeButton.SetBounds(365, 43, 200, 31);
+            themeButton.Click += delegate { Ui.Select(!Ui.Dark); }; header.Controls.Add(themeButton);
+            switchHint.AutoSize = false; switchHint.SetBounds(575, 44, 250, 32); switchHint.Font = new Font(Font.FontFamily, 8.5F);
+            Ui.Tone(switchHint, Ui.Role.Warning); header.Controls.Add(switchHint);
             var languageLabel = NewLabel("語言", 835, 9); languageLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             // Anchor a host panel, not the native DropDownList: its actual height can differ
             // even from PreferredHeight. Reapplying cached anchor bounds closes its list.
@@ -176,11 +177,12 @@ namespace ScheduledClicker
                 NewLabel("時", 274, 91), NewLabel("分", 392, 91), NewLabel("秒", 510, 91), NewLabel("倒數最短 1 秒，最長 168 小時。", 18, 142) });
             captureButton.Text = "3 秒後擷取滑鼠位置"; captureButton.SetBounds(16, 32, 340, 36); captureButton.Click += StartCapture;
             positionLabel.Text = "尚未選擇位置"; positionLabel.AutoSize = true; positionLabel.Location = new Point(18, 80);
-            positionLabel.ForeColor = Color.FromArgb(32, 106, 196);
+            Ui.Tone(positionLabel, Ui.Role.Accent);
             clickKind.DropDownStyle = ComboBoxStyle.DropDownList; clickKind.Items.AddRange(new object[] { "單擊", "雙擊" }); clickKind.SelectedIndex = 0;
             clickKind.SetBounds(160, 120, 185, 28);
             pointGroup.Controls.AddRange(new Control[] { captureButton, positionLabel, NewLabel("點擊方式", 18, 125), clickKind });
             var note = new Label { Text = "在指定時間安全地執行一次滑鼠單擊或雙擊\n請保持目標視窗／聊天不變。未驗證 AI 狀態或送達。\n等待設定。排程啟動後可按 F8 緊急停止。", Dock = DockStyle.Bottom, Height = 84, Padding = new Padding(10, 4, 10, 4), BackColor = Ui.Notice };
+            note.Tag = Ui.Role.Notice;
             var actions = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 42, WrapContents = false };
             armButton.Text = "啟動排程"; armButton.AutoSize = true; armButton.Padding = new Padding(12, 3, 12, 3); armButton.Height = 34;
             Ui.Primary(armButton); armButton.Click += ArmSchedule;
@@ -188,7 +190,7 @@ namespace ScheduledClicker
             cancelButton.Enabled = false; cancelButton.Click += delegate { CancelSchedule("排程已取消。", false); };
             actions.Controls.Add(armButton); actions.Controls.Add(cancelButton);
             SetStatus("等待設定。排程啟動後可按 F8 緊急停止。");
-            statusLabel.Dock = DockStyle.Bottom; statusLabel.Height = 74; statusLabel.Padding = new Padding(12, 6, 12, 4); statusLabel.BackColor = Color.White;
+            statusLabel.Tag = Ui.Role.Surface; statusLabel.Dock = DockStyle.Bottom; statusLabel.Height = 74; statusLabel.Padding = new Padding(12, 6, 12, 4); statusLabel.BackColor = Color.White;
             simpleContent.Controls.Add(note); simpleContent.Controls.Add(actions); simpleContent.Controls.Add(statusLabel);
             UpdateNavigation();
         }
@@ -199,8 +201,14 @@ namespace ScheduledClicker
         }
 
         private void SetStatus(string source) { statusSource = source; statusLabel.Text = L.T(source); }
+        private void ThemeChanged()
+        {
+            Ui.Apply(this); UpdateThemeButton(); UpdateNavigation();
+        }
+        private void UpdateThemeButton() { themeButton.Text = L.T(Ui.Dark ? "切換為淺色模式" : "切換為深色模式"); themeButton.AccessibleName = themeButton.Text; }
         private void LanguageChanged()
         {
+            UpdateThemeButton();
             int selected = clickKind.SelectedIndex;
             clickKind.Items[0] = L.T("單擊"); clickKind.Items[1] = L.T("雙擊");
             clickKind.SelectedIndex = selected;
@@ -242,7 +250,7 @@ namespace ScheduledClicker
             captureTimer.Stop();
             capturedPoint = Cursor.Position;
             positionLabel.Text = "X: " + capturedPoint.Value.X + "   Y: " + capturedPoint.Value.Y;
-            positionLabel.ForeColor = Color.FromArgb(32, 106, 196);
+            Ui.Tone(positionLabel, Ui.Role.Accent);
             captureButton.Enabled = true;
             WindowState = FormWindowState.Normal;
             Activate();
@@ -305,7 +313,7 @@ namespace ScheduledClicker
             armButton.Enabled = false;
             cancelButton.Enabled = true;
             SetInputsEnabled(false);
-            statusLabel.ForeColor = Color.FromArgb(32, 106, 196);
+            Ui.Tone(statusLabel, Ui.Role.Accent);
             statusLabel.Tag = plan;
             UpdateCountdownStatus(); UpdateNavigation();
         }
@@ -326,7 +334,7 @@ namespace ScheduledClicker
             ReleaseHotkey();
             if (cancelResult == CancelResult.Executing)
             {
-                statusLabel.ForeColor = Color.FromArgb(190, 99, 35);
+                Ui.Tone(statusLabel, Ui.Role.Warning);
                 SetStatus("點擊已開始執行，現在取消已來不及。");
                 return;
             }
@@ -334,7 +342,7 @@ namespace ScheduledClicker
             armButton.Enabled = true;
             cancelButton.Enabled = false;
             SetInputsEnabled(true);
-            statusLabel.ForeColor = emergency ? Color.FromArgb(190, 55, 55) : Color.FromArgb(57, 66, 82);
+            Ui.Tone(statusLabel, emergency ? Ui.Role.Error : Ui.Role.Surface);
             SetStatus(message); UpdateNavigation();
         }
 
@@ -345,7 +353,7 @@ namespace ScheduledClicker
             armButton.Enabled = true;
             cancelButton.Enabled = false;
             SetInputsEnabled(true);
-            statusLabel.ForeColor = Color.FromArgb(32, 130, 83);
+            Ui.Tone(statusLabel, Ui.Role.Success);
             SetStatus(string.Format("已於 {0:HH:mm:ss.fff} 完成{1}。", DateTime.Now, plan.ClickKind == ClickKind.Double ? "雙擊" : "單擊"));
         }
 
@@ -356,7 +364,7 @@ namespace ScheduledClicker
             armButton.Enabled = true;
             cancelButton.Enabled = false;
             SetInputsEnabled(true);
-            statusLabel.ForeColor = Color.FromArgb(190, 55, 55);
+            Ui.Tone(statusLabel, Ui.Role.Error);
             SetStatus("執行失敗：" + exception.Message);
         }
 

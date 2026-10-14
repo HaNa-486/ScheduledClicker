@@ -31,6 +31,8 @@ Both simple and loop modes support Traditional Chinese, English, Japanese, Korea
 
 Both modes share one window, clock, language selector and mode buttons. Loop timing is on the left and position capture on the right, with prompts underneath and fixed notices, actions and status below. All settings fit the initial/minimum window without page scrolling; long prompt text can scroll inside its editor. Stop an active schedule or capture before switching modes; idle switching preserves configuration. The shared catalog and development checks are described in [`localization/README.md`](localization/README.md).
 
+The local candidate now includes light/dark themes. Startup reads the current system app appearance; a shared header button switches both modes and confirmations for this session. Restarting reads the system again. Windows date/time fields and some native control parts retain their standard rendering. macOS source includes the matching appearance toggle; its build remains deferred.
+
 These changes are **unreleased**. Windows is available as a local review candidate; macOS source is updated, but builds and public CI are deferred until the owner finishes Windows testing and requests them.
 
 ## Download

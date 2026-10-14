@@ -61,6 +61,7 @@ namespace ScheduledClicker
             Controls.Add(settings);
             var actions = Row(start, trial, pause, cancel); actions.Dock = DockStyle.Bottom; actions.Height = 42;
             Ui.Primary(start);
+            notice.Tag = Ui.Role.Notice; status.Tag = Ui.Role.Surface;
             notice.AutoSize = false; notice.Dock = DockStyle.Bottom; notice.Padding = new Padding(10, 4, 10, 4); notice.BackColor = Ui.Notice;
             Controls.Add(notice); Controls.Add(actions); Controls.Add(status);
             settings.RowStyles.Add(new RowStyle(SizeType.Absolute, 200));

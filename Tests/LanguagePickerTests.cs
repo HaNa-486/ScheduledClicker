@@ -33,7 +33,7 @@ internal static class LanguagePickerTests
                 var editor = Field<TextBox>(loop, "editor"); editor.Text = "Keep this prompt 中文 😀";
                 foreach (bool loopMode in new[] { false, true, false })
                 {
-                    Check(shell.SwitchMode(loopMode), "Mode switch failed");
+                    Check(shell.SwitchMode(loopMode), "Mode switch failed"); Pump(150);
                     for (int index = 0; index < L.Codes.Length; index++)
                     {
                         picker.Focus();

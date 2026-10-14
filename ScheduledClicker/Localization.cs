@@ -106,6 +106,7 @@ namespace ScheduledClicker
                 }
                 else dialog.CancelButton = ok;
                 dialog.ClientSize = new System.Drawing.Size(670, height + 96);
+                Ui.Primary(ok); Ui.Apply(dialog); dialog.HandleCreated += delegate { Ui.TitleBar(dialog); };
                 return dialog;
         }
     }

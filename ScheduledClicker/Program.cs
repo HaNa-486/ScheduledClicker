@@ -147,15 +147,19 @@ namespace ScheduledClicker
             var header = new Panel { Dock = DockStyle.Top, Height = 80 };
             var caption = NewLabel("目前時間", 18, 9); header.Controls.Add(caption);
             clockLabel.Font = new Font("Consolas", 16F, FontStyle.Bold); clockLabel.ForeColor = Color.FromArgb(32, 106, 196);
-            clockLabel.AutoSize = true; clockLabel.Location = new Point(18, 34); header.Controls.Add(clockLabel);
+            // Clock text changes every 100 ms; keep it from relaying out the header.
+            clockLabel.AutoSize = false; clockLabel.SetBounds(18, 34, 335, 28); header.Controls.Add(clockLabel);
             simpleModeButton.AutoSize = loopModeButton.AutoSize = false;
             simpleModeButton.SetBounds(365, 16, 200, 36); loopModeButton.SetBounds(567, 16, 210, 36);
             simpleModeButton.Click += delegate { SwitchMode(false); }; loopModeButton.Click += delegate { SwitchMode(true); };
             header.Controls.Add(simpleModeButton); header.Controls.Add(loopModeButton);
             switchHint.Location = new Point(365, 55); switchHint.ForeColor = Color.FromArgb(140, 78, 15); header.Controls.Add(switchHint);
             var languageLabel = NewLabel("語言", 835, 9); languageLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            language.SetBounds(835, 33, 185, 28); language.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            header.Width = ClientSize.Width; header.Controls.Add(languageLabel); header.Controls.Add(language); Controls.Add(header);
+            // Anchor a host panel, not the native DropDownList: its actual height can differ
+            // even from PreferredHeight. Reapplying cached anchor bounds closes its list.
+            var languageHost = new Panel { Bounds = new Rectangle(835, 33, 185, 32), Anchor = AnchorStyles.Top | AnchorStyles.Right };
+            language.Width = 185; languageHost.Controls.Add(language);
+            header.Width = ClientSize.Width; header.Controls.Add(languageLabel); header.Controls.Add(languageHost); Controls.Add(header);
 
             var columns = Ui.Columns(60, 40); simpleContent.Controls.Add(columns);
             var timeGroup = Ui.Card("1. 選擇執行時間"); var pointGroup = Ui.Card("2. 選擇位置與點擊方式");

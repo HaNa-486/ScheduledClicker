@@ -1,15 +1,15 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 17
-- Updated: 2026-10-13
+- State revision: 18
+- Updated: 2026-10-14
 - State confidence: high for Windows loop source/build/core/UI/native-input evidence; macOS loop source reviewed but uncompiled and runtime unverified
 - Phase: unified-window Windows local candidate ready for owner testing; macOS build explicitly deferred
 
 ## Repository identity
 
 - Branch: codex/recurring-prompt-loop
-- Observed commit: ae5d546
+- Observed commit: 6d6ee12
 
 ## Product anchors
 
@@ -21,7 +21,7 @@
 
 ## Current work
 
-- Current slice: single shared window, consistent two-mode layout, all loop settings initially visible; five-language routing retained
+- Current slice: narrow Windows language-picker interaction fix after owner video report; shared-window features retained
 - Active workstream: `workstreams/2026-10-13-loop-input.md`
 - Active review: `reviews/REV-20261013-unified-window.md`; independent lifecycle/concurrency/privacy source review complete
 - Active remediations: unified-window F001 implemented and Windows verified, Mac pending; localization F001 macOS status overlap implemented (native pending); F002 focus-dependent test failure verified fixed. Prior loop F001/F002 remain unverified across platforms.
@@ -30,12 +30,12 @@
 
 ## Handoff
 
-- What changed: one shared native window and header; loop timing left, capture positions right, prompt area below and fixed notices/actions/status. No settings page scrollbar. Idle switching retains state; active/paused execution or capture blocks switching until stopped; close cancels. Shared catalog now has 211 keys. Mac source follows the same structure.
-- Verification evidence: Windows build; 2050 localization/catalog/startup/state/layout/dialog checks; 40 loop core, 10 original core and shared-window navigation/lifecycle checks pass. Five-language renders generated and Chinese/English/German visually inspected. Disposable native shared-host trial passes paste/replace/send, registered hotkey queued cancellation, mode reuse and close cancellation. Catalog consistency check passes; independent source review found no concrete defect.
+- What changed: Windows language picker no longer closes on clock refresh: fixed-size clock and anchored host panel around native-height ComboBox. One shared native window and header; loop timing left, capture positions right, prompt area below and fixed notices/actions/status. No settings page scrollbar. Idle switching retains state; active/paused execution or capture blocks switching until stopped; close cancels. Shared catalog now has 211 keys. Mac source follows the same structure.
+- Verification evidence: Native picker regression fails on old source and passes 15 mouse-open/keyboard-selection interactions with live clock/forced header layout on new source. Windows build; 2050 localization/catalog/startup/state/layout/dialog checks; 40 loop core, 10 original core and shared-window navigation/lifecycle checks pass. Five-language renders generated and Chinese/English/German visually inspected. Disposable native shared-host trial passes paste/replace/send, registered hotkey queued cancellation, mode reuse and close cancellation. Catalog consistency check passes; independent source review found no concrete defect.
 - Not verified: macOS compilation, 40 Swift tests, new Aqua/Dark Aqua loop renders, native clipboard/paste/send/F8 and wrong-sibling-window rejection; physical-key F8 routing in the unified host; all mixed-DPI and small-desktop scenarios
 - Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input; unsigned/ad-hoc-signed distribution
 - Release assessment: not-ready for cross-platform release; Windows candidate available locally; existing tracked release executable preserved
-- Next safe action: owner tests the Windows unified-window candidate locally and reports review findings; only after a later explicit request, build/verify macOS. Do not push or start macOS CI now.
+- Next safe action: owner tests the Windows language-picker-fix candidate locally and reports review findings; only after a later explicit request, build/verify macOS. Do not push or start macOS CI now.
 
 ## Read next
 

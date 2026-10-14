@@ -16,3 +16,8 @@
 - Windows renders inspected, including long German controls and localized confirmation text/buttons. Tests run invisibly and exceptions fail the executable rather than opening a blocking .NET error dialog.
 - Independent review confirmed privacy/authorization disclosures and no execution from language changes. It found one macOS status-label overlap, corrected and re-reviewed by source rectangle evidence.
 - macOS source and tests updated; compilation, Swift tests, native layout/accessibility and multilingual user acceptance remain unverified. No cross-platform release-ready claim.
+
+## Native picker regression (2026-10-14)
+
+- Windows native language dropdown must stay open during clock updates and header layout; selection must update both modes without changing prompt text.
+- Regression passes 15 native mouse-open/keyboard-selection interactions across simple/loop/simple, including forced layout and a live clock. The same test fails against the prior shared-window source. Root cause and correction are recorded in `../../VERIFICATION.md`.

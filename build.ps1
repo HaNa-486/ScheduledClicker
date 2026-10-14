@@ -27,7 +27,7 @@ if ($LASTEXITCODE -ne 0) { throw '循環測試建置失敗。' }
 & "$testDirectory\LoopCoreTests.exe"
 if ($LASTEXITCODE -ne 0) { throw '循環測試失敗。' }
 
-foreach ($testName in @('LoopUiTests', 'LoopIntegrationTest', 'UnifiedIntegrationTest')) {
+foreach ($testName in @('LoopUiTests', 'LoopIntegrationTest', 'UnifiedIntegrationTest', 'LanguagePickerTests')) {
     & $compiler /nologo /target:exe /win32manifest:"$projectRoot\ScheduledClicker\app.manifest" /main:$testName /out:"$testDirectory\$testName.exe" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "$projectRoot\Tests\$testName.cs" "$projectRoot\ScheduledClicker\Program.cs" "$projectRoot\ScheduledClicker\SchedulerCore.cs" "$projectRoot\ScheduledClicker\LoopCore.cs" "$projectRoot\ScheduledClicker\LoopInput.cs" "$projectRoot\ScheduledClicker\LoopForm.cs" "$projectRoot\ScheduledClicker\Ui.cs" "$projectRoot\ScheduledClicker\Localization.cs" "$projectRoot\ScheduledClicker\LocalizationCatalog.cs"
     if ($LASTEXITCODE -ne 0) { throw "$testName 建置失敗。" }
 }
@@ -38,3 +38,6 @@ if ($LASTEXITCODE -ne 0) { throw '循環介面測試失敗。' }
 if ($LASTEXITCODE -ne 0) { throw 'Localization test build failed.' }
 & "$testDirectory\LocalizationTests.exe" "$testDirectory"
 if ($LASTEXITCODE -ne 0) { throw 'Localization tests failed.' }
+
+& "$testDirectory\LanguagePickerTests.exe"
+if ($LASTEXITCODE -ne 0) { throw 'Language picker interaction tests failed.' }

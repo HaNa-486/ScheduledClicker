@@ -1,5 +1,15 @@
 # 驗證報告
 
+## 2026-10-14：Windows 語言下拉選單立即收起修正（尚未發布）
+
+- 使用者錄影顯示語言選單無法保持展開，文字短暫錯位。已以原生選單操作重現；切換翻譯資料本身可正常執行。
+- Root cause：共享標頭的時鐘 Label 使用 AutoSize，每 100 ms 更新文字便觸發父容器 layout。語言 ComboBox 設為右上錨定並指定 28 px 高度，但在測試環境 native control 實際高度為 25 px（PreferredHeight 也可能為 26 px）。DefaultLayout 反覆套用快取的錨定尺寸，造成 SetWindowPos → WM_SIZE，Windows 將展開中的清單收起。追蹤呼叫堆疊確認來源為 MainForm.UpdateClock → Label.OnTextChanged → header layout → ComboBox.SetBoundsCore。
+- 修正：固定時鐘顯示區域，更新文字不再重新排版標頭；將右上錨定移到外層 Panel，內層 ComboBox 保持預設錨定與原生高度，避免重新套用錯誤高度。沒有改動翻譯表、排程或原生輸入引擎；macOS 未涉及此 WinForms 缺陷。
+- 新增 LanguagePickerTests：實際向選單箭頭傳入 native 滑鼠訊息，保持時鐘運作並強制父容器／標頭重排，確認清單仍展開，再用 native 鍵盤訊息選取每一種語言。簡單 → 循環 → 簡單共 15 次操作通過，兩模式按鈕皆翻譯且提示詞保留。
+- 同一項測試對修正前 Program.cs 回報 `Language list closed during clock/header layout`，修正後退出碼 0。舊測試直接設定 SelectedIndex，未涵蓋使用者展開清單的路徑，這是先前漏檢原因。
+- 完整 Windows build、2050 語系／版面檢查、共用視窗生命週期、40 循環核心、10 既有核心及 catalog check 通過。沒有重跑外部輸入引擎測試，因本次未變更該流程。
+- 僅交付本機 Windows 修正版；未公開推送，macOS 建置依原約定延後。未宣稱所有 DPI／多螢幕組合均通過。
+
 ## 2026-10-13：共用視窗與完整可見版面（尚未發布）
 
 - 兩模式共用一個視窗、時鐘、語系與模式切換；循環時間左／位置右、提示詞置於下方，注意事項與操作／狀態固定可見。Windows 初始 client size 1040 × 680，最小尺寸同初始值，放大時欄位跟著擴展。整頁無捲軸；提示詞框內仍可捲動長文字。此版取代下方歷史紀錄的獨立視窗、返回即停止、設定區捲動行為。

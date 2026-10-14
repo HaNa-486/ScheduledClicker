@@ -135,11 +135,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         content.addSubview(label("目前時間", frame: NSRect(x: 18, y: 651, width: 230, height: 20), size: 12, color: .secondaryLabelColor))
         clockLabel.frame = NSRect(x: 18, y: 619, width: 335, height: 28); clockLabel.font = .monospacedDigitSystemFont(ofSize: 20, weight: .semibold)
         clockLabel.textColor = .systemBlue; clockLabel.setAccessibilityLabel("目前時間"); content.addSubview(clockLabel)
-        modeSelector.frame = NSRect(x: 365, y: 641, width: 435, height: 34); modeSelector.selectedSegment = 0
+        modeSelector.frame = NSRect(x: 365, y: 625, width: 435, height: 34); modeSelector.selectedSegment = 0
         modeSelector.target = self; modeSelector.action = #selector(changeMode); content.addSubview(modeSelector)
-        themeButton.frame = NSRect(x: 365, y: 605, width: 200, height: 30); themeButton.bezelStyle = .rounded
+        themeButton.frame = NSRect(x: 790, y: 616, width: 34, height: 34); themeButton.bezelStyle = .inline; themeButton.isBordered = false; themeButton.imagePosition = .imageOnly
         themeButton.target = self; themeButton.action = #selector(toggleAppearance); content.addSubview(themeButton)
-        switchHint.frame = NSRect(x: 575, y: 601, width: 250, height: 36); switchHint.maximumNumberOfLines = 2; switchHint.font = .systemFont(ofSize: 11); switchHint.textColor = .secondaryLabelColor; content.addSubview(switchHint)
+        switchHint.frame = NSRect(x: 365, y: 601, width: 420, height: 20); switchHint.maximumNumberOfLines = 2; switchHint.font = .systemFont(ofSize: 11); switchHint.textColor = .secondaryLabelColor; content.addSubview(switchHint)
         content.addSubview(label("語言", frame: NSRect(x: 835, y: 651, width: 180, height: 20), size: 12, color: .secondaryLabelColor))
         language.view.frame = NSRect(x: 835, y: 619, width: 185, height: 28); content.addSubview(language.view)
         let root = simpleContent
@@ -160,7 +160,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let secondsLabel = NativeUI.label("秒", frame: NSRect(x: 350, y: 94, width: 60, height: 22))
         let delayHint = NativeUI.label("可設定 1 秒至 168 小時。", frame: NSRect(x: 28, y: 137, width: 550, height: 22))
         delayViews = [delayHours, delayMinutes, delaySeconds, hoursLabel, minutesLabel, secondsLabel, delayHint]; delayViews.forEach { root.addSubview($0) }
-        captureButton.frame = NSRect(x: 636, y: 40, width: 370, height: 34); captureButton.bezelStyle = .rounded
+        captureButton.frame = NSRect(x: 636, y: 40, width: 285, height: 34); captureButton.bezelStyle = .rounded
         captureButton.target = self; captureButton.action = #selector(startCapture(_:)); captureButton.toolTip = "按下後視窗會縮小，請在三秒內把滑鼠移到目標位置"; root.addSubview(captureButton)
         positionLabel.frame = NSRect(x: 640, y: 89, width: 350, height: 24); positionLabel.textColor = .systemBlue; root.addSubview(positionLabel)
         root.addSubview(NativeUI.label("點擊方式", frame: NSRect(x: 640, y: 139, width: 340, height: 22)))
@@ -411,7 +411,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private func updateThemeButton() {
         let dark = window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
         themeButton.title = L.t(dark ? "切換為淺色模式" : "切換為深色模式")
-        themeButton.setAccessibilityLabel(themeButton.title)
+        themeButton.setAccessibilityLabel(themeButton.title); themeButton.toolTip = themeButton.title
+        themeButton.image = NSImage(systemSymbolName: dark ? "sun.max" : "moon", accessibilityDescription: themeButton.title)
     }
     private func languageChanged() {
         updateThemeButton()

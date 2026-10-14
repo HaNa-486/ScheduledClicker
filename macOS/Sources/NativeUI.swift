@@ -6,7 +6,7 @@ enum NativeUI {
     static func card(_ title: String, frame: NSRect) -> NSBox {
         let box = NSBox(frame: frame)
         box.boxType = .custom; box.titlePosition = .noTitle
-        box.borderColor = .separatorColor; box.borderWidth = 1; box.cornerRadius = 8
+        box.borderColor = .separatorColor; box.borderWidth = 0; box.cornerRadius = 12
         box.fillColor = .controlBackgroundColor
         return box
     }

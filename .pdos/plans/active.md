@@ -2,6 +2,7 @@
 
 | Slice | Outcome | Risk | Verification | Status |
 |---|---|---|---|---|
+| 深淺色視覺重設計 | 中性色層次、圓角元件、小型日月按鈕、Mac 原生外觀 | 日期編輯、可讀性、語系與焦點回歸 | Windows 2066 locale + 153 appearance + 15 picker + 20 date checks；Mac source only | Windows local aesthetic review; Mac deferred |
 | 系統外觀／深淺色切換 | 啟動跟隨系統、共用按鈕、兩模式與確認同步 | 對比、停用狀態、選單回歸 | Windows 153 appearance + 2061 locale + 15 native picker；Mac source only | Windows local review; Mac build deferred |
 | 共用視窗／完整可見版面 | 同視窗切換、時間左／位置右、全部設定可見、兩模式一致 | 切換競態、關閉取消、文字裁切 | Windows 2050 checks + 40/10 core + 原生共用視窗試跑通過；獨立審查；macOS source only | Windows local review; Mac build explicitly deferred |
 | 五語系／固定注意事項 | 系統選語系、兩模式同步切換、固定可見 notices | 誤譯告知、草稿重寫、版面遮蔽 | Windows 1166 checks + 40/10 core + 導航通過；獨立告知審查；macOS source only | Windows local review; Mac build explicitly deferred |

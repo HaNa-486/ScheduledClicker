@@ -8,7 +8,7 @@ namespace ScheduledClicker
 {
     internal static class Ui
     {
-        internal enum Role { Primary, Notice, Surface, Accent, Warning, Success, Error }
+        internal enum Role { Primary, Selected, Notice, Surface, Accent, Warning, Success, Error }
         internal static bool Dark { get; private set; }
         internal static event Action Changed;
         static Ui() { Dark = ReadSystemTheme(); }
@@ -21,13 +21,20 @@ namespace ScheduledClicker
             catch (System.IO.IOException) { return false; }
         }
         internal static void Select(bool dark) { if (Dark == dark) return; Dark = dark; if (Changed != null) Changed(); }
-        internal static Color Background { get { return Dark ? Color.FromArgb(17, 24, 39) : Color.FromArgb(247, 249, 252); } }
-        internal static Color Surface { get { return Dark ? Color.FromArgb(31, 41, 55) : Color.White; } }
-        internal static Color Text { get { return Dark ? Color.FromArgb(229, 231, 235) : Color.FromArgb(36, 45, 60); } }
-        internal static Color Accent { get { return Dark ? Color.FromArgb(139, 188, 255) : Color.FromArgb(32, 106, 196); } }
-        internal static Color Notice { get { return Dark ? Color.FromArgb(48, 43, 28) : Color.FromArgb(255, 249, 230); } }
+        internal static Color Background { get { return Dark ? Color.FromArgb(23, 25, 31) : Color.FromArgb(245, 246, 248); } }
+        internal static Color Surface { get { return Dark ? Color.FromArgb(33, 36, 44) : Color.White; } }
+        internal static Color Text { get { return Dark ? Color.FromArgb(225, 228, 235) : Color.FromArgb(37, 42, 52); } }
+        internal static Color Accent { get { return Dark ? Color.FromArgb(155, 181, 255) : Color.FromArgb(56, 84, 177); } }
+        internal static Color Notice { get { return Dark ? Color.FromArgb(34, 42, 53) : Color.FromArgb(237, 242, 250); } }
         internal static Color DisabledText { get { return Dark ? Color.FromArgb(158, 173, 194) : Color.FromArgb(100, 110, 124); } }
-        private static Color PrimaryColor { get { return Color.FromArgb(37, 99, 235); } }
+        internal static Color Field { get { return Dark ? Color.FromArgb(41,45,54) : Color.FromArgb(243,245,248); } }
+        internal static Color Muted { get { return Dark ? Color.FromArgb(164,173,189) : Color.FromArgb(97,107,123); } }
+        internal static Color Stroke { get { return Dark ? Color.FromArgb(61,67,79) : Color.FromArgb(216,222,231); } }
+        internal static Color Hover { get { return Dark ? Color.FromArgb(51,56,67) : Color.FromArgb(231,235,242); } }
+        internal static Color SelectedSurface { get { return Dark ? Color.FromArgb(59,66,83) : Color.FromArgb(224,231,245); } }
+        internal static Color PrimaryColor { get { return Color.FromArgb(68,99,209); } }
+        internal static Color PrimaryHover { get { return Color.FromArgb(56,84,187); } }
+        internal static Color PrimaryPressed { get { return Color.FromArgb(46,72,164); } }
         [DllImport("dwmapi.dll")] private static extern int DwmSetWindowAttribute(IntPtr window, int attribute, ref int value, int size);
         internal static void TitleBar(Form form)
         {
@@ -48,18 +55,17 @@ namespace ScheduledClicker
         private static void PaintControl(Control control)
         {
             var role = control.Tag is Role ? (Role?)control.Tag : null;
-            control.ForeColor = Text;
+            control.ForeColor = control is Label && role == null ? Muted : Text;
             control.BackColor = control.Parent == null ? Background : control.Parent.BackColor;
             if (control is Form || control is UserControl) control.BackColor = Background;
-            if (control is GroupBox || role == Role.Surface) control.BackColor = Surface;
-            if (control is TextBoxBase || control is ListBox || control is UpDownBase || control is ComboBox) control.BackColor = Dark ? Background : Color.White;
+            if (control is GroupBox || (role == Role.Surface && !(control is Label))) control.BackColor = Surface;
+            if (control is TextBoxBase || control is ListBox || control is UpDownBase || control is ComboBox) control.BackColor = Field;
             var button = control as Button;
             if (button != null) {
-                button.Paint -= DisabledButtonPaint; button.Paint += DisabledButtonPaint;
                 button.UseVisualStyleBackColor = false; button.FlatStyle = FlatStyle.Flat;
-                button.FlatAppearance.BorderColor = Dark ? Color.FromArgb(83, 99, 120) : Color.FromArgb(190, 199, 211);
-                button.FlatAppearance.MouseOverBackColor = Dark ? Color.FromArgb(50, 65, 85) : Color.FromArgb(228, 237, 250);
-                button.BackColor = Surface;
+                button.FlatAppearance.BorderColor = Stroke;
+                button.FlatAppearance.MouseOverBackColor = Hover;
+                button.BackColor = Field;
             }
             var combo = control as ComboBox;
             if (combo != null && combo.DrawMode != DrawMode.OwnerDrawFixed) {
@@ -71,22 +77,25 @@ namespace ScheduledClicker
             var radio = control as RadioButton; if (radio != null) { radio.FlatStyle = FlatStyle.Flat; radio.UseVisualStyleBackColor = false; }
             if (role == Role.Primary) {
                 control.BackColor = PrimaryColor; control.ForeColor = Color.White;
-                if (button != null) { button.FlatAppearance.MouseOverBackColor = Color.FromArgb(29, 78, 216); button.FlatAppearance.MouseDownBackColor = Color.FromArgb(30, 64, 175); }
+                if (button != null) { button.FlatAppearance.MouseOverBackColor = PrimaryHover; button.FlatAppearance.MouseDownBackColor = PrimaryPressed; }
             }
-            if (role == Role.Notice) { control.BackColor = Notice; control.ForeColor = Dark ? Color.FromArgb(245, 226, 172) : Text; }
+            if (role == Role.Selected) control.BackColor = SelectedSurface;
+            if (role == Role.Notice) { control.BackColor = Notice; control.ForeColor = Dark ? Color.FromArgb(185,197,218) : Color.FromArgb(70,89,120); }
             if (role == Role.Accent) control.ForeColor = Accent;
             if (role == Role.Warning) control.ForeColor = Dark ? Color.FromArgb(255, 199, 130) : Color.FromArgb(150, 75, 15);
             if (role == Role.Success) control.ForeColor = Dark ? Color.FromArgb(129, 223, 170) : Color.FromArgb(32, 130, 83);
             if (role == Role.Error) control.ForeColor = Dark ? Color.FromArgb(255, 170, 167) : Color.FromArgb(190, 55, 55);
-            // Date/time fields keep native segment editing, selection, spin buttons and accessibility.
-            if (control is DateTimePicker) { control.BackColor = SystemColors.Window; control.ForeColor = SystemColors.WindowText; }
+            // Date fields use a themed text editor with explicit validation and segment adjustments.
+            if (control is DateTimeField) control.BackColor = Field;
+            var box = control as TextBox; if (box != null) box.BorderStyle = BorderStyle.None;
+            if (list != null) list.BorderStyle = BorderStyle.None;
         }
         private static void DrawComboItem(object sender, DrawItemEventArgs e)
         {
             var combo = (ComboBox)sender;
-            bool selected = (e.State & DrawItemState.Selected) != 0;
-            Color background = selected ? PrimaryColor : (Dark ? Background : Color.White);
-            Color foreground = selected ? Color.White : Text;
+            bool selected = (e.State & DrawItemState.Selected) != 0 && (e.State & DrawItemState.ComboBoxEdit) == 0;
+            Color background = selected ? SelectedSurface : Field;
+            Color foreground = Text;
             using (var brush = new SolidBrush(background)) e.Graphics.FillRectangle(brush, e.Bounds);
             string text = e.Index >= 0 ? Convert.ToString(combo.Items[e.Index]) : combo.Text;
             TextRenderer.DrawText(e.Graphics, text, combo.Font, e.Bounds, foreground, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
@@ -96,8 +105,8 @@ namespace ScheduledClicker
         {
             var list = (ListBox)sender; if (e.Index < 0) return;
             bool selected = (e.State & DrawItemState.Selected) != 0;
-            Color background = list.Enabled ? (selected ? PrimaryColor : list.BackColor) : Surface;
-            Color foreground = list.Enabled ? (selected ? Color.White : Text) : DisabledText;
+            Color background = list.Enabled ? (selected ? SelectedSurface : list.BackColor) : Surface;
+            Color foreground = list.Enabled ? Text : DisabledText;
             using (var brush = new SolidBrush(background)) e.Graphics.FillRectangle(brush, e.Bounds);
             TextRenderer.DrawText(e.Graphics, Convert.ToString(list.Items[e.Index]), list.Font, e.Bounds, foreground, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
             e.DrawFocusRectangle();
@@ -113,23 +122,14 @@ namespace ScheduledClicker
             }
             TextRenderer.DrawText(e.Graphics, check.Text, check.Font, new Rectangle(side + 6, 0, Math.Max(0, check.Width - side - 6), check.Height), DisabledText, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
         }
-        private static void DisabledButtonPaint(object sender, PaintEventArgs e)
-        {
-            var button = (Button)sender; if (button.Enabled) return;
-            e.Graphics.Clear(Surface);
-            using (var pen = new Pen(Dark ? Color.FromArgb(83, 99, 120) : Color.FromArgb(190, 199, 211)))
-                e.Graphics.DrawRectangle(pen, 0, 0, button.Width - 1, button.Height - 1);
-            TextRenderer.DrawText(e.Graphics, button.Text, button.Font, button.ClientRectangle,
-                DisabledText, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
-        }
         internal static void Selected(Button button, bool selected)
         {
-            if ((button.Tag is Role && (Role)button.Tag == Role.Primary) == selected && button.BackColor == (selected ? PrimaryColor : Surface)) return;
-            button.Tag = selected ? (object)Role.Primary : null; PaintControl(button);
+            if ((button.Tag is Role && (Role)button.Tag == Role.Selected) == selected && button.BackColor == (selected ? SelectedSurface : Field)) return;
+            button.Tag = selected ? (object)Role.Selected : null; PaintControl(button);
         }
-        internal static Button Button(string text) { return new Button { Text = text, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, MinimumSize = new Size(80, 30), Padding = new Padding(8, 1, 8, 1), Margin = new Padding(3, 2, 3, 2) }; }
+        internal static Button Button(string text) { return new ModernButton { Text = text, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, MinimumSize = new Size(80, 30), Padding = new Padding(8, 1, 8, 1), Margin = new Padding(3, 2, 3, 2) }; }
         internal static void Primary(Button button) { Tone(button, Role.Primary); }
-        internal static GroupBox Card(string title) { return new GroupBox { Text = title, Dock = DockStyle.Fill, BackColor = Color.White, Padding = new Padding(4), Margin = new Padding(0, 0, 8, 8) }; }
+        internal static GroupBox Card(string title) { return new ModernCard { Text = title, Dock = DockStyle.Fill, BackColor = Color.White, Padding = new Padding(4), Margin = new Padding(0, 0, 8, 8) }; }
         internal static TableLayoutPanel Columns(float left, float right)
         {
             var grid = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1, Margin = new Padding(0) };

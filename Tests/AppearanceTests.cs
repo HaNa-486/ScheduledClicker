@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -31,7 +31,7 @@ internal static class AppearanceTests
                 var toggle = Field<Button>(shell, "themeButton"); var picker = Field<ComboBox>(shell, "language");
                 var loop = Field<LoopForm>(shell, "loopForm"); var editor = Field<TextBox>(loop, "editor");
                 editor.Text = "Unchanged prompt 中文 😀"; editor.Select(2, 4);
-                var first = Field<DateTimePicker>(loop, "first"); first.Value = DateTime.Now.AddHours(12); DateTime date = first.Value;
+                var first = Field<DateTimeField>(loop, "first"); first.Value = DateTime.Now.AddHours(12); DateTime date = first.Value;
                 IntPtr window = shell.Handle;
                 foreach (string language in L.Codes)
                 foreach (bool dark in new[] { false, true })
@@ -40,7 +40,7 @@ internal static class AppearanceTests
                     if (Ui.Dark != dark) toggle.PerformClick(); Pump(50);
                     Check(Ui.Dark == dark && shell.BackColor == Ui.Background, "Theme button failed");
                     Check(toggle.Text == L.T(dark ? "切換為淺色模式" : "切換為深色模式"), "Theme caption not localized");
-                    Check(TextRenderer.MeasureText(toggle.Text, toggle.Font).Width < toggle.Width - toggle.Padding.Horizontal, "Theme caption clipped");
+                    Check(((ModernButton)toggle).IconOnly && toggle.AccessibleName == toggle.Text && toggle.Width >= 32, "Theme icon missing accessible caption or hit area");
                     Check(Contrast(Ui.Text, Ui.Background) >= 4.5 && Contrast(Ui.Text, Ui.Surface) >= 4.5 && Contrast(Ui.Accent, Ui.Surface) >= 4.5, "Theme text contrast below 4.5:1");
                     var primary = Field<Button>(loop, "start");
                     Check(Contrast(primary.ForeColor, primary.FlatAppearance.MouseOverBackColor) >= 4.5 && Contrast(Ui.DisabledText, Ui.Surface) >= 4.5, "Hover/disabled text contrast too low");

@@ -13,8 +13,8 @@ namespace ScheduledClicker
         private readonly LoopEngine engine;
         private readonly Timer timer = new Timer { Interval = 50 };
         private readonly TableLayoutPanel settings = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 1, Padding = new Padding(0), Margin = new Padding(0) };
-        private readonly DateTimePicker first = DatePicker(DateTime.Now.AddMinutes(1));
-        private readonly DateTimePicker deadline = DatePicker(DateTime.Now.AddDays(1));
+        private readonly DateTimeField first = DatePicker(DateTime.Now.AddMinutes(1));
+        private readonly DateTimeField deadline = DatePicker(DateTime.Now.AddDays(1));
         private readonly NumericUpDown hours = Number(0, 8760, 5);
         private readonly NumericUpDown minutes = Number(0, 59, 10);
         private readonly NumericUpDown seconds = Number(0, 59, 0);
@@ -24,7 +24,7 @@ namespace ScheduledClicker
         private readonly CheckBox timeBound = new CheckBox { Text = "截止時間", AutoSize = true };
         private readonly CheckBox repeatLast = new CheckBox { Text = "序列用完後，重複最後一筆", AutoSize = true };
         private readonly CheckBox replace = new CheckBox { Text = "取代輸入框原有文字（預設保留並插入）", AutoSize = true };
-        private readonly ComboBox mode = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 210 };
+        private readonly ComboBox mode = new ModernCombo { DropDownStyle = ComboBoxStyle.DropDownList, Width = 210 };
         private readonly ListBox entries = new ListBox { Width = 135, Height = 132 };
         private readonly TextBox editor = new TextBox { Multiline = true, AcceptsReturn = true, ScrollBars = ScrollBars.Vertical, Width = 445, Height = 132, MaxLength = 20000 };
         private readonly List<string> prompts = new List<string> { L.T("繼續") };
@@ -61,7 +61,7 @@ namespace ScheduledClicker
             Controls.Add(settings);
             var actions = Row(start, trial, pause, cancel); actions.Dock = DockStyle.Bottom; actions.Height = 42;
             Ui.Primary(start);
-            notice.Tag = Ui.Role.Notice; status.Tag = Ui.Role.Surface;
+            notice.Font = new Font(Font.FontFamily, 9F); notice.Tag = Ui.Role.Notice; status.Tag = Ui.Role.Surface;
             notice.AutoSize = false; notice.Dock = DockStyle.Bottom; notice.Padding = new Padding(10, 4, 10, 4); notice.BackColor = Ui.Notice;
             Controls.Add(notice); Controls.Add(actions); Controls.Add(status);
             settings.RowStyles.Add(new RowStyle(SizeType.Absolute, 200));
@@ -83,7 +83,7 @@ namespace ScheduledClicker
             var points = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(10, 3, 10, 6) };
             points.RowStyles.Add(new RowStyle(SizeType.Absolute, 28)); points.RowStyles.Add(new RowStyle(SizeType.Percent, 50)); points.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
             var hint = Label("請擷取同一視窗內的兩個位置"); hint.Dock = DockStyle.Fill; hint.AutoSize = false;
-            points.Controls.Add(hint, 0, 0);
+            points.Controls.Add(hint, 0, 0); inputLabel.Margin = sendLabel.Margin = new Padding(3,0,3,0);
             var inputRow = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, Margin = new Padding(0) };
             inputRow.Controls.Add(captureInput); inputRow.Controls.Add(inputLabel);
             var sendRow = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, Margin = new Padding(0) };
@@ -132,8 +132,8 @@ namespace ScheduledClicker
             base.Dispose(disposing);
         }
 
-        private static NumericUpDown Number(int min, int max, int value) { return new NumericUpDown { Minimum = min, Maximum = max, Value = value, Width = 65 }; }
-        private static DateTimePicker DatePicker(DateTime value) { return new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy/MM/dd HH:mm:ss", ShowUpDown = true, Width = 250, Value = value }; }
+        private static NumericUpDown Number(int min, int max, int value) { return new ModernNumber { Minimum = min, Maximum = max, Value = value, Width = 65 }; }
+        private static DateTimeField DatePicker(DateTime value) { return new DateTimeField { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy/MM/dd HH:mm:ss", ShowUpDown = true, Width = 250, Value = value }; }
         private static Button Button(string text) { return Ui.Button(text); }
         private static Label Label(string text) { return Label(text, false); }
         private static Label Label(string text, bool bold) { return new Label { Text = text, AutoSize = true, Margin = new Padding(3, 4, 3, 2), Font = new Font("Microsoft JhengHei UI", bold ? 12 : 10, bold ? FontStyle.Bold : FontStyle.Regular) }; }
@@ -149,6 +149,7 @@ namespace ScheduledClicker
         }
         private void LanguageChanged()
         {
+            first.Describe(L.T("首次執行")); deadline.Describe(L.T("截止時間"));
             loading = true;
             int selectedMode = mode.SelectedIndex;
             // Replace item captions in place: do not fire mode changes or rewrite prompt text.

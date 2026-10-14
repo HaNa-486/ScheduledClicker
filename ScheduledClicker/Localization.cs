@@ -54,7 +54,7 @@ namespace ScheduledClicker
         }
         internal static ComboBox Picker()
         {
-            var picker = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 145, AccessibleName = "Language" };
+            var picker = new ModernCombo { DropDownStyle = ComboBoxStyle.DropDownList, Width = 145, AccessibleName = "Language" };
             picker.Items.AddRange(Names); picker.SelectedIndex = Array.IndexOf(Codes, Language);
             picker.SelectedIndexChanged += delegate { if (picker.SelectedIndex >= 0) Select(Codes[picker.SelectedIndex]); };
             Action update = delegate { picker.SelectedIndex = Array.IndexOf(Codes, Language); };
@@ -97,11 +97,11 @@ namespace ScheduledClicker
                 var body = new Label { Text = L.T(message), AutoSize = true, MaximumSize = new System.Drawing.Size(630, 0), Location = new System.Drawing.Point(20, 20) };
                 dialog.Controls.Add(body);
                 int height = body.GetPreferredSize(new System.Drawing.Size(630, 0)).Height;
-                var ok = new Button { Text = L.T("確定"), DialogResult = DialogResult.OK, Size = new System.Drawing.Size(140, 36), Location = new System.Drawing.Point(355, height + 40) };
+                var ok = new ModernButton { Text = L.T("確定"), DialogResult = DialogResult.OK, Size = new System.Drawing.Size(140, 36), Location = new System.Drawing.Point(355, height + 40) };
                 dialog.Controls.Add(ok); dialog.AcceptButton = ok;
                 if (buttons == MessageBoxButtons.OKCancel)
                 {
-                    var cancel = new Button { Text = L.T("取消"), DialogResult = DialogResult.Cancel, Size = new System.Drawing.Size(140, 36), Location = new System.Drawing.Point(510, height + 40) };
+                    var cancel = new ModernButton { Text = L.T("取消"), DialogResult = DialogResult.Cancel, Size = new System.Drawing.Size(140, 36), Location = new System.Drawing.Point(510, height + 40) };
                     dialog.Controls.Add(cancel); dialog.CancelButton = cancel;
                 }
                 else dialog.CancelButton = ok;

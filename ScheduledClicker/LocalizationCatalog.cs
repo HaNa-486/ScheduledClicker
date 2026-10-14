@@ -214,5 +214,6 @@ new string[] { "請擷取同一視窗內的兩個位置", "Capture both points i
 new string[] { "請先停止目前操作，再切換模式。", "Stop the current action before switching modes.", "モードの切り替え前に操作を停止してください。", "현재 동작을 중지한 후 모드를 전환하세요.", "Vor dem Moduswechsel die aktuelle Aktion stoppen." },
 new string[] { "切換為深色模式", "Switch to dark mode", "ダークモードに切替", "다크 모드로 전환", "Dunkles Design" },
 new string[] { "切換為淺色模式", "Switch to light mode", "ライトモードに切替", "라이트 모드로 전환", "Helles Design" },
+new string[] { "請輸入有效的日期與時間（yyyy/MM/dd HH:mm:ss）。", "Enter a valid date and time (yyyy/MM/dd HH:mm:ss).", "有効な日時を入力してください（yyyy/MM/dd HH:mm:ss）。", "올바른 날짜와 시간을 입력하세요(yyyy/MM/dd HH:mm:ss).", "Gültiges Datum und Uhrzeit eingeben (yyyy/MM/dd HH:mm:ss)." },
 };
 } }

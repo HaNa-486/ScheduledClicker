@@ -67,7 +67,7 @@ internal static class LocalizationTests
                 mode.SelectedIndex = 1; Field<Button>(loop, "add").PerformClick();
                 editor.Text = "使用者保留：目前時間 / Continue / 続けて / 계속 / Weiter 😀"; editor.Select(3, 5);
                 string prompt = editor.Text;
-                var first = Field<DateTimePicker>(loop, "first"); first.Value = DateTime.Now.AddHours(12); DateTime firstValue = first.Value;
+                var first = Field<DateTimeField>(loop, "first"); first.Value = DateTime.Now.AddHours(12); DateTime firstValue = first.Value;
                 Field<NumericUpDown>(loop, "count").Value = 7;
                 foreach (string code in L.Codes)
                 {

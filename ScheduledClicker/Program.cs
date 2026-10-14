@@ -43,16 +43,16 @@ namespace ScheduledClicker
         private readonly Label clockLabel = new Label();
         private readonly Label positionLabel = new Label();
         private readonly Label statusLabel = new Label();
-        private readonly DateTimePicker targetTime = new DateTimePicker();
-        private readonly NumericUpDown delayHours = new NumericUpDown();
-        private readonly NumericUpDown delayMinutes = new NumericUpDown();
-        private readonly NumericUpDown delaySeconds = new NumericUpDown();
+        private readonly DateTimeField targetTime = new DateTimeField();
+        private readonly NumericUpDown delayHours = new ModernNumber();
+        private readonly NumericUpDown delayMinutes = new ModernNumber();
+        private readonly NumericUpDown delaySeconds = new ModernNumber();
         private readonly RadioButton absoluteMode = new RadioButton();
         private readonly RadioButton delayMode = new RadioButton();
-        private readonly ComboBox clickKind = new ComboBox();
-        private readonly Button captureButton = new Button();
-        private readonly Button armButton = new Button();
-        private readonly Button cancelButton = new Button();
+        private readonly ComboBox clickKind = new ModernCombo();
+        private readonly Button captureButton = new ModernButton();
+        private readonly Button armButton = new ModernButton();
+        private readonly Button cancelButton = new ModernButton();
         private Point? capturedPoint;
         private int captureCountdown;
         private bool hotkeyRegistered;
@@ -61,6 +61,7 @@ namespace ScheduledClicker
         private readonly Panel simpleContent = new Panel { Dock = DockStyle.Fill, Padding = new Padding(16, 0, 16, 8) };
         private readonly Button simpleModeButton = Ui.Button("簡單模式");
         private readonly Button loopModeButton = Ui.Button("循環模式");
+        private readonly ToolTip themeTip = new ToolTip();
         private readonly Button themeButton = Ui.Button("");
         private readonly Label switchHint = new Label { AutoSize = true };
         private bool loopSelected;
@@ -114,7 +115,7 @@ namespace ScheduledClicker
 
             schedule.Executed += delegate(ClickPlan plan) { PostToUi(delegate { SetCompleted(plan); }); };
             schedule.Failed += delegate(Exception ex) { PostToUi(delegate { SetFailed(ex); }); };
-            FormClosing += delegate { closing = true; L.Changed -= LanguageChanged; Ui.Changed -= ThemeChanged; localized.Dispose(); schedule.Dispose(); clockTimer.Dispose(); captureTimer.Dispose(); loopForm.Dispose(); };
+            FormClosing += delegate { closing = true; L.Changed -= LanguageChanged; Ui.Changed -= ThemeChanged; localized.Dispose(); schedule.Dispose(); clockTimer.Dispose(); captureTimer.Dispose(); themeTip.Dispose(); loopForm.Dispose(); };
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -148,12 +149,12 @@ namespace ScheduledClicker
             // Clock text changes every 100 ms; keep it from relaying out the header.
             clockLabel.AutoSize = false; clockLabel.SetBounds(18, 34, 335, 28); header.Controls.Add(clockLabel);
             simpleModeButton.AutoSize = loopModeButton.AutoSize = false;
-            simpleModeButton.SetBounds(365, 5, 200, 34); loopModeButton.SetBounds(567, 5, 210, 34);
+            simpleModeButton.SetBounds(365, 16, 200, 34); loopModeButton.SetBounds(567, 16, 210, 34);
             simpleModeButton.Click += delegate { SwitchMode(false); }; loopModeButton.Click += delegate { SwitchMode(true); };
             header.Controls.Add(simpleModeButton); header.Controls.Add(loopModeButton);
-            themeButton.AutoSize = false; themeButton.SetBounds(365, 43, 200, 31);
+            themeButton.AutoSize = false; themeButton.MinimumSize = new Size(32,32); themeButton.SetBounds(790, 30, 34, 34); ((ModernButton)themeButton).IconOnly = true;
             themeButton.Click += delegate { Ui.Select(!Ui.Dark); }; header.Controls.Add(themeButton);
-            switchHint.AutoSize = false; switchHint.SetBounds(575, 44, 250, 32); switchHint.Font = new Font(Font.FontFamily, 8.5F);
+            switchHint.AutoSize = false; switchHint.SetBounds(365, 54, 420, 24); switchHint.Font = new Font(Font.FontFamily, 8.5F);
             Ui.Tone(switchHint, Ui.Role.Warning); header.Controls.Add(switchHint);
             var languageLabel = NewLabel("語言", 835, 9); languageLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             // Anchor a host panel, not the native DropDownList: its actual height can differ
@@ -167,7 +168,7 @@ namespace ScheduledClicker
             columns.Controls.Add(timeGroup, 0, 0); columns.Controls.Add(pointGroup, 1, 0);
             absoluteMode.Text = "指定時間"; absoluteMode.Checked = true; absoluteMode.AutoSize = true; absoluteMode.Location = new Point(18, 36);
             absoluteMode.CheckedChanged += delegate { UpdateModeState(); };
-            targetTime.Format = DateTimePickerFormat.Custom; targetTime.CustomFormat = "yyyy/MM/dd  HH:mm:ss"; targetTime.ShowUpDown = true;
+            targetTime.Format = DateTimePickerFormat.Custom; targetTime.CustomFormat = "yyyy/MM/dd HH:mm:ss"; targetTime.ShowUpDown = true;
             targetTime.SetBounds(210, 32, 250, 26); targetTime.Value = DateTime.Now.AddMinutes(1);
             delayMode.Text = "倒數延遲"; delayMode.AutoSize = true; delayMode.Location = new Point(18, 90);
             delayHours.Minimum = 0; delayHours.Maximum = 168; delayHours.SetBounds(210, 87, 58, 26);
@@ -182,7 +183,7 @@ namespace ScheduledClicker
             clickKind.SetBounds(160, 120, 185, 28);
             pointGroup.Controls.AddRange(new Control[] { captureButton, positionLabel, NewLabel("點擊方式", 18, 125), clickKind });
             var note = new Label { Text = "在指定時間安全地執行一次滑鼠單擊或雙擊\n請保持目標視窗／聊天不變。未驗證 AI 狀態或送達。\n等待設定。排程啟動後可按 F8 緊急停止。", Dock = DockStyle.Bottom, Height = 84, Padding = new Padding(10, 4, 10, 4), BackColor = Ui.Notice };
-            note.Tag = Ui.Role.Notice;
+            note.Font = new Font(Font.FontFamily, 9F); note.Height = 76; note.Tag = Ui.Role.Notice;
             var actions = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 42, WrapContents = false };
             armButton.Text = "啟動排程"; armButton.AutoSize = true; armButton.Padding = new Padding(12, 3, 12, 3); armButton.Height = 34;
             Ui.Primary(armButton); armButton.Click += ArmSchedule;
@@ -205,9 +206,10 @@ namespace ScheduledClicker
         {
             Ui.Apply(this); UpdateThemeButton(); UpdateNavigation();
         }
-        private void UpdateThemeButton() { themeButton.Text = L.T(Ui.Dark ? "切換為淺色模式" : "切換為深色模式"); themeButton.AccessibleName = themeButton.Text; }
+        private void UpdateThemeButton() { themeButton.Text = L.T(Ui.Dark ? "切換為淺色模式" : "切換為深色模式"); themeButton.AccessibleName = themeButton.Text; themeTip.SetToolTip(themeButton,themeButton.Text); }
         private void LanguageChanged()
         {
+            targetTime.Describe(L.T("指定時間"));
             UpdateThemeButton();
             int selected = clickKind.SelectedIndex;
             clickKind.Items[0] = L.T("單擊"); clickKind.Items[1] = L.T("雙擊");
@@ -270,7 +272,7 @@ namespace ScheduledClicker
             TimeSpan? requestedDelay = null;
             if (absoluteMode.Checked)
             {
-                runAt = targetTime.Value;
+                if (!targetTime.TryGetValue(out runAt)) { LocalizedDialog.Show(this, L.T("請輸入有效的日期與時間（yyyy/MM/dd HH:mm:ss）。"), "時間無效", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
             }
             else
             {

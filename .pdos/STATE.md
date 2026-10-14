@@ -1,15 +1,15 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 19
+- State revision: 20
 - Updated: 2026-10-14
 - State confidence: high for Windows loop source/build/core/UI/native-input evidence; macOS loop source reviewed but uncompiled and runtime unverified
-- Phase: light/dark Windows local candidate ready for owner testing; macOS build explicitly deferred
+- Phase: redesigned light/dark Windows local candidate ready for owner testing; macOS build explicitly deferred
 
 ## Repository identity
 
 - Branch: codex/recurring-prompt-loop
-- Observed commit: 45c2ee9
+- Observed commit: 2256843
 
 ## Product anchors
 
@@ -21,8 +21,8 @@
 
 ## Current work
 
-- Current slice: system-selected startup appearance and manual light/dark button shared by both modes and dialogs
-- Active workstream: `workstreams/2026-10-14-appearance.md`; prior loop work remains paused for owner/Mac validation
+- Current slice: research-led visual redesign of both themes, compact accessible appearance action and coherent controls
+- Active workstream: `workstreams/2026-10-14-visual-redesign.md`; prior loop work remains paused for owner/Mac validation
 - Active review: `reviews/REV-20261013-unified-window.md`; independent lifecycle/concurrency/privacy source review complete
 - Active remediations: unified-window F001 implemented and Windows verified, Mac pending; localization F001 macOS status overlap implemented (native pending); F002 focus-dependent test failure verified fixed. Prior loop F001/F002 remain unverified across platforms.
 - Blocking dependencies: no local macOS compiler; user explicitly deferred all public push/macOS builds until Windows testing and review are complete. No permission question is pending.
@@ -30,14 +30,16 @@
 
 ## Handoff
 
-- What changed: Windows reads current app theme at launch; header toggle switches both modes and owned dialogs for this session. Themes cover app backgrounds, text, notices, state colors and disabled controls. Native date/time and some system control parts retain Windows rendering. 213 translation keys. Mac source snapshots appearance and adds manual Aqua/Dark Aqua switching, uncompiled.
-- Verification evidence: Windows build; 153 appearance/startup/contrast/state checks and 30 renders; 2061 localization/layout checks; 15 native picker interactions; shared-window lifecycle, 40 loop core and 10 original core checks pass. Dark/light renders inspected, including disabled controls and German confirmation. Catalog check passes. Existing native input evidence remains historical; input engine unchanged.
+- What changed: Research-led neutral surfaces, rounded cards/buttons, subdued navigation and notices, compact localized sun/moon action. Themed date fields validate explicit date text before scheduling and support caret-segment adjustments. 214 translation keys. Mac source uses native semantic surfaces and SF Symbols; uncompiled.
+- Verification evidence: Windows build; 153 appearance/startup/contrast/state checks and 30 renders; 2066 localization/layout checks; 15 native picker interactions; 20 date validation/rollover/plan-preservation checks; shared-window lifecycle, 40 loop core and 10 original core checks pass. Dark/light and German renders inspected; catalog check passes. Input engine unchanged; no new external input evidence claimed.
 - Not verified: macOS compilation, 40 Swift tests, new Aqua/Dark Aqua loop renders, native clipboard/paste/send/F8 and wrong-sibling-window rejection; physical-key F8 routing in the unified host; all mixed-DPI and small-desktop scenarios
 - Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input; unsigned/ad-hoc-signed distribution
-- Release assessment: not-ready for cross-platform release; Windows candidate available locally; existing tracked release executable preserved; native control parts retain system rendering
-- Next safe action: owner tests the Windows appearance candidate locally and reports review findings; only after a later explicit request, build/verify macOS. Do not push or start macOS CI now.
+- Release assessment: not-ready for cross-platform release; Windows local candidate only, aesthetic acceptance pending; tracked release executable preserved. Native scrollbars/system parts remain OS rendered.
+- Next safe action: owner tests the redesigned Windows candidate locally and reports aesthetic/interaction findings; only after a later explicit request, build/verify macOS. Do not push or start macOS CI now.
 
 ## Read next
+
+- `specs/visual-design.md` - research, design decisions, changed date editor contract and acceptance
 
 - `specs/appearance.md` - startup theme, manual toggle and native appearance boundaries
 - `specs/unified-window.md` - current shared-window/layout contract

@@ -134,7 +134,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     private func buildWindow() {
         window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1040, height: 680), styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
-        window.title = "ScheduledClicker — 定時滑鼠點擊器"; window.isReleasedWhenClosed = false; window.delegate = self
+        window.title = "ScheduledClicker — 定時滑鼠點擊器 · build \(NativeLoopInput.build)"; window.isReleasedWhenClosed = false; window.delegate = self
         window.contentMinSize = NSSize(width: 1040, height: 680); window.center(); window.backgroundColor = .windowBackgroundColor
         let content = AppearanceBackgroundView(frame: window.contentView?.bounds ?? .zero); window.contentView = content
         content.addSubview(simpleContent)

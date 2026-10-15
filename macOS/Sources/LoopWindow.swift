@@ -44,6 +44,7 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
     private let trial = NSButton(title: "試跑一輪", target: nil, action: nil)
     private let pause = NSButton(title: "暫停", target: nil, action: nil)
     private let cancel = NSButton(title: "取消 / 停止", target: nil, action: nil)
+    private let copyDiagnostic = NSButton(title: "複製診斷", target: nil, action: nil)
     private let status = NSTextField(wrappingLabelWithString: "等待設定。")
     private static var mono: TimeInterval { ProcessInfo.processInfo.systemUptime }
 
@@ -131,6 +132,9 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
             button.bezelStyle = .rounded; button.target = self; root.addSubview(button)
         }
         start.bezelColor = .systemBlue
+        copyDiagnostic.frame = NSRect(x: 836, y: 490, width: 188, height: 34)
+        copyDiagnostic.bezelStyle = .rounded; copyDiagnostic.target = self; copyDiagnostic.action = #selector(copyDiagnostics)
+        root.addSubview(copyDiagnostic)
         start.action = #selector(startLoop); trial.action = #selector(trialLoop); pause.action = #selector(togglePause); cancel.action = #selector(cancelLoop)
         status.frame = NSRect(x: 20, y: 530, width: 1000, height: 68); status.font = .systemFont(ofSize: 12.5); root.addSubview(status)
     }
@@ -169,7 +173,7 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
                 guard let point = MacMouse.currentLocation() else { throw loopError("無法讀取滑鼠位置。") }
                 let target = try LoopTarget.capture(point)
                 guard target.process != ProcessInfo.processInfo.processIdentifier else { throw loopError("請擷取外部目標視窗。") }
-                let label = "X \(Int(point.x)) / Y \(Int(point.y))"
+                let label = "\(target.appName) · X \(Int(point.x)) / Y \(Int(point.y))"
                 if captureKind == 1 { input.input = target; inputLabel.stringValue = label }
                 else { input.submit = target; sendLabel.stringValue = label }
                 engine.stop("位置已擷取。")
@@ -185,6 +189,11 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
         if engine.active && !engine.paused { window.miniaturize(nil) }
     }
     @objc private func cancelLoop() { captureKind = 0; stop("已取消排程。") }
+    @objc private func copyDiagnostics() {
+        guard !busy else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(input.diagnostics + "\n" + engine.status, forType: .string)
+    }
 
     private func number(_ field: NSTextField, _ range: ClosedRange<Int>, _ name: String) throws -> Int {
         guard let value = Int(field.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)), range.contains(value) else {
@@ -234,6 +243,7 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
         remove.isEnabled = !busy && sequence && prompts.count > 1; repeatLast.isEnabled = !busy && sequence
         count.isEnabled = !busy && countBound.state == .on; deadline.isEnabled = !busy && timeBound.state == .on
         start.isEnabled = !busy; trial.isEnabled = !busy; pause.isEnabled = engine.active; cancel.isEnabled = busy
+        copyDiagnostic.isEnabled = !busy
         pause.title = L.t(engine.paused ? "恢復" : (engine.betweenRounds ? "暫停" : "停止本輪"))
         let left = engine.active && !engine.paused ? "；下個步驟剩 \(Int(max(0, engine.remaining(wall: Date(), mono: Self.mono).rounded(.up)))) 秒" : ""
         status.stringValue = captureKind != 0 ? "請把滑鼠移到目標位置，倒數 \(Int(max(0, (captureDue - Self.mono).rounded(.up)))) 秒。" : "已執行送出點擊 \(engine.completed) 輪\(left)\n\(engine.status)" + (engine.active ? " F8（或 Fn+F8）可停止。" : "")

@@ -4,6 +4,8 @@ import Cocoa
 struct FakeAccess: LoopFocusAccess {
     var hit = "inputA", keyboard = "inputA", focused = "windowA"
     var unavailable = false
+    var foreground: pid_t = 42
+    func focusedApplicationProcess() throws -> pid_t { foreground }
     func focusedWindow(_ process: pid_t) throws -> String { focused }
     func focusedElement(_ process: pid_t) throws -> String { keyboard }
     func element(at point: CGPoint) throws -> String {
@@ -27,6 +29,8 @@ func expect(_ access: FakeAccess, allowed: Bool, _ reason: String) {
     if accepted != allowed { fatalError(reason) }
 }
 expect(FakeAccess(), allowed: true, "Same window identity accepts independently of AX/CG geometry")
+var inactive = FakeAccess(); inactive.foreground = 99
+expect(inactive, allowed: false, "Old focused-window data must not pass when another application owns keyboard focus")
 var remote = FakeAccess(); remote.hit = "remoteInput"; remote.keyboard = "remoteInput"
 expect(remote, allowed: true, "Web content leaf PID may differ when owning AX window identity matches")
 var sample = FakeAccess(); sample.focused = "windowB"; sample.keyboard = "inputB"

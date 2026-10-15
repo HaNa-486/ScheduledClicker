@@ -214,3 +214,7 @@ Windows 無法送出滑鼠輸入。錯誤碼：{0}	Windows could not send mouse 
 切換為淺色模式	Switch to light mode	ライトモードに切替	라이트 모드로 전환	Helles Design
 請輸入有效的日期與時間（yyyy/MM/dd HH:mm:ss）。	Enter a valid date and time (yyyy/MM/dd HH:mm:ss).	有効な日時を入力してください（yyyy/MM/dd HH:mm:ss）。	올바른 날짜와 시간을 입력하세요(yyyy/MM/dd HH:mm:ss).	Gültiges Datum und Uhrzeit eingeben (yyyy/MM/dd HH:mm:ss).
 無法驗證目標視窗焦點（{0}）；請確認目標 App 的輔助使用支援。	Cannot verify target window focus ({0}); check the target app’s accessibility support.	対象ウインドウのフォーカスを確認できません（{0}）。対象アプリのアクセシビリティ対応を確認してください。	대상 창의 포커스를 확인할 수 없습니다({0}). 대상 앱의 손쉬운 사용 지원을 확인하세요.	Der Fokus des Zielfensters lässt sich nicht prüfen ({0}). Prüfen Sie die Bedienungshilfen-Unterstützung der Ziel-App.
+已請求啟用目標程式，等待點擊輸入框。	Requested target app activation; waiting to click the input field.	対象アプリの有効化を要求しました。入力欄のクリックを待機中。	대상 앱 활성화를 요청했습니다. 입력란 클릭을 기다리는 중입니다.	Aktivierung der Ziel-App angefordert; warte auf Klick ins Eingabefeld.
+無法啟用目標程式，已停止。	Cannot activate the target app. Stopped.	対象アプリを有効化できないため停止しました。	대상 앱을 활성화할 수 없어 중지했습니다.	Ziel-App kann nicht aktiviert werden. Gestoppt.
+擷取到無法接受鍵盤輸入的系統視窗，請重新擷取。	Captured a system window that cannot receive keyboard input. Capture again.	キーボード入力を受け付けないシステムウインドウです。再取得してください。	키보드 입력을 받을 수 없는 시스템 창입니다. 다시 캡처하세요.	Ein Systemfenster ohne Tastatureingabe wurde erfasst. Bitte erneut erfassen.
+複製診斷	Copy diagnostics	診断情報をコピー	진단 정보 복사	Diagnose kopieren

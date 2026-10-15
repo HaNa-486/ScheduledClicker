@@ -35,9 +35,15 @@ struct LoopPlan {
 }
 
 protocol LoopActions: AnyObject {
+    var activatesTarget: Bool { get }
+    func activateTarget() throws
     func focusInput() throws
     func paste(_ prompt: String, replaceDraft: Bool) throws
     func send() throws
+}
+extension LoopActions {
+    var activatesTarget: Bool { false }
+    func activateTarget() throws {}
 }
 
 // Owned and ticked by the main thread; cancellation removes every future step.
@@ -93,6 +99,16 @@ final class LoopEngine {
         if left < -5 { stop("已錯過步驟超過 5 秒，排程停止，不補送。"); return }
         do {
             if stage == 0 {
+                if actions.activatesTarget {
+                    try actions.activateTarget()
+                    first = false; stage = -1; due = completionClock() + plan.stepDelay
+                    status = "已請求啟用目標程式，等待點擊輸入框。"
+                    return
+                }
+                try actions.focusInput()
+                first = false; stage = 1; due = completionClock() + plan.stepDelay
+                status = "已點輸入框，等待貼上。"
+            } else if stage == -1 {
                 try actions.focusInput()
                 first = false; stage = 1; due = completionClock() + plan.stepDelay
                 status = "已點輸入框，等待貼上。"

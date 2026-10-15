@@ -1,15 +1,15 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 23
+- State revision: 24
 - Updated: 2026-10-15
 - State confidence: high for Windows owner acceptance and both-platform CI/core/UI evidence; Mac native external input remains unverified
-- Phase: preview.2 repairs built and reviewed; Safari native retest pending, no release
+- Phase: preview.2 native retest failed; foreground diagnosis and activation correction in progress, no release
 
 ## Repository identity
 
 - Branch: codex/recurring-prompt-loop
-- Observed commit: 7a75cba
+- Observed commit: d07f0cf
 
 ## Product anchors
 
@@ -21,8 +21,8 @@
 
 ## Current work
 
-- Current slice: Repair Safari focus rejection reported on MacBook Air with one external display and lid closed; localize untouched starter prompts across platforms; add Mac numeric wheel support. Root trigger is not yet reproduced; generic old error conflates several conditions.
-- Workstream: `workstreams/2026-10-15-macos-input-acceptance-fixes.md` paused for native retest; delivery workstream paused.
+- Current slice: Owner confirms new app replaced, caret visible, Safari and Word fail with complete no-code focus message. Under build12002 this maps to NSWorkspace foreground PID guard; wrong captured owner vs foreground-state discrepancy remain unproven. Add live AX keyboard-owner check, separate bounded activation phase and content-free diagnostics.
+- Workstream: `workstreams/2026-10-15-macos-foreground-diagnosis.md` active; earlier workstreams paused.
 - Active review: `reviews/REV-20261015-macos-input.md`; independent focus/privacy source recheck passes, no native Safari claim.
 - Active remediations: localized starter F002 verified; focus F001 and wheel F003 implemented pending owner native acceptance. Earlier loop wrong-window F001 remains unverified.
 - Blocking dependencies: none for candidate/source delivery. Native Mac Accessibility, paste/send and physical F8 require a Mac desktop.
@@ -34,7 +34,7 @@
 - Verification evidence: CI 38696929654 at 7a75cba both platforms pass. Mac 21/40 core, 9 focus-policy, 15 number-field, 1091 localization checks and 24 UI renders; Windows full regression plus 2077 localization checks. ZIP hash/version verified. See `../VERIFICATION.md`.
 - Not verified: Mac native external clipboard/paste/send, wrong sibling window rejection, physical F8 routing, every display/DPI/assistive-technology combination, notarization and live site publication.
 - Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input. CI artifacts expire and require GitHub sign-in.
-- Release assessment: native Mac loop acceptance failed on preview.1; corrected preview.2 available for retest, not a stable cross-platform release. Windows owner accepted the local redesign. Tracked prior release executable preserved; website source is not deployed.
+- Release assessment: native Mac loop acceptance failed on preview.1; preview.2 also failed Safari and Word native retest, not a stable cross-platform release. Windows owner accepted the local redesign. Tracked prior release executable preserved; website source is not deployed.
 - Next safe action: owner repeats Safari trial and sibling-window refusal using preview.2/build 12002, plus numeric wheel and untouched prompt language checks; no formal release until accepted.
 
 ## Read next

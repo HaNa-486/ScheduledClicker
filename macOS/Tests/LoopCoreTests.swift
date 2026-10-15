@@ -1,6 +1,8 @@
 import Foundation
 
 final class FakeActions: LoopActions {
+    var activatesTarget = false
+    func activateTarget() throws { try record("activate") }
     var events: [String] = []
     var fail: String?
     var after: (() -> Void)?
@@ -89,5 +91,31 @@ tick(e, 10); tick(e, 14.5); check(a.events.count == 1, "slow focus retains full 
 tick(e, 15); tick(e, 19.5); check(a.events.count == 2, "slow paste retains full delay")
 tick(e, 20); tick(e, 83.5); check(a.events.count == 3, "interval after slow send")
 tick(e, 84); check(a.events.count == 4, "next round completion clock")
+// Mac activation is a separate cancellable step; request success never pastes.
+a = FakeActions(); a.activatesTarget = true; e = start(a, plan())
+tick(e, 10); check(a.events == ["activate"] && !e.betweenRounds, "activation only at first due time")
+tick(e, 10.5); check(a.events.count == 1, "yield run loop before click")
+tick(e, 11); check(a.events == ["activate", "focus"], "click only on later tick")
+tick(e, 12); check(a.events.last!.hasPrefix("paste:"), "paste follows focus settling")
+tick(e, 13); check(e.completed == 1, "activation path sends exactly once")
+tick(e, 73); check(a.events.last == "activate", "activation repeats only at next round")
+for reason in ["cancel", "F8", "close"] {
+    a = FakeActions(); a.activatesTarget = true; e = start(a, plan()); tick(e, 10)
+    e.stop(reason); tick(e, 11); tick(e, 100)
+    check(a.events == ["activate"], "\(reason) during activation prevents click and paste")
+}
+a = FakeActions(); a.activatesTarget = true; e = start(a, plan()); tick(e, 10)
+e.togglePause(wall: wall.addingTimeInterval(10.5), mono: 110.5); tick(e, 11)
+check(!e.active && a.events == ["activate"], "pause during activation stops")
+p = plan(); p.deadline = wall.addingTimeInterval(10.5)
+a = FakeActions(); a.activatesTarget = true; e = start(a, p); tick(e, 10); tick(e, 11)
+check(!e.active && a.events == ["activate"], "deadline during activation stops")
+for failure in ["activate", "focus"] {
+    a = FakeActions(); a.activatesTarget = true; a.fail = failure; e = start(a, plan())
+    tick(e, 10); tick(e, 11); tick(e, 12); tick(e, 100)
+    check(!e.active && e.completed == 0 && !a.events.contains(where: { $0.hasPrefix("paste:") }), "\(failure) failure never pastes/retries")
+}
+a = FakeActions(); a.activatesTarget = true; e = start(a, plan()); tick(e, 10); tick(e, 17)
+check(!e.active && a.events == ["activate"], "late activation completion cannot click")
 print("RESULT: \(checks - failures) passed, \(failures) failed")
 exit(failures == 0 ? 0 : 1)

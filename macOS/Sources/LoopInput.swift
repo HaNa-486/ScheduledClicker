@@ -119,11 +119,11 @@ func verifyLoopFocus<A: LoopFocusAccess>(access: A, process: pid_t, point: CGPoi
     let focused = try access.focusedWindow(process)
     let keyboard = try access.focusedElement(process)
     guard try access.process(of: hit) == process,
-          access.process(of: focused) == process,
-          access.process(of: keyboard) == process,
-          access.equal(access.window(of: hit), focused),
-          access.equal(access.window(of: keyboard), focused),
-          access.equal(access.topLevel(of: hit), access.topLevel(of: keyboard)) else {
+          try access.process(of: focused) == process,
+          try access.process(of: keyboard) == process,
+          try access.equal(access.window(of: hit), focused),
+          try access.equal(access.window(of: keyboard), focused),
+          try access.equal(access.topLevel(of: hit), access.topLevel(of: keyboard)) else {
         throw loopError("焦點已離開原本的目標視窗，已停止。")
     }
 }

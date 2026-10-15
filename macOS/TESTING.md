@@ -12,3 +12,11 @@ The universal ZIP supports macOS 13+ on Apple silicon and Intel. CI builds both 
 8. Check both modes, all five languages and the sun/moon action. Settings and prompt text should remain. Restart should select the system language and appearance again. Keep the computer awake/unlocked and the target layout fixed during each input test.
 
 Report the macOS version, Intel/Apple silicon, preview build, step and observed result. Do not use a real conversation until the harmless target passes. A completed send click does not prove message delivery in another app.
+
+## Preview 2 targeted retest (build 12002)
+
+1. Fully quit the older app, replace it with this build, and confirm Accessibility permission belongs to the new copy. Use Safari on the same external display/clamshell setup that failed.
+2. Run one harmless trial in ManualTarget.html. Accept only if exactly one complete Unicode entry appears. If stopped, report the full error including `focus.*` or `AX.*` code; these contain no prompt/window-title data. Also test sibling Safari windows and a modal sheet; do not accept text being sent to either unintended target.
+3. Before editing the starter prompt, switch all five languages: 繼續 / Continue / 続けて / 계속 / Weiter. Type a custom prompt (including a manually typed 繼續), switch again, and verify your text stays unchanged. Windows follows the same rule. A running schedule retains its original prompt snapshot.
+4. Hover over hours/minutes/seconds in either mode, then the loop step-delay and round count. Mouse wheel adjusts by one per event; trackpad motion accumulates and ignores inertia. Check minimum/maximum, typing then scrolling, disabled fields, and hidden modes. These fields still allow typing. Date pickers retain their native segment/stepper behavior.
+5. Keep using the disposable target until normal trial plus wrong-window refusal pass. The repaired focus policy has automated identity tests, but the original Safari failure cannot be declared resolved until this native retest succeeds.

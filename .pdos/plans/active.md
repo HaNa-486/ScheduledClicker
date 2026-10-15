@@ -4,6 +4,7 @@ Current status is the first row. Earlier rows record slice-time evidence; Window
 
 | Slice | Outcome | Risk | Verification | Status |
 |---|---|---|---|---|
+| Mac acceptance repair | AX identity, untouched prompt localization, numeric wheel | Wrong-target input / native Safari compatibility | CI 38696929654, 9 focus + 15 numbers + full regression | preview.2 implemented; owner native retest |
 | Mac preview + discovery | Universal 1.2.0-preview.1、九頁版本化內容與 AI 摘要 | 原生輸入／公開發布界線 | CI 38688961403、24 Mac renders、9 pages + 71 facts、獨立審查 | candidate verified; native Mac owner testing pending |
 | 深淺色視覺重設計 | 中性色層次、圓角元件、小型日月按鈕、Mac 原生外觀 | 日期編輯、可讀性、語系與焦點回歸 | Windows 2066 locale + 153 appearance + 15 picker + 20 date checks；Mac source only | Windows local aesthetic review; Mac deferred |
 | 系統外觀／深淺色切換 | 啟動跟隨系統、共用按鈕、兩模式與確認同步 | 對比、停用狀態、選單回歸 | Windows 153 appearance + 2061 locale + 15 native picker；Mac source only | Windows local review; Mac build deferred |

@@ -50,7 +50,7 @@ for path in DOCS.rglob("index.html"):
     page = Page(source)
     visible = normalize(" ".join(page.words))
     assert page.h1 == 1, f"Expected one h1: {path}"
-    assert "1.1.2" in visible and "1.2.0-preview.1" in visible, f"Missing version distinction: {path}"
+    assert "1.1.2" in visible and "1.2.0-preview.2" in visible, f"Missing version distinction: {path}"
     faq_count = 0
     for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', source, re.S):
         data = json.loads(raw)
@@ -78,7 +78,7 @@ for path in DOCS.rglob("index.html"):
 
 for name in ("llms.txt", "llms-full.txt"):
     text = (DOCS / name).read_text(encoding="utf-8")
-    for required in ("1.1.2", "1.2.0-preview.1", "clipboard", "recurring-input/", "VERIFICATION.md"):
+    for required in ("1.1.2", "1.2.0-preview.2", "clipboard", "recurring-input/", "VERIFICATION.md"):
         assert required in text, f"Missing fact in {name}: {required}"
         checks += 1
 print(f"PASS: {checks} discovery checks: visible FAQ/schema parity, version boundaries, fragments and AI summaries.")

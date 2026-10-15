@@ -2,6 +2,13 @@
 
 本專案的重大變更會記錄在此。格式參考 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本採用 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [1.2.0-preview.2] — 2026-10-15 (candidate, native Mac retest pending)
+
+- Replace Mac cross-API geometry/window-order focus inference with owning accessibility window identity and top-level checks. Preserve captured CG window/visibility checks and fail before clipboard changes. Support remote WebKit leaf elements through their owning window; add content-free diagnostic codes.
+- Translate the untouched starter prompt when switching languages on both platforms; preserve every edited prompt.
+- Add mouse-wheel/trackpad adjustment to Mac numeric fields in both modes, bounded by the same validation limits; ignore momentum and disabled/hidden controls.
+- Add focus-policy, numeric-field and pristine-prompt regression checks. Safari external-display owner retest remains required; no stable release.
+
 ## [1.2.0-preview.1] — 2026-10-15 (candidate, not a stable release)
 
 ### Added

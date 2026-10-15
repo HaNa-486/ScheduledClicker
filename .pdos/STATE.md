@@ -4,12 +4,12 @@
 - State revision: 23
 - Updated: 2026-10-15
 - State confidence: high for Windows owner acceptance and both-platform CI/core/UI evidence; Mac native external input remains unverified
-- Phase: Mac owner found loop false focus rejection; scoped repairs in progress, no release
+- Phase: preview.2 repairs built and reviewed; Safari native retest pending, no release
 
 ## Repository identity
 
 - Branch: codex/recurring-prompt-loop
-- Observed commit: d959e8a
+- Observed commit: 7a75cba
 
 ## Product anchors
 
@@ -22,22 +22,24 @@
 ## Current work
 
 - Current slice: Repair Safari focus rejection reported on MacBook Air with one external display and lid closed; localize untouched starter prompts across platforms; add Mac numeric wheel support. Root trigger is not yet reproduced; generic old error conflates several conditions.
-- Workstream: `workstreams/2026-10-15-macos-input-acceptance-fixes.md` active; delivery workstream paused.
-- Active review: `reviews/REV-20261015-macos-discovery.md`; header overlap and pause wording findings fixed and independently rechecked.
-- Active remediations: loop F002 verified by both-platform core tests; loop F001 wrong-sibling-window rejection remains implemented, pending native Mac acceptance. Unified-window/localization historical records retain their limited evidence.
+- Workstream: `workstreams/2026-10-15-macos-input-acceptance-fixes.md` paused for native retest; delivery workstream paused.
+- Active review: `reviews/REV-20261015-macos-input.md`; independent focus/privacy source recheck passes, no native Safari claim.
+- Active remediations: localized starter F002 verified; focus F001 and wheel F003 implemented pending owner native acceptance. Earlier loop wrong-window F001 remains unverified.
 - Blocking dependencies: none for candidate/source delivery. Native Mac Accessibility, paste/send and physical F8 require a Mac desktop.
 - Consequential open decisions: production merge, stable release, site deployment and Developer ID signing/notarization remain owner-controlled. Current user request authorizes feature-branch push and Mac CI after Windows acceptance.
 
 ## Handoff
 
-- What changed: Mac header spacing and icon-only theme action fixed; diagnostic UI smoke uses bounded observable clock sampling. Universal app version 1.2.0/build 12001. Website, FAQ/schema, sitemap, README, changelog and llms files describe current preview without changing stable download links or crawler policy.
-- Verification evidence: CI 38688961403 at 12dbed9 passed Windows and Mac. Mac: 21 original + 40 loop + 1086 localization checks, self-test, 24 UI renders; x86_64/arm64, ad-hoc signature and archive/hash verified. Windows existing regression suites passed. Nine-page site validator and 71 discovery checks pass; desktop and 375 px browser journeys checked. See `../VERIFICATION.md`.
+- What changed: preview.2 / Mac build 12002 uses AX owning-window identity and top-level checks, content-free focus diagnostics, localized untouched starter prompts on both platforms and bounded Mac wheel number fields. Discovery source/download links updated to this candidate.
+- Verification evidence: CI 38696929654 at 7a75cba both platforms pass. Mac 21/40 core, 9 focus-policy, 15 number-field, 1091 localization checks and 24 UI renders; Windows full regression plus 2077 localization checks. ZIP hash/version verified. See `../VERIFICATION.md`.
 - Not verified: Mac native external clipboard/paste/send, wrong sibling window rejection, physical F8 routing, every display/DPI/assistive-technology combination, notarization and live site publication.
 - Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input. CI artifacts expire and require GitHub sign-in.
-- Release assessment: native Mac loop acceptance failed; corrected preview pending, not a stable cross-platform release. Windows owner accepted the local redesign. Tracked prior release executable preserved; website source is not deployed.
-- Next safe action: owner runs `macOS/TESTING.md` against the delivered ZIP; resolve native findings before requesting formal release/merge.
+- Release assessment: native Mac loop acceptance failed on preview.1; corrected preview.2 available for retest, not a stable cross-platform release. Windows owner accepted the local redesign. Tracked prior release executable preserved; website source is not deployed.
+- Next safe action: owner repeats Safari trial and sibling-window refusal using preview.2/build 12002, plus numeric wheel and untouched prompt language checks; no formal release until accepted.
 
 ## Read next
+
+- `specs/macos-input-repair.md` and `reviews/REV-20261015-macos-input.md` - current repair contract and limitations
 
 - `specs/macos-preview-discovery.md` - current delivery contract, research and evidence
 - `reviews/REV-20261015-macos-discovery.md` - current independent review

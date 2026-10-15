@@ -13,7 +13,7 @@
 
 ## Plan
 
-- Recommended solution: AX focused-window geometry plus front-to-back CG window identity.
+- Recommended solution: AX owning-window CFEqual identity and top-level checks, retaining captured CG identity/geometry/visibility.
 - Acceptance criteria: Wrong sibling window rejects paste before clipboard write or input events.
 - Verification plan: Compile on macOS; test two non-overlapping windows of one local test application; inspect clipboard and received text.
 - Rollback: Disable recurring input if macOS acceptance fails; retain one-shot feature.
@@ -21,12 +21,12 @@
 ## Evidence
 
 - Implementation: NativeLoopInput.focusedWindowMatches, called from check before Paste changes clipboard.
-- Verification: Correction implemented and independently re-reviewed; Windows tests pass; macOS execution pending.
-- Residual risk: macOS compile and runtime pending; cannot mark verified.
+- Verification: 2026-10-15: geometry/order inference replaced after owner Safari rejection; independent re-review passes. Native sibling-window acceptance still pending.
+- Residual risk: Mac builds and deterministic identity tests execute in CI; real Safari paste/sibling-window refusal remains unverified.
 
 ## History
 
 - 2026-10-13 open: saved independent review finding.
 - 2026-10-13T07:17:53Z planned: Independent finding accepted within authorized feature scope..
 - 2026-10-13T07:17:53Z in_progress: Implementing correction with regression coverage..
-- 2026-10-13T07:17:53Z implemented: Correction implemented and independently re-reviewed; Windows tests pass; macOS execution pending..
+- 2026-10-13T07:17:53Z implemented: 2026-10-15: geometry/order inference replaced after owner Safari rejection; independent re-review passes. Native sibling-window acceptance still pending..

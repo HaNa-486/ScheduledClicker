@@ -1,0 +1,10 @@
+# Mac acceptance repair contract
+
+- User authorizes preview repairs, not stable release. Target reported: Safari on MacBook Air, lid closed, one external display; OS version unknown.
+- Focus: preserve CG captured window ID/PID/bounds/visibility and foreground-app checks. Use AX hit testing at captured point, normalized owning-window PID and CFEqual, plus keyboard/hit top-level equality. Never fallback to PID-only, geometry proximity or app whitelist. Check before clipboard writes and before send.
+- Rationale: [Apple hit-test API](https://developer.apple.com/documentation/applicationservices/1462077-axuielementcopyelementatposition), [window attribute](https://developer.apple.com/documentation/applicationservices/kaxwindowattribute) and [top-level attribute](https://developer.apple.com/documentation/applicationservices/kaxtopleveluielementattribute). [WebKit remote accessibility IDs](https://bugs.webkit.org/show_bug.cgi?id=297546) explain why leaf PID cannot be assumed equal to owning-window PID. None proves the user's exact failure branch.
+- Diagnostic errors contain API stage/result or identity mismatch code, never prompt text, window title or clipboard contents. Unknown identity fails closed.
+- Starter: current locale at construction and idle manual switches; only untouched initial prompt is UI-owned. Editing or deleting it permanently ends auto-translation. Added rounds remain blank. Captured running plan remains unchanged.
+- Numbers: both-mode hours/minutes/seconds, loop wait and count use existing limits. Discrete wheel adjusts one; precise trackpad deltas accumulate; momentum ignored; only enabled visible hovered fields in the active app window consume events. Active typed text must win over stale field value; invalid draft remains for normal validation. Date pickers retain native segments/stepper.
+- Acceptance: build/tests plus independent source review establish implementation; owner repeats Safari trial, sibling-window/sheet refusal and physical wheel tests before native acceptance or formal release.
+- Delivery: preview 1.2.0-preview.2, Mac bundle 1.2.0/build 12002; Windows informational version matches.

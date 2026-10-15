@@ -15,7 +15,7 @@ It was created for workflows such as sending a prepared Codex message after the 
 
 ## Key features
 
-**Preview 1.2.0-preview.1:** bounded recurring input/send, a shared simple/loop window, five interface languages and system-selected light/dark appearance. Windows owner testing passed on 2026-10-15. Mac universal build and native appearance evidence passed [CI run 38688961403](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38688961403); native input still requires a local desktop test. Released v1.1.2 downloads provide the one-shot workflow below.
+**Preview 1.2.0-preview.2:** bounded recurring input/send, a shared simple/loop window, five interface languages and system-selected light/dark appearance. Windows owner testing of the redesign passed on 2026-10-15; the preview-2 fixes pass automated regression checks. Mac universal build and native appearance evidence passed [CI run 38696929654](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38696929654); native input still requires a local desktop test. Released v1.1.2 downloads provide the one-shot workflow below.
 
 - Schedule one click at an exact future date and time.
 - Schedule one click after a seconds, minutes, or hours delay.
@@ -37,7 +37,7 @@ These changes are **unreleased**. Windows is available as a local review candida
 
 ## Preview Mac download and local test
 
-Open the successful [feature branch build](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38688961403), sign in to GitHub, and download `ScheduledClicker-macOS-universal`. Extract the outer Actions artifact, then extract the app ZIP inside. Verify its adjacent SHA-256, move the app to Applications, and grant Accessibility permission. Builds are ad-hoc signed, not Apple-notarized; artifacts expire. Source bundle metadata is 1.2.0, build 12001, identifying this preview rather than the stable v1.1.2.
+Open the successful [feature branch build](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38696929654), sign in to GitHub, and download `ScheduledClicker-macOS-universal`. Extract the outer Actions artifact, then extract the app ZIP inside. Verify its adjacent SHA-256, move the app to Applications, and grant Accessibility permission. Builds are ad-hoc signed, not Apple-notarized; artifacts expire. Source bundle metadata is 1.2.0, build 12002, identifying this preview rather than the stable v1.1.2.
 
 Start with a disposable text window and one trial round. Verify paste/send, pause/cancel and F8 (or Fn+F8), both appearances and language switching. Check that moving focus to another window stops the pending paste without replacing the clipboard. The preview cannot detect a changed chat or confirm delivery. See [preview guide](docs/recurring-input/index.html) and [verification](VERIFICATION.md).
 

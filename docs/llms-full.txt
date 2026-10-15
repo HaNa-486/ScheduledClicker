@@ -1,11 +1,11 @@
 # ScheduledClicker
 
-ScheduledClicker is a free, open-source local desktop tool for Windows 11 and macOS 13+. Stable v1.1.2 schedules one single or double mouse click. Candidate 1.2.0-preview.1 adds bounded recurring prompt input/send, a shared simple/loop window, five interface languages and manual light/dark switching.
+ScheduledClicker is a free, open-source local desktop tool for Windows 11 and macOS 13+. Stable v1.1.2 schedules one single or double mouse click. Candidate 1.2.0-preview.2 adds bounded recurring prompt input/send, a shared simple/loop window, five interface languages and manual light/dark switching.
 
 ## Availability (updated 2026-10-15)
 
 - Stable release: v1.1.2, https://github.com/HaNa-486/ScheduledClicker/releases/latest
-- Preview: 1.2.0-preview.1, feature branch codex/recurring-prompt-loop. This is not a stable release.
+- Preview: 1.2.0-preview.2, feature branch codex/recurring-prompt-loop. This is not a stable release.
 - Preview guide: https://hana-486.github.io/ScheduledClicker/recurring-input/
 - Preview download instructions: https://hana-486.github.io/ScheduledClicker/download/#preview
 - Source: https://github.com/HaNa-486/ScheduledClicker
@@ -42,3 +42,5 @@ Windows preview owner testing passed on 2026-10-15; its automated evidence inclu
 - Changelog: https://hana-486.github.io/ScheduledClicker/changelog/
 
 Independent project; not affiliated with or endorsed by OpenAI. This file is a supplemental product summary, not an indexing guarantee or crawler instruction.
+
+Preview 2 (Mac build 12002) repairs focus identity verification, localizes only untouched starter prompts, and adds Mac numeric wheel adjustment. The Safari native-input fix still requires owner retesting; automated policy tests are not a delivery guarantee.

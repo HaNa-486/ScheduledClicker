@@ -1,6 +1,6 @@
 # ScheduledClicker
 
-Free local Windows 11 and macOS 13+ scheduling tool. Stable v1.1.2 supports one scheduled single/double click. Candidate 1.2.0-preview.1 adds bounded recurring prompt input/send, five languages and light/dark switching; it is not a stable release.
+Free local Windows 11 and macOS 13+ scheduling tool. Stable v1.1.2 supports one scheduled single/double click. Candidate 1.2.0-preview.2 adds bounded recurring prompt input/send, five languages and light/dark switching; it is not a stable release.
 
 - [Website](https://hana-486.github.io/ScheduledClicker/)
 - [Stable downloads](https://github.com/HaNa-486/ScheduledClicker/releases/latest)

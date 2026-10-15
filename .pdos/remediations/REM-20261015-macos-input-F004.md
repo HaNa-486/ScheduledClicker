@@ -30,3 +30,5 @@
 - 2026-10-15T09:13:13Z planned: VERIFICATION.md; CI 38710315157 and independent review.
 - 2026-10-15T09:13:13Z in_progress: 05861ea implementation.
 - 2026-10-15T09:13:13Z implemented: CI 38710315157; VERIFICATION.md; independent review.
+
+- 2026-10-15 native retest failed: build12003 captured and activated Dock; target-selection correction tracked by F005. No native acceptance claimed.

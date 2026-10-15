@@ -1,5 +1,15 @@
 # 驗證報告
 
+## 2026-10-15：Dock 誤擷取根因修正候選（build 12004）
+
+- 已確認根因：build12003 使用者診斷顯示 target app=Dock、layer20，隨後要求啟用 Dock，並於 input-click 前因目標比對失敗停止。舊程式以 CG 視窗外框涵蓋座標的第一個項目選 owner，誤將 compositor surface 當成可輸入視窗；not-prohibited activation policy 並未排除 Dock。上一版啟用流程放大此擷取錯誤。先前 build12002 的失敗與此相符，但沒有相同 trace，不能把其所有 native 原因一併視為證實。
+- 修正：system-wide AX hit-test 找 owning AXWindow/PID，保存原始 window/topLevel identity 與 AX bounds；每個階段直接對照已保存的身分，focused/keyboard/current hit 都必須匹配。移除 CG rectangle 作為目標權威，不以忽略 Dock/nonzero layers 方式點穿遮擋。只支援一般可存取 App 視窗，AX 失敗無 fallback。
+- 新增擷取前授權提示；拒絕時不倒數、不最小化，清除該側舊目標。獨立審查指出的第二次 hit 可能重綁 sibling 問題也已修正，A→B 序列 fixture 覆蓋。剪貼簿仍在全部驗證之後寫入。
+- [CI 38718545337](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38718545337)，來源 `8943758`，兩平台成功：Mac 21 原核心、54 循環、31 擷取／焦點身分、15 數字、1116 語系檢查與 24 UI renders；Windows 40/10 核心、2102 語系／版面及既有選單、外觀、日期、共用視窗回歸通過。中文深色渲染已檢視。
+- [精確 build12004 產物](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38718545337/artifacts/11963866520)：內層 ZIP 379053 bytes，bundle 1.2.0/build12004，SHA-256 `D159B0A4E610A97A9281CB227FDA9E64D204DCBCADB8D4AA2BEECAE3BC55DE61`。下載後比對 checksum 與 Info.plist 通過；CI universal 架構與 ad-hoc 簽章檢查通過。
+- 獨立審查修正後無剩餘 source blocker。政策測試不代表 owner 桌面上透明 Dock surface 的 AX 命中結果，Safari/Word 原生擷取／貼上／送出、錯誤 sibling 拒絕與 F8 仍待驗收。build12003 實機失敗已記錄，build12004 是候選而非已確認修復。無正式發布、合併或網站部署。
+
+
 ## 2026-10-15：Mac 前景程式檢查與啟用流程修正候選（build 12003）
 
 - 實機證據：使用者確認已替換 build 12002，Safari 與 Word 都無法循環輸入；輸入框有游標。完整錯誤沒有代碼。對照該版本，無代碼訊息來自外層 NSWorkspace 前景 PID 檢查，發生在剪貼簿寫入前。前景狀態差異或擷取到錯誤 owner 的底層原因仍未確定；不能把游標或程式碼推論當成已證實的 native root cause。

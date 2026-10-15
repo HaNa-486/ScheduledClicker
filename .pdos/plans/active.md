@@ -4,6 +4,7 @@ Current status is the first row. Earlier rows record slice-time evidence; Window
 
 | Slice | Outcome | Risk | Verification | Status |
 |---|---|---|---|---|
+| Mac AX target capture | Correct confirmed Dock compositor miscapture; bind original AX identity | Wrong-target activation/input | CI 38718545337, 31 capture/focus + full regression; independent review | build12004 implemented; native retest pending |
 | Mac foreground diagnosis | Live AX keyboard owner, staged activation, copyable diagnostics | Wrong-target input / cancel race | CI 38710315157, 54 loop + 10 focus + full regression; independent review | build 12003 implemented; native retest pending |
 | Mac acceptance repair | AX identity, untouched prompt localization, numeric wheel | Wrong-target input / native Safari compatibility | CI 38696929654, 9 focus + 15 numbers + full regression | preview.2 implemented; owner native retest |
 | Mac preview + discovery | Universal 1.2.0-preview.1、九頁版本化內容與 AI 摘要 | 原生輸入／公開發布界線 | CI 38688961403、24 Mac renders、9 pages + 71 facts、獨立審查 | candidate verified; native Mac owner testing pending |

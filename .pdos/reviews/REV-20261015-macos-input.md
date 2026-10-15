@@ -76,3 +76,20 @@ Independent read-only reviewer checked both focus implementation and followup re
 - Residual risk: The user's actual Mac foreground behavior and cause remain unknown until native retest; compile/fake policies do not prove native paste works.
 - Autonomy class: independent-review-required
 - Remediation: remediations/REM-20261015-macos-input-F004.md
+
+### F-005
+
+- Severity: high
+- Confidence: high for captured wrong owner and source defect; native replacement behavior pending
+- Status: implemented
+- Evidence: Owner build12003 trace names Dock at layer20 as captured target; activation request succeeds, then geometry validation stops before input-click. Owner reports cursor no longer triggered.
+- User impact: Loop cannot click or paste into intended app; activation amplifies the target-selection defect.
+- Root cause: CGWindowList bounding-rectangle containment was treated as an input hit-test. A compositor surface owned by Dock became the target. Activation-policy not-prohibited did not exclude Dock. The old uncoded foreground failures are consistent with this defect but were not captured with equivalent diagnostic evidence.
+- Recommended solution: System-wide AX hit-test, owning-window PID and stored AX window/topLevel identity with same-API geometry. Revalidate every step against captured identity; never fall back to CG rectangles or skip overlay layers.
+- Alternatives and tradeoffs: Skipping all nonzero layers can click through real overlays. A Dock blacklist retains the flawed selection method. AX-only requires accessible regular app windows; inaccessible/system/accessory targets refuse at capture.
+- Affected areas: LoopInput.swift, LoopWindow.swift, FocusIdentityTests.swift, shared catalog and Mac build metadata.
+- Acceptance criteria: Capturing Safari/Word identifies that app and normal trial pastes; real Dock/foreign overlay/unavailable AX refuses. Same-PID same-frame sibling replacement, top-level change, movement and geometry failure stop before clipboard. Permission denial leaves capture idle.
+- Verification: Independent source review corrected permission entry-point and second-hit rebinding gaps. Policy fixtures include original captured identity, remote leaves, unavailable AX, invalid geometry and A-to-B hit sequence. Build12004 CI/native results recorded in VERIFICATION.md.
+- Residual risk: CI policies cannot prove actual Dock surface hit-testing on the owner desktop; native paste/send, wrong-window refusal and F8 remain required.
+- Autonomy class: independent-review-required
+- Remediation: remediations/REM-20261015-macos-input-F005.md

@@ -7,4 +7,7 @@
 - Starter: current locale at construction and idle manual switches; only untouched initial prompt is UI-owned. Editing or deleting it permanently ends auto-translation. Added rounds remain blank. Captured running plan remains unchanged.
 - Numbers: both-mode hours/minutes/seconds, loop wait and count use existing limits. Discrete wheel adjusts one; precise trackpad deltas accumulate; momentum ignored; only enabled visible hovered fields in the active app window consume events. Active typed text must win over stale field value; invalid draft remains for normal validation. Date pickers retain native segments/stepper.
 - Acceptance: build/tests plus independent source review establish implementation; owner repeats Safari trial, sibling-window/sheet refusal and physical wheel tests before native acceptance or formal release.
-- Delivery: preview 1.2.0-preview.2, Mac bundle 1.2.0/build 12002; Windows informational version matches.
+- Delivery: preview series 1.2.0-preview.2, updated Mac bundle 1.2.0/build 12003; Windows candidate metadata remains preview.2. Mac title exposes the build.
+
+- Repeated-failure correction: AXFocusedApplication identifies the live keyboard owner; NSWorkspace PID is diagnostic comparison only. A separate activation request stage waits one configured step delay before revalidating and clicking. Cancellation/deadline/late checks apply to this stage. No queued paste or retries. Capture refuses unactivatable system owners rather than skipping overlays.
+- Diagnostics: user-triggered clipboard copy only while idle; bounded in-memory trace includes build/OS, app/PID/window/layer and stage/error, never prompt/clipboard contents or window title. No file/network persistence.

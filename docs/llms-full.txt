@@ -43,4 +43,4 @@ Windows preview owner testing passed on 2026-10-15; its automated evidence inclu
 
 Independent project; not affiliated with or endorsed by OpenAI. This file is a supplemental product summary, not an indexing guarantee or crawler instruction.
 
-Preview 2 (Mac build 12002) repairs focus identity verification, localizes only untouched starter prompts, and adds Mac numeric wheel adjustment. The Safari native-input fix still requires owner retesting; automated policy tests are not a delivery guarantee.
+Preview 2 localizes only untouched starter prompts and adds Mac numeric wheel adjustment. Mac build 12002 still failed Safari and Word owner tests. Current Mac build 12003 uses live Accessibility keyboard ownership, staged target activation and content-free copyable diagnostics. Native acceptance is pending; automated policy tests are not a delivery guarantee. Exact candidate evidence: https://github.com/HaNa-486/ScheduledClicker/actions/runs/38710315157. Windows candidate metadata remains preview.2.

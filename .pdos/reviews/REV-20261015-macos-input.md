@@ -59,3 +59,20 @@ Independent read-only reviewer checked both focus implementation and followup re
 - Residual risk: Hardware event routing and natural-scroll preferences still require owner Mac retest; date fields retain native stepper behavior.
 - Autonomy class: auto-decide
 - Remediation: remediations/REM-20261015-macos-input-F003.md
+
+### F-004
+
+- Severity: high
+- Confidence: high for the failed guard; underlying native trigger unproven
+- Status: implemented
+- Evidence: Owner replaced build 12002, observes caret, and Safari/Word both fail with the complete no-code foreground message and zero send rounds.
+- User impact: Mac critical input journey still cannot complete; prior diagnostics omitted the failing outer guard.
+- Root cause: Confirmed code path is NSWorkspace foreground PID mismatch before clipboard writes. Captured CG owner mismatch versus foreground-state discrepancy remains a hypothesis, not an established native cause.
+- Recommended solution: Query live AX keyboard-owning app; request target activation as a separate cancellable stage, wait and revalidate; show captured app/build and copyable content-free stage diagnostics.
+- Alternatives and tradeoffs: Removing guards or app exemptions risks wrong-target input. Activation adds one configured step delay and may legitimately fail; success still requires live focus validation.
+- Affected areas: Mac LoopInput, LoopCore, LoopWindow, AppDelegate, tests and shared translations.
+- Acceptance criteria: Safari/Word normal paste succeeds; wrong sibling/sheet/unknown focus refuses before clipboard writes; stop/deadline prevents remaining steps; copied diagnostics identifies stage without prompt/title/clipboard contents.
+- Verification: CI 38710315157 at 05861ea passes both platforms (54 Mac loop, 10 focus policy, 1111 localization). Independent read-only review found no new privacy/state/API blockers. Exact build12003 ZIP hash and metadata verified; UI copy action visible. Native input not executed here.
+- Residual risk: The user's actual Mac foreground behavior and cause remain unknown until native retest; compile/fake policies do not prove native paste works.
+- Autonomy class: independent-review-required
+- Remediation: remediations/REM-20261015-macos-input-F004.md

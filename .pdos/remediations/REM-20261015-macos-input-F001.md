@@ -30,3 +30,5 @@
 - 2026-10-15T07:12:54Z planned: Owner-authorized scoped repair; implementation and independent review recorded..
 - 2026-10-15T07:12:54Z in_progress: Owner-authorized scoped repair; implementation and independent review recorded..
 - 2026-10-15T07:12:55Z implemented: Owner-authorized scoped repair; implementation and independent review recorded..
+
+- 2026-10-15 native retest: build 12002 still fails Safari and Word with caret visible and no-code outer foreground error. F004 tracks that guard and observability correction. This record remains implemented, not verified.

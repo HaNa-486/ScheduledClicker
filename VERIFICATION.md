@@ -1,5 +1,16 @@
 # 驗證報告
 
+## 2026-10-15：Mac 前景程式檢查與啟用流程修正候選（build 12003）
+
+- 實機證據：使用者確認已替換 build 12002，Safari 與 Word 都無法循環輸入；輸入框有游標。完整錯誤沒有代碼。對照該版本，無代碼訊息來自外層 NSWorkspace 前景 PID 檢查，發生在剪貼簿寫入前。前景狀態差異或擷取到錯誤 owner 的底層原因仍未確定；不能把游標或程式碼推論當成已證實的 native root cause。
+- 修正：改查 system-wide AXFocusedApplication 的鍵盤接收程序；每輪先驗證擷取位置、必要時要求目標程式啟用，等待一個設定的步驟間隔，下一個 tick 再檢查後點擊。貼上前仍檢查 AX owning-window 與 top-level 身分。取消、F8、截止與逾時仍阻止後續步驟，沒有延遲貼上 callback；沒有 Safari/Word 特例。
+- 可觀測性：標題顯示 build 12003、擷取位置顯示 App 名稱；新增五語系「複製診斷」。只包含 build/OS、程序/視窗 ID、layer、前景比對與階段/錯誤，不讀取提示詞、剪貼簿內容或視窗標題。使用者主動複製診斷會覆蓋剪貼簿。
+- [CI 38710315157](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38710315157)，來源 `05861ea`，兩平台成功：Mac 21 原核心、54 循環、10 焦點策略、15 數字欄位、1111 語系檢查、自我檢查與 24 渲染；Windows 40 循環、10 原核心、2097 語系／版面、15 選單、153 外觀、20 日期及共用視窗通過。中文深色 Mac 循環渲染已檢視，複製診斷按鈕完整可見。
+- [精確 Mac 產物](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38710315157/artifacts/11960920186)：內層 ZIP 367612 bytes，bundle 1.2.0/build 12003，SHA-256 `0721C59A0471F34854A05370CB1A60A9FDC9C12010AA9D142587C3584EB26D55`；下載後與 CI checksum、Info.plist 比對通過。CI 驗證 x86_64/arm64 與 ad-hoc 簽章。
+- 獨立唯讀審查：未發現新的狀態機、API、診斷隱私或取消流程阻擋問題；審查不是原生輸入驗證。依據 [Apple AXFocusedApplication 文件](https://developer.apple.com/documentation/applicationservices/kaxfocusedapplicationattribute)，該屬性識別目前接受鍵盤輸入的程式。
+- 狀態：build 12002 實機驗收失敗；build 12003 僅為修正候選，Safari/Word 貼上、錯誤 sibling 視窗拒絕、外接螢幕與實體 F8 仍待使用者驗收。Windows 功能未改，candidate 版本仍 preview.2。未合併、未正式發布、未部署網站。前次段落為歷史證據。
+
+
 ## 2026-10-15：Mac Safari 焦點、預設提示詞與數字滾輪修正（preview.2）
 
 - 使用者在 MacBook Air 闔蓋、單一外接螢幕的 Safari 上回報：單點成功，循環貼上前顯示焦點離開。原版把 AX 查詢失敗、跨 API 框架不完全相等、同程序視窗順序不符都合併為焦點離開。已確認檢查設計與診斷有問題，但無原機資料，不能斷言是哪一個條件觸發本次故障。

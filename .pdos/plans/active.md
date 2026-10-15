@@ -4,6 +4,7 @@ Current status is the first row. Earlier rows record slice-time evidence; Window
 
 | Slice | Outcome | Risk | Verification | Status |
 |---|---|---|---|---|
+| Mac foreground diagnosis | Live AX keyboard owner, staged activation, copyable diagnostics | Wrong-target input / cancel race | CI 38710315157, 54 loop + 10 focus + full regression; independent review | build 12003 implemented; native retest pending |
 | Mac acceptance repair | AX identity, untouched prompt localization, numeric wheel | Wrong-target input / native Safari compatibility | CI 38696929654, 9 focus + 15 numbers + full regression | preview.2 implemented; owner native retest |
 | Mac preview + discovery | Universal 1.2.0-preview.1、九頁版本化內容與 AI 摘要 | 原生輸入／公開發布界線 | CI 38688961403、24 Mac renders、9 pages + 71 facts、獨立審查 | candidate verified; native Mac owner testing pending |
 | 深淺色視覺重設計 | 中性色層次、圓角元件、小型日月按鈕、Mac 原生外觀 | 日期編輯、可讀性、語系與焦點回歸 | Windows 2066 locale + 153 appearance + 15 picker + 20 date checks；Mac source only | Windows local aesthetic review; Mac deferred |

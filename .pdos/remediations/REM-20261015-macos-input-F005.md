@@ -30,3 +30,5 @@
 - 2026-10-15T10:13:39Z planned: Owner trace and source defect in F005.
 - 2026-10-15T10:13:40Z in_progress: 8943758; independent review.
 - 2026-10-15T10:15:51Z implemented: CI 38718545337; source 8943758; ZIP metadata/hash; independent review; VERIFICATION.md.
+
+- 2026-10-15 owner acceptance: reports all Mac functions now working on the delivered build12004. Normal functional acceptance recorded; individual wrong-target/cancellation/permission-negative cases not itemized. No formal release authorization.

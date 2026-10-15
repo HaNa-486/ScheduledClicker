@@ -118,14 +118,19 @@ func verifyLoopFocus<A: LoopFocusAccess>(access: A, process: pid_t, point: CGPoi
     let hit = try access.element(at: point)
     let focused = try access.focusedWindow(process)
     let keyboard = try access.focusedElement(process)
-    guard try access.process(of: hit) == process,
-          try access.process(of: focused) == process,
-          try access.process(of: keyboard) == process,
-          try access.equal(access.window(of: hit), focused),
-          try access.equal(access.window(of: keyboard), focused),
-          try access.equal(access.topLevel(of: hit), access.topLevel(of: keyboard)) else {
-        throw loopError("焦點已離開原本的目標視窗，已停止。")
+    let hitWindow = try access.window(of: hit)
+    let keyboardWindow = try access.window(of: keyboard)
+    func require(_ value: Bool, _ code: String) throws {
+        if !value { throw loopError("焦點已離開原本的目標視窗，已停止。 [focus.\(code)]") }
     }
+    // Web content can live in a remote accessibility process (Safari/WebKit).
+    // Bind the owning windows to the captured process, not the leaf elements.
+    try require(access.process(of: focused) == process, "focused-pid")
+    try require(access.process(of: hitWindow) == process, "hit-window-pid")
+    try require(access.process(of: keyboardWindow) == process, "keyboard-window-pid")
+    try require(access.equal(hitWindow, focused), "hit-window")
+    try require(access.equal(keyboardWindow, focused), "keyboard-window")
+    try require(access.equal(access.topLevel(of: hit), access.topLevel(of: keyboard)), "top-level")
 }
 
 private struct NativeFocusAccess: LoopFocusAccess {

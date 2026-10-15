@@ -10,12 +10,13 @@ struct FakeAccess: LoopFocusAccess {
         if unavailable { throw loopError("AX unavailable") }; return hit
     }
     func window(of element: String) throws -> String {
-        element.hasSuffix("B") ? "windowB" : "windowA"
+        if element == "foreign" { return "foreignWindow" }
+        return element.hasSuffix("B") ? "windowB" : "windowA"
     }
     func topLevel(of element: String) throws -> String {
         element == "sheetA" ? "sheetA" : try window(of: element)
     }
-    func process(of element: String) throws -> pid_t { element == "foreign" ? 99 : 42 }
+    func process(of element: String) throws -> pid_t { ["foreign", "foreignWindow", "remoteInput"].contains(element) ? 99 : 42 }
     func equal(_ lhs: String, _ rhs: String) -> Bool { lhs == rhs }
 }
 var checks = 0
@@ -26,6 +27,8 @@ func expect(_ access: FakeAccess, allowed: Bool, _ reason: String) {
     if accepted != allowed { fatalError(reason) }
 }
 expect(FakeAccess(), allowed: true, "Same window identity accepts independently of AX/CG geometry")
+var remote = FakeAccess(); remote.hit = "remoteInput"; remote.keyboard = "remoteInput"
+expect(remote, allowed: true, "Web content leaf PID may differ when owning AX window identity matches")
 var sample = FakeAccess(); sample.focused = "windowB"; sample.keyboard = "inputB"
 expect(sample, allowed: false, "Same-process sibling window must not receive input")
 sample = FakeAccess(); sample.hit = "inputB"

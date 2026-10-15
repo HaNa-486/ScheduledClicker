@@ -48,6 +48,7 @@ namespace ScheduledClicker
         private double captureDue;
         private bool registered;
         private bool loading;
+        private bool defaultPromptUntouched = true;
         private const int Hotkey = 0x4C50;
         [DllImport("user32.dll")] private static extern bool RegisterHotKey(IntPtr window, int id, uint modifiers, uint key);
         [DllImport("user32.dll")] private static extern bool UnregisterHotKey(IntPtr window, int id);
@@ -103,10 +104,10 @@ namespace ScheduledClicker
             promptLayout.Controls.Add(editRow, 0, 1); promptLayout.Controls.Add(repeatLast, 0, 2); promptLayout.Controls.Add(replace, 0, 3);
             promptCard.Controls.Add(promptLayout);
             entries.SelectedIndexChanged += delegate { LoadPrompt(); };
-            editor.TextChanged += delegate { if (!loading && entries.SelectedIndex >= 0) prompts[entries.SelectedIndex] = editor.Text; };
+            editor.TextChanged += delegate { if (!loading && entries.SelectedIndex >= 0) { prompts[entries.SelectedIndex] = editor.Text; if (entries.SelectedIndex == 0) defaultPromptUntouched = false; } };
             mode.SelectedIndexChanged += delegate { if (!loading) { entries.SelectedIndex = 0; UpdatePromptMode(); } };
             add.Click += delegate { prompts.Add(""); RefreshEntries(prompts.Count - 1); };
-            remove.Click += delegate { if (prompts.Count > 1) { int i = entries.SelectedIndex; prompts.RemoveAt(i); RefreshEntries(Math.Min(i, prompts.Count - 1)); } };
+            remove.Click += delegate { if (prompts.Count > 1) { int i = entries.SelectedIndex; if (i == 0) defaultPromptUntouched = false; prompts.RemoveAt(i); RefreshEntries(Math.Min(i, prompts.Count - 1)); } };
             countBound.CheckedChanged += delegate { UpdatePromptMode(); };
             timeBound.CheckedChanged += delegate { UpdatePromptMode(); };
             captureInput.Click += delegate { BeginCapture(1); }; captureSend.Click += delegate { BeginCapture(2); };
@@ -149,6 +150,11 @@ namespace ScheduledClicker
         }
         private void LanguageChanged()
         {
+            // Only the untouched starter is UI-owned; never translate user drafts.
+            if (defaultPromptUntouched && !Busy) {
+                prompts[0] = L.T("繼續");
+                if (entries.SelectedIndex == 0) LoadPrompt();
+            }
             first.Describe(L.T("首次執行")); deadline.Describe(L.T("截止時間"));
             loading = true;
             int selectedMode = mode.SelectedIndex;

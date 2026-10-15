@@ -215,5 +215,6 @@ new string[] { "請先停止目前操作，再切換模式。", "Stop the curren
 new string[] { "切換為深色模式", "Switch to dark mode", "ダークモードに切替", "다크 모드로 전환", "Dunkles Design" },
 new string[] { "切換為淺色模式", "Switch to light mode", "ライトモードに切替", "라이트 모드로 전환", "Helles Design" },
 new string[] { "請輸入有效的日期與時間（yyyy/MM/dd HH:mm:ss）。", "Enter a valid date and time (yyyy/MM/dd HH:mm:ss).", "有効な日時を入力してください（yyyy/MM/dd HH:mm:ss）。", "올바른 날짜와 시간을 입력하세요(yyyy/MM/dd HH:mm:ss).", "Gültiges Datum und Uhrzeit eingeben (yyyy/MM/dd HH:mm:ss)." },
+new string[] { "無法驗證目標視窗焦點（{0}）；請確認目標 App 的輔助使用支援。", "Cannot verify target window focus ({0}); check the target app’s accessibility support.", "対象ウインドウのフォーカスを確認できません（{0}）。対象アプリのアクセシビリティ対応を確認してください。", "대상 창의 포커스를 확인할 수 없습니다({0}). 대상 앱의 손쉬운 사용 지원을 확인하세요.", "Der Fokus des Zielfensters lässt sich nicht prüfen ({0}). Prüfen Sie die Bedienungshilfen-Unterstützung der Ziel-App." },
 };
 } }

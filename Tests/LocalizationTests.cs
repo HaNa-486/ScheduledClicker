@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -64,6 +64,13 @@ internal static class LocalizationTests
                 simple.Opacity = 0; simple.ShowInTaskbar = false; simple.Show(); simple.SwitchMode(true); Application.DoEvents();
                 var loop = Field<LoopForm>(simple, "loopForm");
                 var editor = Field<TextBox>(loop, "editor"); var mode = Field<ComboBox>(loop, "mode");
+                foreach (string code in L.Codes) {
+                    L.Select(code);
+                    Check(editor.Text == L.T("繼續"), "Untouched default prompt " + code);
+                }
+                editor.Text = "edited"; editor.Text = "繼續";
+                L.Select("en");
+                Check(editor.Text == "繼續", "User-entered default-looking text must be preserved");
                 mode.SelectedIndex = 1; Field<Button>(loop, "add").PerformClick();
                 editor.Text = "使用者保留：目前時間 / Continue / 続けて / 계속 / Weiter 😀"; editor.Select(3, 5);
                 string prompt = editor.Text;

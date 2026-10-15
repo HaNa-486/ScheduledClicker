@@ -63,28 +63,9 @@ final class NativeLoopInput: LoopActions {
         }
     }
 
-    // Check both accessibility focus geometry and front-to-back CG window identity.
-    // A sibling window of the same process must never receive the prompt.
     private func focusedWindowMatches(_ target: LoopTarget) throws -> Bool {
-        let application = AXUIElementCreateApplication(target.process)
-        var focused: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(application, kAXFocusedWindowAttribute as CFString, &focused) == .success,
-              let focused, CFGetTypeID(focused) == AXUIElementGetTypeID() else { return false }
-        let window = focused as! AXUIElement
-        var rawPosition: CFTypeRef?
-        var rawSize: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(window, kAXPositionAttribute as CFString, &rawPosition) == .success,
-              AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &rawSize) == .success,
-              let rawPosition, let rawSize,
-              CFGetTypeID(rawPosition) == AXValueGetTypeID(), CFGetTypeID(rawSize) == AXValueGetTypeID() else { return false }
-        var position = CGPoint.zero
-        var size = CGSize.zero
-        guard AXValueGetValue(rawPosition as! AXValue, .cgPoint, &position),
-              AXValueGetValue(rawSize as! AXValue, .cgSize, &size),
-              CGRect(origin: position, size: size) == target.bounds,
-              let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]] else { return false }
-        let frontWindow = windows.first { ($0[kCGWindowOwnerPID as String] as? Int32) == target.process && ($0[kCGWindowAlpha as String] as? Double ?? 1) > 0 }
-        return frontWindow?[kCGWindowNumber as String] as? UInt32 == target.window
+        try verifyLoopFocus(access: NativeFocusAccess(), process: target.process, point: target.point)
+        return true
     }
 
     func focusInput() throws {
@@ -118,4 +99,74 @@ final class NativeLoopInput: LoopActions {
         up.flags = []
         down.post(tap: .cghidEventTap); up.post(tap: .cghidEventTap)
     }
+}
+
+// Compare accessibility identities within one API. AX and CG rectangles need
+// not be byte-for-byte equal, and helper windows need not be the focused window.
+protocol LoopFocusAccess {
+    associatedtype Element
+    func focusedWindow(_ process: pid_t) throws -> Element
+    func focusedElement(_ process: pid_t) throws -> Element
+    func element(at point: CGPoint) throws -> Element
+    func window(of element: Element) throws -> Element
+    func topLevel(of element: Element) throws -> Element
+    func process(of element: Element) throws -> pid_t
+    func equal(_ lhs: Element, _ rhs: Element) -> Bool
+}
+
+func verifyLoopFocus<A: LoopFocusAccess>(access: A, process: pid_t, point: CGPoint) throws {
+    let hit = try access.element(at: point)
+    let focused = try access.focusedWindow(process)
+    let keyboard = try access.focusedElement(process)
+    guard try access.process(of: hit) == process,
+          access.process(of: focused) == process,
+          access.process(of: keyboard) == process,
+          access.equal(access.window(of: hit), focused),
+          access.equal(access.window(of: keyboard), focused),
+          access.equal(access.topLevel(of: hit), access.topLevel(of: keyboard)) else {
+        throw loopError("焦點已離開原本的目標視窗，已停止。")
+    }
+}
+
+private struct NativeFocusAccess: LoopFocusAccess {
+    private func failure(_ stage: String, _ error: AXError) -> NSError {
+        loopError("無法驗證目標視窗焦點（\(stage):\(error.rawValue)）；請確認目標 App 的輔助使用支援。")
+    }
+    private func attribute(_ element: AXUIElement, _ name: CFString, _ stage: String) throws -> AXUIElement {
+        var value: CFTypeRef?
+        let result = AXUIElementCopyAttributeValue(element, name, &value)
+        guard result == .success, let value, CFGetTypeID(value) == AXUIElementGetTypeID() else { throw failure(stage, result) }
+        return value as! AXUIElement
+    }
+    private func isWindow(_ element: AXUIElement) -> Bool {
+        var role: CFTypeRef?
+        return AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role) == .success && (role as? String) == (kAXWindowRole as String)
+    }
+    func focusedWindow(_ process: pid_t) throws -> AXUIElement {
+        try attribute(AXUIElementCreateApplication(process), kAXFocusedWindowAttribute as CFString, "AX.focusedWindow")
+    }
+    func focusedElement(_ process: pid_t) throws -> AXUIElement {
+        try attribute(AXUIElementCreateApplication(process), kAXFocusedUIElementAttribute as CFString, "AX.focusedElement")
+    }
+    func element(at point: CGPoint) throws -> AXUIElement {
+        var element: AXUIElement?
+        let result = AXUIElementCopyElementAtPosition(AXUIElementCreateSystemWide(), Float(point.x), Float(point.y), &element)
+        guard result == .success, let element else { throw failure("AX.hitTest", result) }
+        return element
+    }
+    func window(of element: AXUIElement) throws -> AXUIElement {
+        if isWindow(element) { return element }
+        return try attribute(element, kAXWindowAttribute as CFString, "AX.window")
+    }
+    func topLevel(of element: AXUIElement) throws -> AXUIElement {
+        if isWindow(element) { return element }
+        return try attribute(element, kAXTopLevelUIElementAttribute as CFString, "AX.topLevel")
+    }
+    func process(of element: AXUIElement) throws -> pid_t {
+        var pid: pid_t = 0
+        let result = AXUIElementGetPid(element, &pid)
+        guard result == .success else { throw failure("AX.pid", result) }
+        return pid
+    }
+    func equal(_ lhs: AXUIElement, _ rhs: AXUIElement) -> Bool { CFEqual(lhs, rhs) }
 }

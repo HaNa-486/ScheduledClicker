@@ -17,17 +17,18 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
     private var prompts = [L.t("繼續")]
     private var editingIndex = 0
     private var loading = false
+    private var defaultPromptUntouched = true
     private var localized: LocalizedView?
     private var languageObserver: NSObjectProtocol?
     private let notice = NSTextField(wrappingLabelWithString: "執行時保持喚醒、不鎖屏，目標視窗與聊天固定。\n使用剪貼簿貼上，會覆寫剪貼簿；不判斷 AI 狀態或送達結果。\n試跑會真的輸入並點送出。中途停止後請檢查草稿，避免重複。\n兩個停止條件同時勾選時，先達到者停止。關閉本視窗也會取消。")
     private var controls: [NSControl] = []
     private let first = NSDatePicker()
     private let deadline = NSDatePicker()
-    private let hours = NSTextField(string: "5")
-    private let minutes = NSTextField(string: "10")
-    private let seconds = NSTextField(string: "0")
-    private let wait = NSTextField(string: "1")
-    private let count = NSTextField(string: "3")
+    private let hours = WheelNumberField(5, range: 0...8760)
+    private let minutes = WheelNumberField(10, range: 0...59)
+    private let seconds = WheelNumberField(0, range: 0...59)
+    private let wait = WheelNumberField(1, range: 1...10)
+    private let count = WheelNumberField(3, range: 1...10000)
     private let countBound = NSButton(checkboxWithTitle: "最多輪次", target: nil, action: nil)
     private let timeBound = NSButton(checkboxWithTitle: "截止時間", target: nil, action: nil)
     private let repeatLast = NSButton(checkboxWithTitle: "序列用完後，重複最後一筆", target: nil, action: nil)
@@ -135,6 +136,10 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
     }
 
     private func languageChanged() {
+        if defaultPromptUntouched && !busy {
+            prompts[0] = L.t("繼續")
+            if editingIndex == 0 { loading = true; editor.string = prompts[0]; loading = false }
+        }
         first.locale = Locale(identifier: L.language == "zh" ? "zh-Hant" : L.language)
         deadline.locale = first.locale
         for index in prompts.indices { entries.item(at: index)?.title = L.t("第 \(index + 1) 輪") }
@@ -143,7 +148,7 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
         refresh()
     }
 
-    func textDidChange(_ notification: Notification) { if !loading { prompts[editingIndex] = editor.string } }
+    func textDidChange(_ notification: Notification) { if !loading { prompts[editingIndex] = editor.string; if editingIndex == 0 { defaultPromptUntouched = false } } }
     private func refreshEntries(selected: Int) {
         loading = true; entries.removeAllItems()
         entries.addItems(withTitles: prompts.indices.map { L.t("第 \($0 + 1) 輪") }); entries.selectItem(at: selected)
@@ -153,7 +158,7 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
     @objc private func entryChanged() { refreshEntries(selected: entries.indexOfSelectedItem) }
     @objc private func optionsChanged() { refresh() }
     @objc private func addPrompt() { prompts.append(""); refreshEntries(selected: prompts.count - 1) }
-    @objc private func removePrompt() { if prompts.count > 1 { prompts.remove(at: editingIndex); refreshEntries(selected: min(editingIndex, prompts.count - 1)) } }
+    @objc private func removePrompt() { if prompts.count > 1 { if editingIndex == 0 { defaultPromptUntouched = false }; prompts.remove(at: editingIndex); refreshEntries(selected: min(editingIndex, prompts.count - 1)) } }
     @objc private func captureInput() { capture(1) }
     @objc private func captureSend() { capture(2) }
     private func capture(_ kind: Int) { captureKind = kind; captureDue = Self.mono + 3; refresh(); window.miniaturize(nil) }
@@ -253,6 +258,15 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
 
     // No native input: exercise editor state and render both appearances in CI.
     func smokeTest(screenshot: String?, switchMode: (Bool) -> Bool) -> Bool {
+        let startupLanguage = L.language
+        for code in L.codes {
+            L.select(code)
+            guard prompts[0] == L.t("繼續"), editor.string == prompts[0] else { return false }
+        }
+        editor.string = "繼續"; textDidChange(Notification(name: NSText.didChangeNotification))
+        L.select("en")
+        guard editor.string == "繼續" else { return false }
+        L.select(startupLanguage)
         mode.selectItem(at: 1); modeChanged()
         addPrompt(); editor.string = "第二輪：繼續\n保留進度 😀"; textDidChange(Notification(name: NSText.didChangeNotification))
         mode.selectItem(at: 0); modeChanged()

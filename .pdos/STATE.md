@@ -1,15 +1,15 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 30
+- State revision: 31
 - Updated: 2026-10-15
-- State confidence: owner accepted Mac build12004 and Windows targeted tests; exact release/public downloads and deployed site verified; detailed native negative-case coverage not itemized
-- Phase: Implementing owner-authorized five-language first-use website; publish after verification. v1.2.0 runtime remains unchanged.
+- State confidence: Owner-authorized website publication verified: 45 live locale pages, 10 summaries and unchanged release downloads; native first-launch dialogs and native-speaker review not repeated.
+- Phase: Five-language first-use website published; all five findings verified. v1.2.0 runtime unchanged.
 
 ## Repository identity
 
-- Branch: codex/multilingual-install-guide
-- Observed commit: 2e1f82a
+- Branch: main
+- Observed commit: 64ffd4c2fc241cf478b94e356c06c6bc608500e3
 
 ## Product anchors
 
@@ -21,21 +21,21 @@
 
 ## Current work
 
-- Current slice: Fix warning-specific opening help, direct install anchors, checksum instructions, five full website languages and support entry points; synchronize discovery.
-- Workstream: `workstreams/2026-10-15-multilingual-install-guide.md` active; release-120 completed.
-- Active review: `reviews/REV-20261015-site-first-use.md`; five findings authorized, independent safety/discovery review in progress.
+- Current slice: Completed all five website findings: warning-specific opening help, platform installation anchors, full-path checksum guides, five full languages and issue-report routes.
+- Workstream: `workstreams/2026-10-15-multilingual-install-guide.md` completed; prior workstreams historical or paused.
+- Active review: `reviews/REV-20261015-site-first-use.md` completed; independent safety/discovery review passed and five findings verified.
 - Active remediations: Mac normal functional acceptance and Windows targeted tests confirmed by owner. High wrong-window records retain individual native negative-case evidence gaps; do not relabel those cases verified.
-- Blocking dependencies: Browser validation, independent review and CI before deployment; verify live localized pages afterward.
-- Consequential decisions: Owner explicitly authorizes these website fixes and publication after checks; signing and Search Console deferred. See specs/multilingual-install-guide.md.
+- Blocking dependencies: None for this website delivery. Signing/notarization and Search Console explicitly deferred by owner.
+- Consequential decisions: Owner authorized implementation and direct publication after verification. Runtime release assets preserved; no signing or Search Console action.
 
 ## Handoff
 
-- What changed: Published v1.2.0 from 3e03d77, merged PR #3 as acbc2d0; uploaded exact CI Windows EXE/Mac universal ZIP and checksums, updated README, nine pages, structured data, FAQ and AI-readable summaries with direct stable URLs.
-- Verification evidence: Source CI 38724830343, PR CI 38724838088, main CI 38725336658 and Pages 38725335990 pass. Four anonymous asset GETs match staged CI bytes/hashes; nine live HTML pages and four discovery files match source text. Tag/main ancestry/tree, versions, browser download view and independent review pass. See `../VERIFICATION.md`.
-- Not verified individually: owner acceptance did not itemize wrong-sibling refusal, physical F8 or permission-denial cases; every display/DPI/assistive-technology combination and notarization remain outside evidence.
-- Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input. Stable release assets now provide anonymous downloads; Actions artifacts are no longer the public delivery route.
-- Release assessment: published with owner authorization after both-platform functional acceptance and all delivery gates passed. Retain conditionally ready evidence classification; do not claim every native failure case verified. Unsigned/ad-hoc and fixed-coordinate limits remain documented.
-- Next safe action: Finish browser and independent review, repair any blockers, publish and verify live locale pages.
+- What changed: Merged PR #4 (source 37884c8) as 64ffd4c. Published 45 static pages across en/zh-Hant/ja/ko/de, localized metadata/FAQ/schema/AI summaries, reciprocal language links, platform installation anchors and report guidance. Original English URLs retained.
+- Verification evidence: 2135 site checks, 504 discovery checks, 56 generated files verified. Independent review passed. Source CI 38730898096, PR CI 38730952006 and main CI 38731219398 passed; Pages 38731218985 passed. Public GET verified 59 text files against source and four unchanged v1.2.0 asset hashes. Five-language narrow viewport/navigation and official download view verified. See ../VERIFICATION.md.
+- Not verified individually: Fresh-machine first-launch OS dialogs, native-speaker editorial acceptance, Search Console indexing, signing/notarization; prior app negative-case limits remain.
+- Residual risks: OS wording and managed-device policy can differ. Unchanged unsigned/ad-hoc apps retain fixed-coordinate, clipboard and native negative-case boundaries. No indexing/ranking guarantee.
+- Release assessment: Website delivered with all scoped findings verified; runtime retains prior conditionally ready evidence boundary. See VERIFICATION.md for exact coverage.
+- Next safe action: Handle concrete first-use feedback. Owner will address signing and Search Console later; no account action pending for this delivery.
 
 ## Read next
 

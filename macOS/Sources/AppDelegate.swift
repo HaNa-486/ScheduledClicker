@@ -89,7 +89,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         if CommandLine.arguments.contains("--ui-smoke-test") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self, self.validateUserInterface(), self.saveSmokeScreenshotIfRequested() else {
+                guard let self else { exit(1) }
+                let valid = self.validateUserInterface()
+                let rendered = self.saveSmokeScreenshotIfRequested()
+                guard valid, rendered else {
                     fputs("macOS UI smoke test failed: unreadable appearance or invalid mode visibility.\n", stderr)
                     exit(1)
                 }
@@ -477,21 +480,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     private func validateUserInterface() -> Bool {
-        guard !modeSelector.frame.intersects(themeButton.frame), !themeButton.frame.intersects(language.view.frame) else { return false }
+        guard !modeSelector.frame.intersects(themeButton.frame), !themeButton.frame.intersects(language.view.frame) else { print("FAIL: header overlap"); return false }
         let originalWindowNumber = window.windowNumber
         let originalFrame = window.frame
-        guard switchMode(true), switchMode(false), window.windowNumber == originalWindowNumber, window.frame == originalFrame else { return false }
+        guard switchMode(true), switchMode(false), window.windowNumber == originalWindowNumber, window.frame == originalFrame else { print("FAIL: shared window identity/frame"); return false }
         let originalAppearance = window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua])
         toggleAppearance()
-        guard window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) != originalAppearance else { return false }
+        guard window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) != originalAppearance else { print("FAIL: appearance toggle"); return false }
         toggleAppearance()
-        guard window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == originalAppearance else { return false }
+        guard window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == originalAppearance else { print("FAIL: appearance round trip"); return false }
         let originalLanguage = L.language
         let originalDate = targetDate.dateValue
         let originalClick = clickType.selectedSegment
         for code in L.codes {
             L.select(code)
-            guard language.view.indexOfSelectedItem == L.codes.firstIndex(of: code), targetDate.dateValue == originalDate, clickType.selectedSegment == originalClick else { return false }
+            guard language.view.indexOfSelectedItem == L.codes.firstIndex(of: code), targetDate.dateValue == originalDate, clickType.selectedSegment == originalClick else { print("FAIL: language state \(code), picker=\(language.view.indexOfSelectedItem), date=\(targetDate.dateValue.timeIntervalSince1970), expected=\(originalDate.timeIntervalSince1970), click=\(clickType.selectedSegment)"); return false }
         }
         L.select(originalLanguage)
         let originalMode = timeMode.selectedSegment
@@ -512,6 +515,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
         let clockRefreshIsSmooth = (clockTimer?.timeInterval ?? 1) <= 0.04
         let changingSubHundredths = Set(smokeClockFractions.map { String($0.suffix(2)) }).count >= 2
+        print("UI checks: absolute=\(absoluteModeIsValid), delay=\(delayModeIsValid), contrast=\(readable), refresh=\(clockRefreshIsSmooth), fractions=\(changingSubHundredths)")
         return absoluteModeIsValid && delayModeIsValid && readable && clockRefreshIsSmooth && changingSubHundredths
     }
 

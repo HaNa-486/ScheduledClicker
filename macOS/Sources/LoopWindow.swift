@@ -165,7 +165,20 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
     @objc private func removePrompt() { if prompts.count > 1 { if editingIndex == 0 { defaultPromptUntouched = false }; prompts.remove(at: editingIndex); refreshEntries(selected: min(editingIndex, prompts.count - 1)) } }
     @objc private func captureInput() { capture(1) }
     @objc private func captureSend() { capture(2) }
-    private func capture(_ kind: Int) { captureKind = kind; captureDue = Self.mono + 3; refresh(); window.miniaturize(nil) }
+    private func capture(_ kind: Int, requestPermission: () -> Bool = {
+        if AXIsProcessTrusted() { return true }
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        return AXIsProcessTrustedWithOptions(options)
+    }) {
+        guard !busy else { return }
+        if kind == 1 { input.input = nil; inputLabel.stringValue = L.t("尚未擷取") }
+        else { input.submit = nil; sendLabel.stringValue = L.t("尚未擷取") }
+        guard requestPermission() else {
+            engine.stop("請在系統設定授予輔助使用權限後重新啟動。")
+            refresh(); return
+        }
+        captureKind = kind; captureDue = Self.mono + 3; refresh(); window.miniaturize(nil)
+    }
 
     private func tick() {
         if captureKind != 0 && Self.mono >= captureDue {
@@ -298,6 +311,8 @@ final class LoopWindow: NSObject, NSTextViewDelegate {
             window.setFrame(NSRect(origin: window.frame.origin, size: originalSize), display: true)
         }
         L.select(originalLanguage)
+        capture(1, requestPermission: { false })
+        guard captureKind == 0, !busy, input.input == nil, !window.isMiniaturized else { return false }
         let windowNumber = window.windowNumber
         guard switchMode(false), switchMode(true), window.windowNumber == windowNumber, editor.string == prompt else { return false }
         do {

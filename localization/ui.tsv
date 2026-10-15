@@ -218,3 +218,4 @@ Windows 無法送出滑鼠輸入。錯誤碼：{0}	Windows could not send mouse 
 無法啟用目標程式，已停止。	Cannot activate the target app. Stopped.	対象アプリを有効化できないため停止しました。	대상 앱을 활성화할 수 없어 중지했습니다.	Ziel-App kann nicht aktiviert werden. Gestoppt.
 擷取到無法接受鍵盤輸入的系統視窗，請重新擷取。	Captured a system window that cannot receive keyboard input. Capture again.	キーボード入力を受け付けないシステムウインドウです。再取得してください。	키보드 입력을 받을 수 없는 시스템 창입니다. 다시 캡처하세요.	Ein Systemfenster ohne Tastatureingabe wurde erfasst. Bitte erneut erfassen.
 複製診斷	Copy diagnostics	診断情報をコピー	진단 정보 복사	Diagnose kopieren
+循環輸入僅支援一般 App 視窗，請重新擷取。	Loop input supports regular app windows only. Capture again.	繰り返し入力は通常のアプリウインドウのみ対応しています。再取得してください。	반복 입력은 일반 앱 창만 지원합니다. 다시 캡처하세요.	Schleifeneingabe unterstützt nur normale App-Fenster. Bitte erneut erfassen.

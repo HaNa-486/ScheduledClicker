@@ -1,15 +1,15 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 25
+- State revision: 26
 - Updated: 2026-10-15
 - State confidence: high for Windows owner acceptance and both-platform CI/core/UI evidence; Mac native external input remains unverified
-- Phase: build 12002 native retest failed; build 12003 correction delivered for native acceptance, no release
+- Phase: build12003 Dock miscapture confirmed; build12004 AX capture correction in progress, no release
 
 ## Repository identity
 
 - Branch: codex/recurring-prompt-loop
-- Observed commit: 05861ea
+- Observed commit: a946914
 
 ## Product anchors
 
@@ -21,8 +21,8 @@
 
 ## Current work
 
-- Current slice: Owner confirms new app replaced, caret visible, Safari and Word fail with complete no-code focus message. Under build12002 this maps to NSWorkspace foreground PID guard; wrong captured owner vs foreground-state discrepancy remain unproven. Live AX keyboard-owner check, separate bounded activation phase and content-free diagnostics implemented in build 12003; underlying native trigger still unproven.
-- Workstream: `workstreams/2026-10-15-macos-foreground-diagnosis.md` paused for owner native acceptance; earlier workstreams paused.
+- Current slice: Build12003 native diagnostic confirms target was Dock at layer20; activation then failed geometry before click. Root cause is CG bounding-rectangle first-hit selecting compositor owner, amplified by activation. Replace capture with stored AX hit-window/topLevel identity and same-API bounds; build12004 in validation.
+- Workstream: `workstreams/2026-10-15-macos-ax-target-capture.md` active; earlier workstreams paused.
 - Active review: `reviews/REV-20261015-macos-input.md`; independent focus/privacy source recheck passes, no native Safari claim.
 - Active remediations: localized starter F002 verified; focus F001, foreground F004 and wheel F003 implemented pending owner native acceptance. Earlier loop wrong-window F001 remains unverified.
 - Blocking dependencies: none for candidate/source delivery. Native Mac Accessibility, paste/send and physical F8 require a Mac desktop.

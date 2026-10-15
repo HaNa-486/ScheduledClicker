@@ -1,29 +1,51 @@
 import Cocoa
 
-struct LoopTarget {
-    let point: CGPoint
-    let window: CGWindowID
+// A compositor rectangle is not an input hit-test: Dock can own large overlay
+// surfaces. Capture and revalidation use the same system-wide AX hit identity.
+protocol LoopTargetAccess: LoopFocusAccess {
+    func bounds(of window: Element) throws -> CGRect
+    func isRegularApplication(_ process: pid_t) -> Bool
+}
+
+struct LoopTargetIdentity<Element> {
+    let window: Element
+    let topLevel: Element
     let process: pid_t
     let bounds: CGRect
-    var layer: Int = 0
+}
+
+func captureLoopIdentity<A: LoopTargetAccess>(access: A, point: CGPoint) throws -> LoopTargetIdentity<A.Element> {
+    let hit = try access.element(at: point)
+    let window = try access.window(of: hit)
+    let process = try access.process(of: window)
+    guard access.isRegularApplication(process) else {
+        throw loopError("循環輸入僅支援一般 App 視窗，請重新擷取。 [capture.application]")
+    }
+    let bounds = try access.bounds(of: window)
+    guard [bounds.origin.x, bounds.origin.y, bounds.width, bounds.height].allSatisfy({ $0.isFinite }),
+          bounds.width > 0, bounds.height > 0, bounds.contains(point) else {
+        throw loopError("無法識別目標視窗，請重新擷取。 [capture.bounds]")
+    }
+    return LoopTargetIdentity(window: window, topLevel: try access.topLevel(of: hit), process: process, bounds: bounds)
+}
+
+func requireSameLoopTarget<A: LoopTargetAccess>(access: A, captured: LoopTargetIdentity<A.Element>, current: LoopTargetIdentity<A.Element>) throws {
+    guard captured.process == current.process,
+          access.equal(captured.window, current.window),
+          access.equal(captured.topLevel, current.topLevel), captured.bounds == current.bounds else {
+        throw loopError("目標視窗移動、被遮住或已關閉，請檢查後重新擷取。 [capture.identity]")
+    }
+}
+
+struct LoopTarget {
+    let point: CGPoint
+    let identity: LoopTargetIdentity<AXUIElement>
+    var process: pid_t { identity.process }
     var appName: String { NSRunningApplication(processIdentifier: process)?.localizedName ?? "PID \(process)" }
 
     static func capture(_ point: CGPoint) throws -> LoopTarget {
-        guard let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]] else {
-            throw loopError("無法識別目標視窗，請重新擷取。")
-        }
-        for item in windows {
-            guard let raw = item[kCGWindowBounds as String] as? NSDictionary,
-                  let bounds = CGRect(dictionaryRepresentation: raw as CFDictionary), bounds.contains(point),
-                  let id = item[kCGWindowNumber as String] as? UInt32,
-                  let pid = item[kCGWindowOwnerPID as String] as? Int32,
-                  (item[kCGWindowAlpha as String] as? Double ?? 1) > 0 else { continue }
-            guard let app = NSRunningApplication(processIdentifier: pid), app.activationPolicy != .prohibited else {
-                throw loopError("擷取到無法接受鍵盤輸入的系統視窗，請重新擷取。 [capture.process=\(pid)]")
-            }
-            return LoopTarget(point: point, window: id, process: pid, bounds: bounds, layer: (item[kCGWindowLayer as String] as? Int) ?? 0)
-        }
-        throw loopError("目標位置沒有可操作的視窗。")
+        guard AXIsProcessTrusted() else { throw loopError("需要輔助使用權限。") }
+        return LoopTarget(point: point, identity: try captureLoopIdentity(access: NativeFocusAccess(), point: point))
     }
 }
 
@@ -37,7 +59,7 @@ final class NativeLoopInput: LoopActions {
     private var displays: DisplaySnapshot?
     private var trace: [String] = []
     var activatesTarget: Bool { true }
-    static var build: String { Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "12003-dev" }
+    static var build: String { Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "12004-dev" }
     var diagnostics: String {
         (["ScheduledClicker build \(Self.build)", "macOS \(ProcessInfo.processInfo.operatingSystemVersionString)"] + trace).joined(separator: "\n")
     }
@@ -45,21 +67,20 @@ final class NativeLoopInput: LoopActions {
 
     func prepare() throws {
         trace.removeAll()
-        guard let input, let submit, input.window == submit.window else {
+        guard let input, let submit else {
             throw loopError("請擷取同一目標視窗的輸入框與送出按鈕。")
         }
+        try requireSameLoopTarget(access: NativeFocusAccess(), captured: input.identity, current: submit.identity)
         guard let snapshot = ActiveDisplays.snapshot() else { throw loopError("無法讀取螢幕配置。") }
         displays = snapshot
-        record("target PID=\(input.process) app=\(input.appName) window=\(input.window) layer=\(input.layer)")
+        record("target PID=\(input.process) app=\(input.appName) AX-window=\(CFHash(input.identity.window)) source=AX-hit-test")
     }
 
     private func check(_ target: LoopTarget, focus: Bool) throws {
         guard AXIsProcessTrusted() else { throw loopError("需要輔助使用權限。") }
         guard displays == ActiveDisplays.snapshot() else { throw loopError("螢幕配置已改變，請重新擷取。") }
         let current = try LoopTarget.capture(target.point)
-        guard current.window == target.window, current.process == target.process, current.bounds == target.bounds else {
-            throw loopError("目標視窗移動、被遮住或已關閉，請檢查後重新擷取。")
-        }
+        try requireSameLoopTarget(access: NativeFocusAccess(), captured: target.identity, current: current.identity)
         if focus {
             try checkForeground(target)
             _ = try focusedWindowMatches(target)
@@ -91,7 +112,7 @@ final class NativeLoopInput: LoopActions {
         record("activation expected=\(input.process) AX=\(actual)")
         if actual == input.process { record("activation already-target"); return }
         guard let app = NSRunningApplication(processIdentifier: input.process), !app.isTerminated,
-              app.activationPolicy != .prohibited else { throw loopError("無法啟用目標程式，已停止。 [activate.target]") }
+              app.activationPolicy == .regular else { throw loopError("無法啟用目標程式，已停止。 [activate.target]") }
         let accepted: Bool
         if #available(macOS 14.0, *) {
             if NSApp.isActive { NSApp.yieldActivation(to: app) }
@@ -104,7 +125,7 @@ final class NativeLoopInput: LoopActions {
     }
 
     private func focusedWindowMatches(_ target: LoopTarget) throws -> Bool {
-        try verifyLoopFocus(access: NativeFocusAccess(), process: target.process, point: target.point)
+        try verifyLoopFocus(access: NativeFocusAccess(), captured: target.identity, point: target.point)
         return true
     }
 
@@ -161,7 +182,8 @@ protocol LoopFocusAccess {
     func equal(_ lhs: Element, _ rhs: Element) -> Bool
 }
 
-func verifyLoopFocus<A: LoopFocusAccess>(access: A, process: pid_t, point: CGPoint) throws {
+func verifyLoopFocus<A: LoopFocusAccess>(access: A, captured: LoopTargetIdentity<A.Element>, point: CGPoint) throws {
+    let process = captured.process
     let actual = try access.focusedApplicationProcess()
     guard actual == process else { throw loopError("焦點已離開原本的目標視窗，已停止。 [focus.application]") }
     let hit = try access.element(at: point)
@@ -177,12 +199,40 @@ func verifyLoopFocus<A: LoopFocusAccess>(access: A, process: pid_t, point: CGPoi
     try require(access.process(of: focused) == process, "focused-pid")
     try require(access.process(of: hitWindow) == process, "hit-window-pid")
     try require(access.process(of: keyboardWindow) == process, "keyboard-window-pid")
+    try require(access.equal(hitWindow, captured.window), "captured-hit-window")
+    try require(access.equal(focused, captured.window), "captured-focused-window")
+    try require(access.equal(keyboardWindow, captured.window), "captured-keyboard-window")
+    try require(access.equal(access.topLevel(of: hit), captured.topLevel), "captured-hit-top-level")
+    try require(access.equal(access.topLevel(of: keyboard), captured.topLevel), "captured-keyboard-top-level")
     try require(access.equal(hitWindow, focused), "hit-window")
     try require(access.equal(keyboardWindow, focused), "keyboard-window")
     try require(access.equal(access.topLevel(of: hit), access.topLevel(of: keyboard)), "top-level")
 }
 
-private struct NativeFocusAccess: LoopFocusAccess {
+private struct NativeFocusAccess: LoopTargetAccess {
+    func isRegularApplication(_ process: pid_t) -> Bool {
+        guard let app = NSRunningApplication(processIdentifier: process) else { return false }
+        return !app.isTerminated && app.activationPolicy == .regular
+    }
+    func bounds(of window: AXUIElement) throws -> CGRect {
+        func value(_ name: CFString, type: AXValueType) throws -> AXValue {
+            var raw: CFTypeRef?
+            let result = AXUIElementCopyAttributeValue(window, name, &raw)
+            guard result == .success, let raw, CFGetTypeID(raw) == AXValueGetTypeID() else {
+                throw failure("AX.bounds", result)
+            }
+            let value = raw as! AXValue
+            guard AXValueGetType(value) == type else { throw failure("AX.boundsType", .illegalArgument) }
+            return value
+        }
+        var origin = CGPoint.zero, size = CGSize.zero
+        let position = try value(kAXPositionAttribute as CFString, type: .cgPoint)
+        let dimensions = try value(kAXSizeAttribute as CFString, type: .cgSize)
+        guard AXValueGetValue(position, .cgPoint, &origin), AXValueGetValue(dimensions, .cgSize, &size) else {
+            throw failure("AX.boundsValue", .illegalArgument)
+        }
+        return CGRect(origin: origin, size: size)
+    }
     func focusedApplicationProcess() throws -> pid_t {
         let app = try attribute(AXUIElementCreateSystemWide(), kAXFocusedApplicationAttribute as CFString, "AX.focusedApplication")
         return try process(of: app)
@@ -214,7 +264,9 @@ private struct NativeFocusAccess: LoopFocusAccess {
     }
     func window(of element: AXUIElement) throws -> AXUIElement {
         if isWindow(element) { return element }
-        return try attribute(element, kAXWindowAttribute as CFString, "AX.window")
+        let window = try attribute(element, kAXWindowAttribute as CFString, "AX.window")
+        guard isWindow(window) else { throw failure("AX.windowRole", .illegalArgument) }
+        return window
     }
     func topLevel(of element: AXUIElement) throws -> AXUIElement {
         if isWindow(element) { return element }

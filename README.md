@@ -11,11 +11,11 @@
 
 ScheduledClicker is a free, open-source Windows 11 and macOS utility that performs one single or double mouse click at a specific future time or after a delay. Both native editions are local-only, with no ads, accounts, telemetry, network access, or third-party packages.
 
-It was created for workflows such as sending a prepared Codex message after the usage reset time shown in the app. ScheduledClicker does **not** detect, bypass, reset, or increase any ChatGPT or Codex limit—it only performs an ordinary mouse click at the time you choose.
+It was created for workflows such as sending a prepared Codex message after the usage reset time shown in the app. ScheduledClicker does **not** detect, bypass, reset, or increase any ChatGPT or Codex limit—it performs only the local input/click actions you configure.
 
 ## Key features
 
-**Unreleased source feature:** bounded recurring input/send workflows are being added to both editions. Windows local build, UI and native-input tests are documented in [`VERIFICATION.md`](VERIFICATION.md); macOS build and hardware verification are pending. Released v1.1.2 downloads still provide the one-shot workflow below.
+**Preview 1.2.0-preview.1:** bounded recurring input/send, a shared simple/loop window, five interface languages and system-selected light/dark appearance. Windows owner testing passed on 2026-10-15. Mac universal build and native appearance evidence passed [CI run 38688961403](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38688961403); native input still requires a local desktop test. Released v1.1.2 downloads provide the one-shot workflow below.
 
 - Schedule one click at an exact future date and time.
 - Schedule one click after a seconds, minutes, or hours delay.
@@ -31,9 +31,15 @@ Both simple and loop modes support Traditional Chinese, English, Japanese, Korea
 
 Both modes share one window, clock, language selector and mode buttons. Loop timing is on the left and position capture on the right, with prompts underneath and fixed notices, actions and status below. All settings fit the initial/minimum window without page scrolling; long prompt text can scroll inside its editor. Stop an active schedule or capture before switching modes; idle switching preserves configuration. The shared catalog and development checks are described in [`localization/README.md`](localization/README.md).
 
-The local candidate now includes light/dark themes. Startup reads the current system app appearance; a shared header button switches both modes and confirmations for this session. Restarting reads the system again. Both themes now use neutral surface layers, rounded cards and a single primary action. A compact sun/moon button includes a translated tooltip and accessible name. Windows date fields accept `yyyy/MM/dd HH:mm:ss`, with Up/Down adjustment of the part at the caret and validation before scheduling; scrollbars and some OS parts retain native rendering. macOS source includes the matching appearance toggle; its build remains deferred.
+The local candidate now includes light/dark themes. Startup reads the current system app appearance; a shared header button switches both modes and confirmations for this session. Restarting reads the system again. Both themes now use neutral surface layers, rounded cards and a single primary action. A compact sun/moon button includes a translated tooltip and accessible name. Windows date fields accept `yyyy/MM/dd HH:mm:ss`, with Up/Down adjustment of the part at the caret and validation before scheduling; scrollbars and some OS parts retain native rendering. macOS uses AppKit controls and a native sun/moon action. Candidate builds are available through the feature branch CI once its checks pass.
 
-These changes are **unreleased**. Windows is available as a local review candidate; macOS source is updated, but builds and public CI are deferred until the owner finishes Windows testing and requests them.
+These changes are **unreleased**. Windows is available as a local review candidate; macOS CI is now authorized after Windows owner acceptance. This does not publish a new stable release.
+
+## Preview Mac download and local test
+
+Open the successful [feature branch build](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38688961403), sign in to GitHub, and download `ScheduledClicker-macOS-universal`. Extract the outer Actions artifact, then extract the app ZIP inside. Verify its adjacent SHA-256, move the app to Applications, and grant Accessibility permission. Builds are ad-hoc signed, not Apple-notarized; artifacts expire. Source bundle metadata is 1.2.0, build 12001, identifying this preview rather than the stable v1.1.2.
+
+Start with a disposable text window and one trial round. Verify paste/send, pause/cancel and F8 (or Fn+F8), both appearances and language switching. Check that moving focus to another window stops the pending paste without replacing the clipboard. The preview cannot detect a changed chat or confirm delivery. See [preview guide](docs/recurring-input/index.html) and [verification](VERIFICATION.md).
 
 ## Download
 

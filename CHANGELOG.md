@@ -2,30 +2,26 @@
 
 本專案的重大變更會記錄在此。格式參考 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本採用 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
-## [Unreleased]
+## [1.2.0-preview.1] — 2026-10-15 (candidate, not a stable release)
 
 ### Added
 
-- 簡單與循環模式支援繁體中文、英文、日文、韓文、德文；依系統語系啟動，視窗內可同步手動切換，提示詞與排程保留。
-- 共用內嵌翻譯表、完整性／格式參數檢查、五語系 Windows 畫面／確認訊息與語系切換測試；macOS 等效測試已備妥但未執行。
+- Bounded recurring input/send with one prompt or a sequence, first execution time, completion-relative interval, maximum rounds/deadline, trial, pause and stop.
+- One shared simple/loop window with a live clock and always-visible notices. Active operations must stop before switching modes; idle settings are retained.
+- Traditional Chinese, English, Japanese, Korean and German interfaces with system startup selection and manual switching.
+- Startup light/dark appearance detection and manual sun/moon action; redesigned neutral surfaces and controls on Windows, native AppKit adaptation on Mac.
+- Mac universal candidate build and five-language/two-appearance UI evidence. Windows owner acceptance received; Mac native input acceptance remains pending.
+- Version-aware website guide, download distinctions, FAQ, structured data and supplemental AI-readable summaries.
 
 ### Fixed
 
-- 循環注意事項移至固定底部，首次開啟與最小視窗均可見；為較長譯文調整兩種模式版面。
-- 修正 macOS 狀態標題與文字的版面重疊（原始碼已審查，實機待驗證）。
-- 修正介面測試以作用中視窗誤判確認視窗的問題；測試改為直接持有視窗、隱藏執行，例外直接回報失敗。
-
-### Previously added in this development slice
-
-- 循環頁固定即時數位時鐘與返回簡單模式按鈕；切換會停止操作，再次進入保留本次程式開啟期間的設定。
-- Windows 與 macOS 原生循環輸入／送出設定介面：首次時間、循環間隔、相同或依輪次提示詞、序列用完停止或重複最後一筆、次數及截止時間。
-- 中文與多行剪貼簿貼上、可選取代草稿、兩個位置擷取、五秒後真實試跑、等待期間暫停／恢復、F8／取消與關閉停止。
-- 目標視窗與焦點／螢幕配置檢查，逾期或失敗停止、不補送；明確區分送出點擊與送達結果。
-- 兩平台循環核心回歸測試與 UI 煙霧測試，Windows 拋棄式視窗原生輸入整合測試。
+- Windows language dropdown closing during clock-triggered layout.
+- Windows themed date input validation and field adjustments.
+- Mac header mode/appearance hit-area overlap; CI guards against recurrence.
 
 ### Verification status
 
-- Windows 已完成本機建置、核心、介面與中文多行原生輸入測試；macOS 建置、雙外觀與實機輸入驗證待完成。此功能尚未發布。
+See VERIFICATION.md for run-bound results. CI screenshots and event construction do not prove native clipboard/paste/send, physical F8 or wrong-window rejection on a user's Mac. Stable v1.1.2 remains the published download.
 
 ## [1.1.2] - 2026-08-28
 

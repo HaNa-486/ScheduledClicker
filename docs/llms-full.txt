@@ -1,41 +1,44 @@
-# ScheduledClicker extended product facts
+# ScheduledClicker
 
-Canonical website: https://hana-486.github.io/ScheduledClicker/
-Source repository: https://github.com/HaNa-486/ScheduledClicker
-Latest release: https://github.com/HaNa-486/ScheduledClicker/releases/latest
-License: MIT
-Current version: 1.1.2
+ScheduledClicker is a free, open-source local desktop tool for Windows 11 and macOS 13+. Stable v1.1.2 schedules one single or double mouse click. Candidate 1.2.0-preview.1 adds bounded recurring prompt input/send, a shared simple/loop window, five interface languages and manual light/dark switching.
 
-## What it is
+## Availability (updated 2026-10-15)
 
-ScheduledClicker is a free, open-source, local-only desktop utility that performs one scheduled mouse click at a fixed coordinate. It supports Windows 11 and macOS 13 Ventura or later. Users can choose an exact future time or a delay and can select single or double click.
+- Stable release: v1.1.2, https://github.com/HaNa-486/ScheduledClicker/releases/latest
+- Preview: 1.2.0-preview.1, feature branch codex/recurring-prompt-loop. This is not a stable release.
+- Preview guide: https://hana-486.github.io/ScheduledClicker/recurring-input/
+- Preview download instructions: https://hana-486.github.io/ScheduledClicker/download/#preview
+- Source: https://github.com/HaNa-486/ScheduledClicker
+- Candidate verification: https://github.com/HaNa-486/ScheduledClicker/blob/codex/recurring-prompt-loop/VERIFICATION.md
+- License: MIT. No ads, accounts, telemetry or application network access.
 
-The Windows download is a portable WinForms EXE. The macOS download is a native universal AppKit application containing Apple silicon arm64 and Intel x86_64 code. The Windows EXE cannot run natively on macOS; each platform needs its own download.
+## Preview behavior
 
-## Privacy and security model
+One prompt per round or a sequence; optional repeat of the final prompt. First execution uses a specified time. The interval starts after a round completes. At least one maximum-round or deadline bound is required; when both apply, the first reached stops. Trial performs real input and a send click. Pause/resume applies only while waiting between rounds; the deadline remains binding. Pausing mid-round stops the loop. Pause/cancel cannot undo already-completed input.
 
-ScheduledClicker has no network access, telemetry, accounts, advertisements, update service, startup registration, saved schedules, or third-party runtime packages. It uses only operating-system APIs. Source, build scripts, tests, release checksums, and verification notes are public.
+Capture the input and Send positions in the same target window. Keep the computer awake and unlocked and the target layout unchanged. The app does not identify chats, detect AI completion or quota resets, or verify delivery. It does not bypass, reset or increase service limits.
 
-The Windows EXE is not commercially code-signed. The macOS app is ad-hoc signed but is not Apple Developer ID signed or notarized. A SHA-256 file is an integrity fingerprint for the macOS ZIP, not an installer and not a substitute for a trusted signature.
+Languages: Traditional Chinese, English, Japanese, Korean and German. All Chinese system locales select Traditional Chinese; ja/ko/de select their language; others select English. Users can switch in either mode. Startup reads the system light/dark appearance; the sun/moon action changes it for this session. Restart reads system choices again.
 
-Fixed-coordinate automation can click the wrong control if a window moves, visible content changes, the display layout changes, or another window covers the target. The computer must stay awake, logged in, and unlocked. Users should test a harmless target and avoid payments, deletion, publishing, or irreversible actions.
+## Data and platform boundaries
 
-## Verification evidence
+The preview loop overwrites the clipboard to paste text; previous clipboard contents are not restored. Text may remain in clipboard history or the target app. Simple mode does not use the clipboard. Schedules, positions and prompts are not saved by ScheduledClicker after exit.
 
-Windows has ten core scheduler tests, a launch smoke test, static sensitive-capability review, and Microsoft Defender scanning. macOS has twenty-one scheduler/failure-path tests, non-clicking Quartz event construction checks, Light and Dark appearance UI checks, millisecond animation validation, universal architecture inspection, property-list validation, ad-hoc signature verification, and archive inspection.
+Windows uses a portable WinForms EXE. Mac uses a separate universal AppKit application with arm64 and x86_64 code, requires macOS 13+ and explicit Accessibility permission. EXE files do not run natively on Mac. Windows is unsigned; Mac is ad-hoc signed, not Developer ID signed or notarized. Checksums verify integrity, not trusted authorship.
 
-A user verified the exact-time and delay modes on Windows 11. A user also verified scheduling and the improved Dark appearance on a MacBook Air. Version 1.1.2 addresses the reported clock-display issue where a 10 Hz refresh made only the hundreds-of-a-second digit look active; the UI now refreshes around 30 times per second while the scheduling engine remains separate.
+## Evidence boundaries
 
-## Codex workflow
+Windows preview owner testing passed on 2026-10-15; its automated evidence includes loop/core, five-language layout, appearance, date validation and language-picker interaction checks. Mac candidate evidence is recorded per CI run in VERIFICATION.md. CI rendering/event construction does not verify native paste/send, global F8 or wrong-sibling-window rejection on a user desktop. Historical v1.1.2 MacBook Air acceptance does not establish preview acceptance.
 
-The tool can press Send on a prepared Codex message after the usage reset time displayed by Codex. It does not detect, bypass, reset, or increase ChatGPT or Codex limits. It is an independent open-source project and is not affiliated with or endorsed by OpenAI.
-
-## Documentation map
+## Documentation
 
 - Windows: https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/
 - macOS: https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/
-- Codex workflow: https://hana-486.github.io/ScheduledClicker/codex-session-continuation/
-- Safety and verification: https://hana-486.github.io/ScheduledClicker/safety-and-verification/
-- Download guidance: https://hana-486.github.io/ScheduledClicker/download/
+- Loop preview: https://hana-486.github.io/ScheduledClicker/recurring-input/
+- Codex use case: https://hana-486.github.io/ScheduledClicker/codex-session-continuation/
+- Safety: https://hana-486.github.io/ScheduledClicker/safety-and-verification/
+- Download: https://hana-486.github.io/ScheduledClicker/download/
 - FAQ: https://hana-486.github.io/ScheduledClicker/faq/
 - Changelog: https://hana-486.github.io/ScheduledClicker/changelog/
+
+Independent project; not affiliated with or endorsed by OpenAI. This file is a supplemental product summary, not an indexing guarantee or crawler instruction.

@@ -1,5 +1,17 @@
 # 驗證報告
 
+## 2026-10-15：macOS 預覽版與探索內容（尚未正式發布）
+
+- 使用者已確認 Windows 測試 OK，授權開始 Mac 建置與內容更新；本節取代下方歷史紀錄中的「Mac 尚未編譯／等待授權」。
+- [CI 38688961403](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38688961403)，來源 `12dbed9`：Windows 與 macOS 均成功。Mac 21 原本核心、40 循環核心、1086 語系檢查、自我檢查及 24 張 UI 渲染通過。五語系 × 深淺色 × 兩模式加 4 張預設畫面；已檢視中文、德文、日文、韓文實際產物。
+- Mac 修正共用標頭模式選擇與主題鈕重疊，保留 13 pt 間隔；主題按鈕只顯示日／月圖示，另有翻譯 tooltip 與 accessible label。加入非重疊與圖示語意檢查。早期一次 UI smoke 僅有泛用失敗，原因未能確定；已補逐項診斷與失敗截圖，時鐘測試改為最多 5 秒觀察到變化，避免依賴固定 0.5 秒取樣。後續兩次完整 CI 通過。
+- Windows CI：40 循環、10 原本核心、2066 語系／版面、15 原生選單、153 外觀、20 日期與共用視窗生命週期檢查通過。此輪未改 Windows 輸入核心。
+- Mac ZIP：343687 bytes；SHA-256 `26AA4D27AD52B260DE6802FC2BBD6945F75B6E1067672B61B57CF2398C524E44`。CI／下載後雜湊一致；檢查 FAT Mach-O 含 x86_64 與 arm64、bundle 1.2.0/build 12001、簽章資源及封裝路徑。CI codesign 驗證通過；僅 ad-hoc，未 Developer ID 簽章／公證。
+- 網站 9 頁 validator、71 項 visible facts／FAQ-schema／local anchor 檢查通過；本機瀏覽器完成指南→預覽下載、FAQ 展開及桌面／375 px 檢查，手機無整頁水平溢出。加入實際 Mac 深淺畫面、版本區別、精確暫停語意、剪貼簿告知與 AI 可讀摘要；無變更爬蟲政策或宣稱排名保證。
+- 獨立審查：標頭間距修正確認；發現暫停說明不準確後，已對照 LoopCore.togglePause 修正網站、llms 與 Mac 指南並複查。循環 completion-clock 的慢操作測試已在兩平台通過；wrong-sibling-window 原生驗收仍待 Mac 實測。
+- 待驗：Mac 真實 Accessibility 授權、外部貼上／送出、同 App 錯誤視窗拒絕、實體 F8，以及所有 DPI／多螢幕／輔助科技情境。使用 [Mac 測試指南](macOS/TESTING.md) 與離線拋棄式目標。CI 畫面不證明訊息送達。
+- 交付狀態：可供 Mac 預覽試用；未合併 main、未正式 Release、網站尚未部署。
+
 ## 2026-10-14：研究後重設深淺色介面（本機候選，尚未發布）
 
 - 參照 Fluent 2 色彩／按鈕、Apple Dark Mode 與 Material 深色表面指引；研究連結、設計判斷與驗收記於 [visual-design.md](.pdos/specs/visual-design.md)。以中性色表面、圓角卡片／按鈕、單一主要操作、低強調提醒與小型日／月圖示取代前版視覺。此節取代下方「日期欄位仍為原生白底」的歷史限制。

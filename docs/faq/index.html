@@ -2,18 +2,159 @@
 <html lang="en"><head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ScheduledClicker FAQ — Windows, macOS, Safety & Codex</title>
-  <meta name="description" content="Answers about ScheduledClicker downloads, Windows and macOS compatibility, Accessibility permission, Dark Mode, SHA-256, safety, and Codex session workflows.">
+  <meta name="description" content="ScheduledClicker answers: stable vs preview, repeating prompts, interval rules, clipboard use, five languages, dark mode and Windows or Mac downloads.">
   <meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" href="https://hana-486.github.io/ScheduledClicker/faq/">
-  <meta property="og:type" content="article"><meta property="og:site_name" content="ScheduledClicker"><meta property="og:title" content="ScheduledClicker FAQ"><meta property="og:description" content="Clear answers about platforms, downloads, permissions, safety, checksums, and Codex workflows."><meta property="og:url" content="https://hana-486.github.io/ScheduledClicker/faq/"><meta property="og:image" content="https://hana-486.github.io/ScheduledClicker/social-preview.jpg"><meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="article"><meta property="og:site_name" content="ScheduledClicker"><meta property="og:title" content="ScheduledClicker FAQ"><meta property="og:description" content="ScheduledClicker answers: stable vs preview, repeating prompts, interval rules, clipboard use, five languages, dark mode and Windows or Mac downloads."><meta property="og:url" content="https://hana-486.github.io/ScheduledClicker/faq/"><meta property="og:image" content="https://hana-486.github.io/ScheduledClicker/social-preview.jpg"><meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="../styles.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is ScheduledClicker?","acceptedAnswer":{"@type":"Answer","text":"ScheduledClicker is a free, open-source Windows 11 and macOS 13+ desktop utility for scheduling one single or double mouse click at a fixed screen coordinate."}},{"@type":"Question","name":"Does the Windows EXE run on macOS?","acceptedAnswer":{"@type":"Answer","text":"No. Download the separate universal macOS ZIP for Apple silicon or Intel Macs."}},{"@type":"Question","name":"Why does macOS require Accessibility permission?","acceptedAnswer":{"@type":"Answer","text":"macOS requires explicit user approval before an application can control the pointer. ScheduledClicker checks permission before arming."}},{"@type":"Question","name":"What is the .sha256 file?","acceptedAnswer":{"@type":"Answer","text":"It is a small text file containing the expected SHA-256 fingerprint of the macOS ZIP so users can verify integrity. It is not an installer."}},{"@type":"Question","name":"Can ScheduledClicker bypass a Codex usage limit?","acceptedAnswer":{"@type":"Answer","text":"No. It only performs one ordinary local click at the chosen time and does not detect, bypass, reset, or increase any limit."}},{"@type":"Question","name":"Is ScheduledClicker safe?","acceptedAnswer":{"@type":"Answer","text":"It is local-only, has no third-party packages, network, telemetry, accounts, or persistence, and publishes source and verification evidence. Fixed-coordinate automation still has misclick risk."}}]}</script>
-</head><body>
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is ScheduledClicker?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A free, open-source Windows 11 and macOS 13+ scheduling utility. Stable v1.1.2 handles one timed click; preview 1.2.0-preview.1 adds bounded prompt input/send loops, five interface languages and manual light/dark switching."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the Windows EXE run on a MacBook?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Use the separate universal macOS ZIP, which supports Apple silicon and Intel Macs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does macOS require Accessibility permission?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "macOS blocks pointer control until the user explicitly grants permission. ScheduledClicker checks this before arming and cannot click without approval."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the macOS app support Dark Mode?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Version 1.1.1 fixed the initial Dark appearance defect. Light and Dark UI renders and contrast checks run in CI."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did only one millisecond digit appear to move?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Version 1.1.1 refreshed its three-digit clock every 100 milliseconds, so the hundreds digit was the most visibly active. Version 1.1.2 refreshes around 30 times per second while keeping scheduling separate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the `.sha256` file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A small text checksum containing the official fingerprint of the macOS ZIP. Compare it with `shasum -a 256`; it is not an installer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can it continue a Codex session after usage resets?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It can click an already-visible Send or Continue button after the reset time displayed by Codex. It does not detect, bypass, reset, or increase any limit."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is ScheduledClicker safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It has no network, telemetry, account, persistence, or third-party package features. Source and verification evidence are public. Fixed-coordinate automation can still misclick if content moves."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why can Windows SmartScreen warn?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The free EXE is not signed with a commercial certificate. Verify the SHA-256 or build from source."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why can macOS warn on first launch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The app is ad-hoc signed but not Apple Developer ID signed or notarized. Control-click → Open and approve it in Privacy & Security."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a failed historical GitHub Actions run make the release unsafe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A failed candidate run remains in project history. Releases are made only after later candidate and main runs pass. The v1.1.1 failure shown in the screenshot was an AppKit compile error in an earlier branch commit and was fixed before release."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does ScheduledClicker support repeating prompts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The 1.2.0-preview.1 candidate adds bounded recurring prompt input and send clicks. Released v1.1.2 supports one scheduled click only. Use the preview download instructions for loop mode."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the loop interval work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Choose the first execution time and a wait interval measured from the completion of each round. Use one prompt every round or a prompt sequence. A maximum round count or deadline is required; if both are selected, the first reached stops the loop."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which interface languages are available in the preview?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Traditional Chinese, English, Japanese, Korean and German. Chinese system locales, including Simplified Chinese, select the Traditional Chinese interface. Japanese, Korean and German select their own language; all other locales select English. You can switch languages in either mode."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the preview follow my system light or dark appearance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It reads the system appearance when the app starts. The shared sun/moon button changes both modes for the current session; restarting reads the system preference again."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will the loop detect an AI reply or a usage reset?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It performs timed input and clicks at captured positions. It cannot detect AI completion, quota availability, changed chats or successful delivery. Choose the interval yourself and keep the target layout unchanged."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does loop mode use the clipboard?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It overwrites the clipboard to paste prompts and does not restore the previous contents. Prompts may remain in clipboard history or the target app. Trial mode sends real input; stopping cannot undo a completed paste or click."
+      }
+    }
+  ]
+}</script>
+<meta name="twitter:description" content="ScheduledClicker answers: stable vs preview, repeating prompts, interval rules, clipboard use, five languages, dark mode and Windows or Mac downloads."></head><body>
   <a class="skip-link" href="#main">Skip to content</a><header class="site-header"><a class="brand" href="../" aria-label="ScheduledClicker home"><span class="brand-mark" aria-hidden="true">⌁</span><span>ScheduledClicker</span></a><nav aria-label="Primary navigation"><a href="../windows-scheduled-auto-clicker/">Windows</a><a href="../macos-scheduled-auto-clicker/">macOS</a><a href="../download/">Download</a><a aria-current="page" href="./">FAQ</a><a href="https://github.com/HaNa-486/ScheduledClicker">GitHub</a></nav></header>
-  <div class="subnav" aria-label="Detailed product pages"><a href="../windows-scheduled-auto-clicker/">Windows details</a><a href="../macos-scheduled-auto-clicker/">macOS details</a><a href="../codex-session-continuation/">Codex workflow</a><a href="../safety-and-verification/">Safety &amp; verification</a><a href="../download/">Download</a><a aria-current="page" href="./">FAQ</a><a href="../changelog/">Changelog</a></div>
-  <main class="page-main" id="main"><div class="breadcrumbs"><a href="../">Home</a> / Frequently asked questions</div>
+  <div class="subnav" aria-label="Detailed product pages"><a href="../windows-scheduled-auto-clicker/">Windows details</a><a href="../macos-scheduled-auto-clicker/">macOS details</a><a href="../codex-session-continuation/">Codex workflow</a><a href="../safety-and-verification/">Safety &amp; verification</a><a href="../download/">Download</a><a aria-current="page" href="./">FAQ</a><a href="../changelog/">Changelog</a><a href="../recurring-input/">Loop mode preview</a></div>
+  <main class="page-main" id="main"><aside class="version-note"><strong>Stable: v1.1.2. Preview: 1.2.0-preview.1.</strong> Recurring prompts, five interface languages and manual light/dark switching are preview features. <a href="../recurring-input/">Explore the preview</a> · <a href="../download/#preview">Preview download instructions</a>.</aside><div class="breadcrumbs"><a href="../">Home</a> / Frequently asked questions</div>
     <section class="page-hero"><p class="eyebrow">Direct answers, documented limits</p><h1>ScheduledClicker frequently asked questions</h1><p class="lead">Platform compatibility, download files, macOS permissions, safety, checksums, timing, and the Codex workflow.</p></section>
     <section class="prose faq">
-      <details open><summary>What is ScheduledClicker?</summary><p>A free, open-source Windows 11 and macOS 13+ desktop utility for scheduling one single or double mouse click at a fixed coordinate, either at a future date and time or after a delay.</p></details>
+      <details open><summary>What is ScheduledClicker?</summary><p>A free, open-source Windows 11 and macOS 13+ scheduling utility. Stable v1.1.2 handles one timed click; preview 1.2.0-preview.1 adds bounded prompt input/send loops, five interface languages and manual light/dark switching.</p></details>
       <details><summary>Does the Windows EXE run on a MacBook?</summary><p>No. Use the separate universal macOS ZIP, which supports Apple silicon and Intel Macs.</p></details>
       <details><summary>Why does macOS require Accessibility permission?</summary><p>macOS blocks pointer control until the user explicitly grants permission. ScheduledClicker checks this before arming and cannot click without approval.</p></details>
       <details><summary>Does the macOS app support Dark Mode?</summary><p>Yes. Version 1.1.1 fixed the initial Dark appearance defect. Light and Dark UI renders and contrast checks run in CI.</p></details>
@@ -24,6 +165,6 @@
       <details><summary>Why can Windows SmartScreen warn?</summary><p>The free EXE is not signed with a commercial certificate. Verify the SHA-256 or build from source.</p></details>
       <details><summary>Why can macOS warn on first launch?</summary><p>The app is ad-hoc signed but not Apple Developer ID signed or notarized. Control-click → Open and approve it in Privacy &amp; Security.</p></details>
       <details><summary>Does a failed historical GitHub Actions run make the release unsafe?</summary><p>No. A failed candidate run remains in project history. Releases are made only after later candidate and main runs pass. The v1.1.1 failure shown in the screenshot was an AppKit compile error in an earlier branch commit and was fixed before release.</p></details>
-    </section>
+    <details><summary>Does ScheduledClicker support repeating prompts?</summary><p>The 1.2.0-preview.1 candidate adds bounded recurring prompt input and send clicks. Released v1.1.2 supports one scheduled click only. Use the preview download instructions for loop mode.</p></details><details><summary>How does the loop interval work?</summary><p>Choose the first execution time and a wait interval measured from the completion of each round. Use one prompt every round or a prompt sequence. A maximum round count or deadline is required; if both are selected, the first reached stops the loop.</p></details><details><summary>Which interface languages are available in the preview?</summary><p>Traditional Chinese, English, Japanese, Korean and German. Chinese system locales, including Simplified Chinese, select the Traditional Chinese interface. Japanese, Korean and German select their own language; all other locales select English. You can switch languages in either mode.</p></details><details><summary>Does the preview follow my system light or dark appearance?</summary><p>Yes. It reads the system appearance when the app starts. The shared sun/moon button changes both modes for the current session; restarting reads the system preference again.</p></details><details><summary>Will the loop detect an AI reply or a usage reset?</summary><p>No. It performs timed input and clicks at captured positions. It cannot detect AI completion, quota availability, changed chats or successful delivery. Choose the interval yourself and keep the target layout unchanged.</p></details><details><summary>Does loop mode use the clipboard?</summary><p>Yes. It overwrites the clipboard to paste prompts and does not restore the previous contents. Prompts may remain in clipboard history or the target app. Trial mode sends real input; stopping cannot undo a completed paste or click.</p></details></section>
   </main><footer><span>ScheduledClicker FAQ · Version 1.1.2</span><span><a href="../">Home</a> · <a href="../download/">Download</a></span></footer>
 </body></html>

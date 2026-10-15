@@ -13,6 +13,7 @@ jobs:
   windows:
     name: Windows build and tests
     runs-on: windows-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Build
@@ -38,12 +39,20 @@ jobs:
   macos:
     name: macOS universal build and tests
     runs-on: macos-15
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Build, test, ad-hoc sign, and package
         run: bash ./build-macos.sh
       - name: Inspect executable architectures
         run: lipo -archs .artifacts/macos/ScheduledClicker.app/Contents/MacOS/ScheduledClicker
+      - name: Upload macOS UI diagnostics
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: macOS-ui-evidence
+          path: .artifacts/macos/*.png
+          if-no-files-found: ignore
       - name: Upload macOS application
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:

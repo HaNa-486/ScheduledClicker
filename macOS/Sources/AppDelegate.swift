@@ -135,7 +135,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         content.addSubview(label("目前時間", frame: NSRect(x: 18, y: 651, width: 230, height: 20), size: 12, color: .secondaryLabelColor))
         clockLabel.frame = NSRect(x: 18, y: 619, width: 335, height: 28); clockLabel.font = .monospacedDigitSystemFont(ofSize: 20, weight: .semibold)
         clockLabel.textColor = .systemBlue; clockLabel.setAccessibilityLabel("目前時間"); content.addSubview(clockLabel)
-        modeSelector.frame = NSRect(x: 365, y: 625, width: 435, height: 34); modeSelector.selectedSegment = 0
+        modeSelector.frame = NSRect(x: 365, y: 625, width: 412, height: 34); modeSelector.selectedSegment = 0
         modeSelector.target = self; modeSelector.action = #selector(changeMode); content.addSubview(modeSelector)
         themeButton.frame = NSRect(x: 790, y: 616, width: 34, height: 34); themeButton.bezelStyle = .inline; themeButton.isBordered = false; themeButton.imagePosition = .imageOnly
         themeButton.target = self; themeButton.action = #selector(toggleAppearance); content.addSubview(themeButton)
@@ -477,6 +477,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     private func validateUserInterface() -> Bool {
+        guard !modeSelector.frame.intersects(themeButton.frame), !themeButton.frame.intersects(language.view.frame) else { return false }
         let originalWindowNumber = window.windowNumber
         let originalFrame = window.frame
         guard switchMode(true), switchMode(false), window.windowNumber == originalWindowNumber, window.frame == originalFrame else { return false }

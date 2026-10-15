@@ -72,9 +72,11 @@ swiftc -framework AppKit "$project_root/macOS/Sources/Localization.swift" "$proj
 "$executable" --ui-smoke-test --appearance dark --screenshot "$build_root/ui-dark.png"
 "$executable" --loop-ui-smoke-test --appearance light --screenshot "$build_root/loop-light.png"
 "$executable" --loop-ui-smoke-test --appearance dark --screenshot "$build_root/loop-dark.png"
+for appearance in light dark; do
 for language in zh en ja ko de; do
-  "$executable" --ui-smoke-test --language "$language" --appearance light --screenshot "$build_root/ui-$language.png"
-  "$executable" --loop-ui-smoke-test --language "$language" --appearance light --screenshot "$build_root/loop-$language.png"
+  "$executable" --ui-smoke-test --language "$language" --appearance "$appearance" --screenshot "$build_root/ui-$language-$appearance.png"
+  "$executable" --loop-ui-smoke-test --language "$language" --appearance "$appearance" --screenshot "$build_root/loop-$language-$appearance.png"
+done
 done
 plutil -lint "$app_root/Contents/Info.plist"
 test "$(lipo -archs "$executable")" = "x86_64 arm64" || test "$(lipo -archs "$executable")" = "arm64 x86_64"

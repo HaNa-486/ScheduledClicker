@@ -1,15 +1,15 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 20
-- Updated: 2026-10-14
+- State revision: 21
+- Updated: 2026-10-15
 - State confidence: high for Windows loop source/build/core/UI/native-input evidence; macOS loop source reviewed but uncompiled and runtime unverified
-- Phase: redesigned light/dark Windows local candidate ready for owner testing; macOS build explicitly deferred
+- Phase: Windows owner acceptance received; Mac CI candidate and discovery content in progress
 
 ## Repository identity
 
 - Branch: codex/recurring-prompt-loop
-- Observed commit: 2256843
+- Observed commit: 77559dd
 
 ## Product anchors
 
@@ -21,11 +21,11 @@
 
 ## Current work
 
-- Current slice: research-led visual redesign of both themes, compact accessible appearance action and coherent controls
-- Active workstream: `workstreams/2026-10-14-visual-redesign.md`; prior loop work remains paused for owner/Mac validation
+- Current slice: build/verify Mac universal 1.2.0-preview.1 candidate and align website, README and AI-readable facts with versioned availability.
+- Active workstream: `workstreams/2026-10-15-macos-discovery-delivery.md`; prior loop work remains paused for owner/Mac validation
 - Active review: `reviews/REV-20261013-unified-window.md`; independent lifecycle/concurrency/privacy source review complete
 - Active remediations: unified-window F001 implemented and Windows verified, Mac pending; localization F001 macOS status overlap implemented (native pending); F002 focus-dependent test failure verified fixed. Prior loop F001/F002 remain unverified across platforms.
-- Blocking dependencies: no local macOS compiler; user explicitly deferred all public push/macOS builds until Windows testing and review are complete. No permission question is pending.
+- Blocking dependencies: Mac requires GitHub CI; owner now authorizes Mac build after Windows acceptance. Branch push for CI is within this request; production merge/release remains separate.
 - Consequential open decisions: public branch/PR publication, final merge/release, signing/notarization remain owner-controlled
 
 ## Handoff
@@ -35,7 +35,7 @@
 - Not verified: macOS compilation, 40 Swift tests, new Aqua/Dark Aqua loop renders, native clipboard/paste/send/F8 and wrong-sibling-window rejection; physical-key F8 routing in the unified host; all mixed-DPI and small-desktop scenarios
 - Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input; unsigned/ad-hoc-signed distribution
 - Release assessment: not-ready for cross-platform release; Windows local candidate only, aesthetic acceptance pending; tracked release executable preserved. Native scrollbars/system parts remain OS rendered.
-- Next safe action: owner tests the redesigned Windows candidate locally and reports aesthetic/interaction findings; only after a later explicit request, build/verify macOS. Do not push or start macOS CI now.
+- Next safe action: run Mac CI on the feature branch, repair compiler/runtime findings and inspect renders; deliver candidate ZIP and source documentation for owner review.
 
 ## Read next
 

@@ -58,7 +58,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         languageObserver = NotificationCenter.default.addObserver(forName: L.changed, object: nil, queue: .main) { [weak self] _ in self?.languageChanged() }
         languageChanged()
         installEmergencyKeyMonitors()
-        setStatus("等待設定。\(emergencyStopHint())")
+        setStatus("等待設定。 \(emergencyStopHint())")
 
         engine.onExecuted = { [weak self] plan in self?.setCompleted(plan) }
         engine.onFailed = { [weak self] error in self?.setFailed(error) }
@@ -88,18 +88,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
 
         if CommandLine.arguments.contains("--ui-smoke-test") {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self else { exit(1) }
-                let valid = self.validateUserInterface()
-                let rendered = self.saveSmokeScreenshotIfRequested()
-                guard valid, rendered else {
-                    fputs("macOS UI smoke test failed: unreadable appearance or invalid mode visibility.\n", stderr)
-                    exit(1)
-                }
-                print("macOS UI smoke test passed for \(self.window.effectiveAppearance.name.rawValue).")
-                NSApp.terminate(nil)
-            }
+            runSimpleSmoke(deadline: Date().addingTimeInterval(5))
         }
+    }
+
+    // Wait for observable clock samples instead of assuming a loaded CI host updates within 0.5 s.
+    private func runSimpleSmoke(deadline: Date) {
+        if Set(smokeClockFractions.map { String($0.suffix(2)) }).count < 2, Date() < deadline {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in self?.runSimpleSmoke(deadline: deadline) }
+            return
+        }
+        let valid = validateUserInterface()
+        let rendered = saveSmokeScreenshotIfRequested()
+        guard valid, rendered else {
+            fputs("macOS UI smoke test failed; see preceding diagnostics.\n", stderr); exit(1)
+        }
+        print("macOS UI smoke test passed for \(window.effectiveAppearance.name.rawValue).")
+        NSApp.terminate(nil)
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -413,9 +418,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
     private func updateThemeButton() {
         let dark = window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-        themeButton.title = L.t(dark ? "切換為淺色模式" : "切換為深色模式")
-        themeButton.setAccessibilityLabel(themeButton.title); themeButton.toolTip = themeButton.title
-        themeButton.image = NSImage(systemSymbolName: dark ? "sun.max" : "moon", accessibilityDescription: themeButton.title)
+        let caption = L.t(dark ? "切換為淺色模式" : "切換為深色模式")
+        themeButton.title = ""
+        themeButton.setAccessibilityLabel(caption); themeButton.toolTip = caption
+        themeButton.image = NSImage(systemSymbolName: dark ? "sun.max" : "moon", accessibilityDescription: caption)
+        themeButton.imagePosition = .imageOnly
     }
     private func languageChanged() {
         updateThemeButton()
@@ -484,6 +491,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let originalWindowNumber = window.windowNumber
         let originalFrame = window.frame
         guard switchMode(true), switchMode(false), window.windowNumber == originalWindowNumber, window.frame == originalFrame else { print("FAIL: shared window identity/frame"); return false }
+        guard themeButton.image != nil, themeButton.title.isEmpty, themeButton.imagePosition == .imageOnly, themeButton.accessibilityLabel() == themeButton.toolTip else { print("FAIL: appearance icon semantics"); return false }
         let originalAppearance = window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua])
         toggleAppearance()
         guard window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) != originalAppearance else { print("FAIL: appearance toggle"); return false }

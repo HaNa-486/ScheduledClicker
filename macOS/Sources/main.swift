@@ -30,6 +30,11 @@ if CommandLine.arguments.contains("--self-test") {
 }
 
 let application = NSApplication.shared
+if let index = CommandLine.arguments.firstIndex(of: "--language"), CommandLine.arguments.indices.contains(index + 1) {
+    let code = CommandLine.arguments[index + 1]
+    guard L.codes.contains(code) else { fputs("Unknown language. Use zh, en, ja, ko or de.\n", stderr); exit(2) }
+    L.select(code)
+}
 if let appearanceIndex = CommandLine.arguments.firstIndex(of: "--appearance"),
    CommandLine.arguments.indices.contains(appearanceIndex + 1) {
     switch CommandLine.arguments[appearanceIndex + 1] {

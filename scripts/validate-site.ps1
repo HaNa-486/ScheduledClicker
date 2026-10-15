@@ -1,14 +1,14 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 
 $docsRoot = Join-Path $PSScriptRoot '..\docs'
 $pages = @(Get-ChildItem -LiteralPath $docsRoot -Filter index.html -File -Recurse)
-if ($pages.Count -ne 8) { throw "Expected 8 indexable HTML pages, found $($pages.Count)." }
+if ($pages.Count -ne 9) { throw "Expected 9 indexable HTML pages, found $($pages.Count)." }
 
 $canonicalUrls = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 $titles = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 $descriptions = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 $expectedPrimaryLabels = @('Windows', 'macOS', 'Download', 'FAQ', 'GitHub')
-$expectedDetailLabels = @('Windows details', 'macOS details', 'Codex workflow', 'Safety & verification', 'Download', 'FAQ', 'Changelog')
+$expectedDetailLabels = @('Windows details', 'macOS details', 'Codex workflow', 'Safety & verification', 'Download', 'FAQ', 'Changelog', 'Loop mode')
 $expectedPrimaryUrls = @(
     'https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/',
     'https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/',
@@ -23,7 +23,8 @@ $expectedDetailUrls = @(
     'https://hana-486.github.io/ScheduledClicker/safety-and-verification/',
     'https://hana-486.github.io/ScheduledClicker/download/',
     'https://hana-486.github.io/ScheduledClicker/faq/',
-    'https://hana-486.github.io/ScheduledClicker/changelog/'
+    'https://hana-486.github.io/ScheduledClicker/changelog/',
+    'https://hana-486.github.io/ScheduledClicker/recurring-input/'
 )
 
 function Get-AnchorRecords([string]$fragment, [string]$baseUrl) {
@@ -62,7 +63,7 @@ function Assert-NavigationContract(
 }
 
 foreach ($page in $pages) {
-    $html = Get-Content -LiteralPath $page.FullName -Raw
+    $html = Get-Content -LiteralPath $page.FullName -Raw -Encoding UTF8
     foreach ($requiredPattern in @(
         '<title>[^<]+</title>',
         '<meta name="description" content="[^\"]+">',
@@ -111,7 +112,7 @@ foreach ($page in $pages) {
     }
 }
 
-[xml]$sitemap = Get-Content -LiteralPath (Join-Path $docsRoot 'sitemap.xml') -Raw
+[xml]$sitemap = Get-Content -LiteralPath (Join-Path $docsRoot 'sitemap.xml') -Raw -Encoding UTF8
 $sitemapUrls = @($sitemap.urlset.url | ForEach-Object { $_.loc })
 if ($sitemapUrls.Count -ne $canonicalUrls.Count) { throw "Sitemap has $($sitemapUrls.Count) URLs but site has $($canonicalUrls.Count) canonicals." }
 foreach ($canonical in $canonicalUrls) {
@@ -122,7 +123,7 @@ foreach ($requiredFile in @('robots.txt', 'llms.txt', 'llms-full.txt', 'social-p
     if (-not (Test-Path -LiteralPath (Join-Path $docsRoot $requiredFile) -PathType Leaf)) { throw "Missing discovery asset: $requiredFile" }
 }
 
-$siteStyles = Get-Content -LiteralPath (Join-Path $docsRoot 'styles.css') -Raw
+$siteStyles = Get-Content -LiteralPath (Join-Path $docsRoot 'styles.css') -Raw -Encoding UTF8
 foreach ($contrastSelector in @(
     '.prose a.button.primary,.prose a.button.primary:visited{color:#041020}',
     '.prose a.button.primary:hover{color:#041020;filter:brightness(1.06)}',

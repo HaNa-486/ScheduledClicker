@@ -1,0 +1,12 @@
+# v1.2.0 release contract
+
+- Authority: owner reports Mac all functions normal; Windows three targeted prompt-language/custom-text/loop tests passed; explicitly requests formal publication and download/SEO/AEO/AISEO/GEO/LLMO updates.
+- Runtime scope: no input behavior changes after accepted Mac build12004/Windows preview2. Windows informational version becomes 1.2.0; Mac remains bundle1.2.0/build12004.
+- Artifacts: Windows EXE plus Windows SHA256; universal Mac ZIP plus Mac SHA256 from the same successful CI source. Tag v1.2.0 must identify that source and be reachable from merged main. Public release assets are canonical, not expiring Actions downloads.
+- Site: nine existing URLs, clear Windows/Mac cards, stable version/date/requirements, exact release asset links, current README/changelog, FAQ-visible/schema parity, SoftwareApplication metadata, sitemap/robots and supplemental llms summaries. Retain old #preview anchor as an upgrade explanation.
+- SEO research: Google Search Central AI optimization guide and software-app structured data documentation prioritize useful visible content and accurate markup, not new AI-specific ranking guarantees. Existing llms summaries are supplemental only. No fabricated reviews/ratings.
+- Verification: both CI jobs, version/hash/archive/signature/architecture evidence, Windows local full regression, desktop/mobile download layout, exact artifact staging, anonymous post-publish GET+rehash and deployed page/schema/version checks.
+- Release assessment: conditionally ready on owner-authorized normal functionality plus automated policies/source review. Existing high wrong-target remediation records retain native negative-case granularity gaps; explicit owner publication authority does not turn unperformed tests into verified evidence.
+- Limits: unsigned Windows; ad-hoc/non-notarized Mac; regular accessible Mac app windows only; fixed coordinates, clipboard overwrite, no AI state/delivery recognition. No promise of every third-party app or configuration.
+- Rollback: retain prior v1.1.2 assets/tag. If a release defect is confirmed, remove v1.2.0 latest designation and restore prior public download pointers via a reviewed commit; do not overwrite immutable release files silently. No rollback action is authorized merely by this plan.
+- Deployment ordering: stage draft with verified assets, merge accepted source, publish promptly, verify Pages and anonymous files. A temporary propagation interval is checked before final handoff.

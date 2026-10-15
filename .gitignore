@@ -5,3 +5,5 @@ dist/ScheduledClicker-macOS-universal.sha256
 *.user
 *.suo
 .vs/
+
+dist/ScheduledClicker-Windows.sha256

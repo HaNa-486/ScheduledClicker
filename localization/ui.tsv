@@ -1,0 +1,221 @@
+# Source (Traditional Chinese)	English	日本語	한국어	Deutsch
+定時滑鼠點擊器	Scheduled Mouse Clicker	予約マウスクリック	예약 마우스 클릭	Geplante Mausklicks
+循環輸入與點擊	Repeated Input and Clicks	繰り返し入力・クリック	반복 입력 및 클릭	Wiederholte Eingabe und Klicks
+循環輸入與點擊…	Repeat input and clicks…	繰り返し入力・クリック…	반복 입력 및 클릭…	Eingabe und Klicks wiederholen…
+目前時間	Current time	現在時刻	현재 시각	Aktuelle Uhrzeit
+語言	Language	言語	언어	Sprache
+返回簡單模式	Back to simple mode	シンプルモードに戻る	기본 모드로 돌아가기	Zurück zum einfachen Modus
+停止並返回簡單模式	Stop and return	停止して戻る	중지하고 돌아가기	Stoppen und zurück
+首次時間與循環間隔	First run and repeat interval	初回実行と繰り返し間隔	첫 실행 및 반복 간격	Erster Start und Intervall
+首次執行	First run	初回実行	첫 실행	Erster Start
+每輪結束後等	Wait after each round	各回の終了後に待機	각 회차 종료 후 대기	Wartezeit nach jeder Runde
+點擊／貼上之間等待	Wait between actions	操作間の待機	동작 사이 대기	Pause zwischen Aktionen
+時	h	時間	시간	Std.
+分	min	分	분	Min.
+秒	s	秒	초	Sek.
+秒（1–10）	s (1–10)	秒（1–10）	초 (1–10)	Sek. (1–10)
+最多輪次	Maximum rounds	最大回数	최대 회차	Maximale Runden
+截止時間	Deadline	終了期限	종료 시각	Endzeit
+輪	rounds	回	회	Runden
+提示詞	Prompts	プロンプト	프롬프트	Prompts
+每輪相同	Same prompt every round	毎回同じ	매회 동일	Jede Runde gleich
+依輪次設定	Prompt sequence	回ごとに設定	회차별 설정	Prompt-Reihenfolge
+新增一輪	Add round	回を追加	회차 추가	Runde hinzufügen
+刪除此輪	Remove round	この回を削除	회차 삭제	Runde entfernen
+序列用完後，重複最後一筆	Repeat the last prompt when the sequence ends	最後のプロンプトを繰り返す	목록이 끝나면 마지막 프롬프트 반복	Nach der Folge den letzten Prompt wiederholen
+取代輸入框原有文字（預設保留並插入）	Replace existing text (default: insert at cursor)	既存の文字を置換（既定：カーソル位置に挿入）	기존 텍스트 교체 (기본: 커서 위치에 삽입)	Vorhandenen Text ersetzen (Standard: am Cursor einfügen)
+位置：請擷取同一視窗內的兩個位置	Positions: capture both points in the same window	位置：同じウィンドウ内の2か所を取得	위치: 같은 창 안의 두 지점을 지정하세요	Positionen: beide Punkte im selben Fenster erfassen
+擷取輸入框（3 秒）	Capture input (3 s)	入力欄を取得（3秒）	입력란 지정 (3초)	Eingabefeld erfassen (3 s)
+擷取送出鈕（3 秒）	Capture send (3 s)	送信ボタンを取得（3秒）	전송 버튼 지정 (3초)	Sendetaste erfassen (3 s)
+尚未擷取	Not captured	未取得	미지정	Noch nicht erfasst
+啟動循環	Start loop	繰り返し開始	반복 시작	Wiederholung starten
+試跑一輪	Try one round	1回試す	한 회차 시험	Eine Runde testen
+暫停	Pause	一時停止	일시 정지	Pausieren
+恢復	Resume	再開	계속	Fortsetzen
+停止本輪	Stop this round	この回を停止	현재 회차 중지	Runde stoppen
+取消 / 停止	Cancel / stop	キャンセル／停止	취소 / 중지	Abbrechen / stoppen
+執行時保持喚醒、不鎖屏，目標視窗與聊天固定。	Keep the computer awake and unlocked; keep the target window and chat unchanged.	実行中はスリープ・画面ロックをせず、対象ウィンドウとチャットを固定してください。	실행 중 절전 및 화면 잠금을 해제하고 대상 창과 채팅을 유지하세요.	Computer wach und entsperrt halten; Zielfenster und Chat unverändert lassen.
+使用剪貼簿貼上，會覆寫剪貼簿；不判斷 AI 狀態或送達結果。	Pasting overwrites the clipboard. AI state and message delivery are not checked.	貼り付けでクリップボードを上書きします。AIの状態や送信結果は確認しません。	붙여넣기는 클립보드를 덮어씁니다. AI 상태나 메시지 전달 여부는 확인하지 않습니다.	Einfügen überschreibt die Zwischenablage. KI-Status und Zustellung werden nicht geprüft.
+試跑會真的輸入並點送出。中途停止後請檢查草稿，避免重複。	A trial really types and clicks Send. Check drafts after stopping to avoid duplicates.	試行でも実際に入力・送信をクリックします。途中停止後は下書きを確認してください。	시험 실행도 실제 입력과 전송 클릭을 수행합니다. 중지 후 초안을 확인하세요.	Auch der Test gibt Text ein und klickt auf Senden. Nach dem Stoppen Entwürfe prüfen.
+兩個停止條件同時勾選時，先達到者停止。關閉本視窗也會取消。	When both limits are enabled, the first one reached stops the loop. Closing cancels it too.	両方の停止条件が有効な場合、先に達した条件で停止します。閉じると中止します。	두 종료 조건 중 먼저 도달한 조건에서 중지합니다. 창을 닫아도 취소됩니다.	Bei zwei Grenzen gilt die zuerst erreichte. Schließen bricht die Wiederholung ebenfalls ab.
+1. 選擇執行時間	1. Choose when to run	1. 実行時刻を選択	1. 실행 시간 선택	1. Ausführungszeit wählen
+指定時間	At a set time	時刻を指定	시각 지정	Feste Uhrzeit
+倒數延遲	After a delay	カウントダウン	지연 실행	Nach Wartezeit
+倒數最短 1 秒，最長 168 小時。	Delay: 1 second to 168 hours.	待機時間：1秒～168時間。	지연: 1초~168시간.	Wartezeit: 1 Sekunde bis 168 Stunden.
+2. 選擇位置與點擊方式	2. Choose position and click type	2. 位置とクリック方法を選択	2. 위치 및 클릭 방식 선택	2. Position und Klickart wählen
+3 秒後擷取滑鼠位置	Capture pointer in 3 s	3秒後にマウス位置を取得	3초 후 마우스 위치 지정	Mausposition in 3 s erfassen
+尚未選擇位置	No position selected	位置が未選択です	위치 미지정	Keine Position gewählt
+單擊	Single click	シングルクリック	한 번 클릭	Einfachklick
+雙擊	Double click	ダブルクリック	두 번 클릭	Doppelklick
+點擊方式	Click type	クリック方法	클릭 방식	Klickart
+啟動排程	Start schedule	予約を開始	예약 시작	Zeitplan starten
+取消排程	Cancel schedule	予約を取り消す	예약 취소	Zeitplan abbrechen
+等待設定。排程啟動後可按 F8 緊急停止。	Ready. Press F8 to stop an active schedule.	設定待ちです。予約開始後はF8で緊急停止できます。	설정 대기 중. 예약 시작 후 F8로 긴급 중지할 수 있습니다.	Bereit. Einen aktiven Zeitplan mit F8 stoppen.
+請先取消目前排程或完成位置擷取。	Cancel the current schedule or finish capturing the position first.	現在の予約を取り消すか、位置の取得を完了してください。	현재 예약을 취소하거나 위치 지정을 완료하세요.	Zuerst den aktuellen Zeitplan abbrechen oder die Positionserfassung abschließen.
+位置已擷取。確認時間後即可啟動排程。	Position captured. Check the time, then start the schedule.	位置を取得しました。時刻を確認して開始してください。	위치가 지정되었습니다. 시간을 확인한 후 예약을 시작하세요.	Position erfasst. Uhrzeit prüfen und Zeitplan starten.
+請先擷取要點擊的滑鼠位置。	Capture the position to click first.	クリックする位置を先に取得してください。	먼저 클릭할 위치를 지정하세요.	Zuerst die Klickposition erfassen.
+倒數延遲至少要 1 秒。	The delay must be at least 1 second.	待機時間は1秒以上にしてください。	지연 시간은 1초 이상이어야 합니다.	Die Wartezeit muss mindestens 1 Sekunde betragen.
+時間無效	Invalid time	無効な時刻	잘못된 시간	Ungültige Zeit
+無法啟動	Unable to start	開始できません	시작할 수 없음	Start nicht möglich
+確認排程	Confirm schedule	予約の確認	예약 확인	Zeitplan bestätigen
+按 F8 可停止。	Press F8 to stop.	F8で停止できます。	F8로 중지할 수 있습니다.	Mit F8 stoppen.
+F8 被占用，請用取消排程按鈕。	F8 is in use. Use Cancel schedule.	F8は使用中です。「予約を取り消す」を使ってください。	F8이 사용 중입니다. 예약 취소 버튼을 사용하세요.	F8 ist belegt. Mit „Zeitplan abbrechen“ stoppen.
+點擊已開始執行，現在取消已來不及。	The click has started and can no longer be cancelled.	クリックが始まったため、取り消せません。	클릭이 시작되어 취소할 수 없습니다.	Der Klick wurde bereits gestartet und kann nicht mehr abgebrochen werden.
+排程已取消。	Schedule cancelled.	予約を取り消しました。	예약이 취소되었습니다.	Zeitplan abgebrochen.
+已取消排程。	Schedule cancelled.	予約を取り消しました。	예약이 취소되었습니다.	Zeitplan abgebrochen.
+已用 F8 緊急停止。	Stopped with F8.	F8で緊急停止しました。	F8로 긴급 중지되었습니다.	Mit F8 gestoppt.
+請擷取外部目標視窗。	Capture a window outside this app.	このアプリ以外の対象ウィンドウを取得してください。	이 앱 외부의 대상 창을 지정하세요.	Ein Zielfenster außerhalb dieser App erfassen.
+位置已擷取。	Position captured.	位置を取得しました。	위치가 지정되었습니다.	Position erfasst.
+已返回簡單模式；循環已停止。	Returned to simple mode; loop stopped.	シンプルモードに戻りました。繰り返しは停止しました。	기본 모드로 돌아왔으며 반복이 중지되었습니다.	Zurück im einfachen Modus; Wiederholung gestoppt.
+不限輪數	No round limit	回数制限なし	회차 제한 없음	Ohne Rundenlimit
+試跑：確認後 5 秒執行一輪。	Trial: one round starts 5 seconds after confirmation.	試行：確認の5秒後に1回実行します。	시험: 확인 5초 후 한 회차를 실행합니다.	Test: Eine Runde startet 5 Sekunden nach Bestätigung.
+重複最後一筆	Repeat last prompt	最後を繰り返す	마지막 프롬프트 반복	Letzten Prompt wiederholen
+用完即停	Stop after the sequence	最後で停止	목록 완료 후 중지	Nach der Folge stoppen
+將真的輸入並點擊送出，會覆寫剪貼簿。	This really enters text and clicks Send, overwriting the clipboard.	実際に文字を入力して送信をクリックし、クリップボードを上書きします。	실제로 텍스트를 입력하고 전송을 클릭하며 클립보드를 덮어씁니다.	Text wird tatsächlich eingegeben und Senden angeklickt. Die Zwischenablage wird überschrieben.
+會取代輸入框原有文字。	Existing text in the input field will be replaced.	入力欄の既存の文字を置き換えます。	입력란의 기존 텍스트를 교체합니다.	Vorhandener Text im Eingabefeld wird ersetzt.
+會在游標位置插入，請先檢查草稿。	Text is inserted at the cursor. Check the draft first.	カーソル位置に挿入します。先に下書きを確認してください。	커서 위치에 삽입합니다. 먼저 초안을 확인하세요.	Text wird am Cursor eingefügt. Zuerst den Entwurf prüfen.
+請保持目標視窗／聊天不變。未驗證 AI 狀態或送達。	Keep the target window and chat unchanged. AI state and delivery are not verified.	対象ウィンドウとチャットを変えないでください。AIの状態や送信結果は確認しません。	대상 창과 채팅을 유지하세요. AI 상태와 전달 여부는 확인하지 않습니다.	Zielfenster und Chat unverändert lassen. KI-Status und Zustellung werden nicht geprüft.
+確認循環操作	Confirm repeated actions	繰り返し操作の確認	반복 동작 확인	Wiederholte Aktionen bestätigen
+F8 已被占用，請先釋放快捷鍵後再啟動。	F8 is in use. Free the shortcut before starting.	F8は使用中です。ショートカットを解放してから開始してください。	F8이 사용 중입니다. 단축키를 해제한 후 시작하세요.	F8 ist belegt. Die Taste vor dem Start freigeben.
+等待設定。	Ready.	設定待ちです。	설정 대기 중.	Bereit.
+等待首次執行。	Waiting for the first run.	初回実行を待っています。	첫 실행을 기다리는 중.	Warten auf den ersten Start.
+本輪可能留下草稿，重新啟動前請檢查。已發生的操作無法撤回。	A draft may remain. Check before restarting. Completed actions cannot be undone.	下書きが残る場合があります。再開前に確認してください。実行済みの操作は元に戻せません。	초안이 남아 있을 수 있습니다. 재시작 전에 확인하세요. 완료된 동작은 되돌릴 수 없습니다.	Ein Entwurf kann übrig bleiben. Vor Neustart prüfen. Ausgeführte Aktionen lassen sich nicht rückgängig machen.
+已到截止時間。	Deadline reached.	終了期限に達しました。	종료 시각에 도달했습니다.	Endzeit erreicht.
+已停止進行中的本輪。	The current round was stopped.	実行中の回を停止しました。	진행 중인 회차가 중지되었습니다.	Aktuelle Runde gestoppt.
+已恢復等待。	Waiting resumed.	待機を再開しました。	대기가 재개되었습니다.	Warten fortgesetzt.
+已暫停；截止時間仍有效。	Paused; the deadline still applies.	一時停止中です。終了期限は有効です。	일시 정지됨. 종료 시각은 계속 적용됩니다.	Pausiert; die Endzeit gilt weiterhin.
+已錯過步驟超過 5 秒，排程停止，不補送。	Step missed by over 5 seconds. Stopped without retrying.	手順が5秒以上遅れたため停止しました。再送しません。	단계가 5초 이상 지연되어 재시도 없이 중지되었습니다.	Schritt um mehr als 5 Sekunden verpasst. Ohne Wiederholung gestoppt.
+已點輸入框，等待貼上。	Input clicked; waiting to paste.	入力欄をクリックしました。貼り付け待ちです。	입력란 클릭 완료. 붙여넣기 대기 중.	Eingabefeld angeklickt; Warten auf Einfügen.
+已貼上，等待點擊送出。	Pasted; waiting to click Send.	貼り付けました。送信クリック待ちです。	붙여넣기 완료. 전송 클릭 대기 중.	Eingefügt; Warten auf Sendeklick.
+已完成設定的操作輪次；未驗證訊息是否送達。	Configured rounds completed; message delivery is not verified.	設定した回数が完了しました。送信結果は未確認です。	설정된 회차를 완료했습니다. 메시지 전달 여부는 확인하지 않았습니다.	Geplante Runden abgeschlossen; Zustellung nicht geprüft.
+本輪已執行送出點擊；未驗證送達，等待下一輪。	Send clicked; delivery unverified. Waiting for the next round.	送信をクリックしました。送信結果は未確認です。次の回を待っています。	전송을 클릭했습니다. 전달 여부 미확인. 다음 회차 대기 중.	Senden angeklickt; Zustellung ungeprüft. Warten auf die nächste Runde.
+首次時間須在未來 365 天內。	The first run must be within the next 365 days.	初回実行は現在より後、365日以内に設定してください。	첫 실행은 지금부터 365일 이내여야 합니다.	Der erste Start muss innerhalb der nächsten 365 Tage liegen.
+間隔須介於 10 秒與 365 天。	The interval must be between 10 seconds and 365 days.	間隔は10秒～365日にしてください。	간격은 10초~365일이어야 합니다.	Das Intervall muss zwischen 10 Sekunden und 365 Tagen liegen.
+步驟等待須介於 1–10 秒。	The action delay must be 1–10 seconds.	操作間の待機は1～10秒にしてください。	동작 대기는 1~10초여야 합니다.	Die Aktionspause muss 1–10 Sekunden betragen.
+請設定執行次數或截止時間。	Set a round limit or deadline.	実行回数または終了期限を設定してください。	실행 횟수 또는 종료 시각을 설정하세요.	Rundenlimit oder Endzeit festlegen.
+執行次數須介於 1–10000。	The round limit must be 1–10000.	実行回数は1～10000回にしてください。	실행 횟수는 1~10000회여야 합니다.	Die Rundenzahl muss zwischen 1 und 10000 liegen.
+截止時間須晚於首次時間，且在未來 365 天內。	The deadline must follow the first run and be within the next 365 days.	終了期限は初回実行より後、365日以内にしてください。	종료 시각은 첫 실행 이후이면서 365일 이내여야 합니다.	Die Endzeit muss nach dem ersten Start und innerhalb der nächsten 365 Tage liegen.
+請輸入提示詞。	Enter a prompt.	プロンプトを入力してください。	프롬프트를 입력하세요.	Einen Prompt eingeben.
+每筆提示詞須為 1–20000 字元，且不可空白或含空字元。	Each prompt must contain 1–20000 characters, with no empty, whitespace-only or null-character entries.	各プロンプトは1～20000文字にしてください。空欄・空白のみ・ヌル文字は使えません。	각 프롬프트는 1~20000자여야 하며 빈 값, 공백만 있는 값, 널 문자는 허용되지 않습니다.	Jeder Prompt braucht 1–20000 Zeichen; leere Einträge, nur Leerraum und Nullzeichen sind unzulässig.
+無法識別目標視窗，請重新擷取。	Cannot identify the target window. Capture it again.	対象ウィンドウを識別できません。再取得してください。	대상 창을 식별할 수 없습니다. 다시 지정하세요.	Zielfenster nicht erkannt. Erneut erfassen.
+請擷取同一目標視窗的輸入框與送出按鈕。	Capture the input field and Send button in the same target window.	同じ対象ウィンドウの入力欄と送信ボタンを取得してください。	같은 대상 창의 입력란과 전송 버튼을 지정하세요.	Eingabefeld und Sendetaste im selben Zielfenster erfassen.
+桌面無法操作，排程已停止。	Desktop unavailable. Schedule stopped.	デスクトップを操作できないため停止しました。	바탕 화면을 사용할 수 없어 예약이 중지되었습니다.	Desktop nicht verfügbar. Zeitplan gestoppt.
+桌面已鎖定或不可操作。	Desktop locked or unavailable.	デスクトップがロック中、または操作できません。	바탕 화면이 잠겼거나 사용할 수 없습니다.	Desktop gesperrt oder nicht verfügbar.
+螢幕配置已改變，請重新擷取。	Display layout changed. Capture the positions again.	画面構成が変わりました。位置を再取得してください。	디스플레이 구성이 변경되었습니다. 위치를 다시 지정하세요.	Bildschirmanordnung geändert. Positionen erneut erfassen.
+目標視窗移動、被遮住或已關閉，請檢查後重新擷取。	Target window moved, is covered or closed. Check and capture again.	対象ウィンドウが移動・遮蔽・終了しました。確認して再取得してください。	대상 창이 이동, 가림 또는 닫힘 상태입니다. 확인 후 다시 지정하세요.	Zielfenster verschoben, verdeckt oder geschlossen. Prüfen und erneut erfassen.
+焦點已離開目標視窗，已停止。	Focus left the target window. Stopped.	対象ウィンドウからフォーカスが外れたため停止しました。	대상 창에서 포커스가 벗어나 중지되었습니다.	Zielfenster hat den Fokus verloren. Gestoppt.
+焦點已離開原本的目標視窗，已停止。	Focus left the original target window. Stopped.	元の対象ウィンドウからフォーカスが外れたため停止しました。	원래 대상 창에서 포커스가 벗어나 중지되었습니다.	Ursprüngliches Zielfenster hat den Fokus verloren. Gestoppt.
+偵測到修飾鍵按住，已停止。	A modifier key is held down. Stopped.	修飾キーが押されているため停止しました。	보조 키가 눌려 있어 중지되었습니다.	Eine Modifikatortaste ist gedrückt. Gestoppt.
+Windows 未完整接受鍵盤輸入，已停止。	Windows did not accept all keyboard input. Stopped.	Windowsがキー入力の一部を受け付けなかったため停止しました。	Windows가 키보드 입력을 모두 수락하지 않아 중지되었습니다.	Windows hat nicht alle Tastatureingaben angenommen. Gestoppt.
+排程資料不存在。	No schedule data.	予約データがありません。	예약 데이터가 없습니다.	Keine Zeitplandaten vorhanden.
+執行時間必須晚於現在。	The run time must be in the future.	実行時刻は現在より後にしてください。	실행 시각은 현재보다 이후여야 합니다.	Die Ausführungszeit muss in der Zukunft liegen.
+執行時間最多可設定在 365 天內。	The run time must be within the next 365 days.	実行時刻は365日以内にしてください。	실행 시각은 365일 이내여야 합니다.	Die Ausführungszeit muss innerhalb der nächsten 365 Tage liegen.
+點擊位置不在目前可用的螢幕範圍內。	The click position is outside the available displays.	クリック位置が利用可能な画面の範囲外です。	클릭 위치가 사용 가능한 화면 범위 밖입니다.	Die Klickposition liegt außerhalb der verfügbaren Bildschirme.
+點擊類型無效。	Invalid click type.	クリック方法が無効です。	잘못된 클릭 방식입니다.	Ungültige Klickart.
+已錯過預定時間超過 5 秒，為避免誤點擊已取消。	More than 5 seconds late. Click cancelled to prevent a misplaced click.	予定時刻を5秒以上過ぎたため、誤クリックを防ぐために取り消しました。	예정 시각을 5초 이상 지나 오클릭 방지를 위해 취소했습니다.	Mehr als 5 Sekunden verspätet. Zum Schutz vor Fehlklicks abgebrochen.
+螢幕配置已改變，原先位置已不在可用螢幕上，已取消點擊。	Display layout changed and the position is no longer available. Click cancelled.	画面構成が変わり、元の位置が画面外になったためクリックを取り消しました。	화면 구성이 바뀌어 기존 위치를 사용할 수 없습니다. 클릭이 취소되었습니다.	Bildschirmanordnung geändert; Position nicht mehr verfügbar. Klick abgebrochen.
+Windows 回報的螢幕範圍無效。	Windows reported invalid display bounds.	Windowsが無効な画面範囲を報告しました。	Windows에서 잘못된 화면 범위를 보고했습니다.	Windows meldet ungültige Bildschirmgrenzen.
+目標位置沒有可操作的視窗。	No usable window at the target position.	対象位置に操作可能なウィンドウがありません。	대상 위치에 조작 가능한 창이 없습니다.	Kein bedienbares Fenster an der Zielposition.
+無法讀取螢幕配置。	Cannot read the display layout.	画面構成を取得できません。	디스플레이 구성을 읽을 수 없습니다.	Bildschirmanordnung nicht lesbar.
+需要輔助使用權限。	Accessibility permission is required.	アクセシビリティ権限が必要です。	손쉬운 사용 권한이 필요합니다.	Bedienungshilfen-Berechtigung erforderlich.
+桌面已鎖定或不可操作，排程已停止。	Desktop locked or unavailable. Schedule stopped.	デスクトップがロック中、または操作できないため停止しました。	바탕 화면이 잠겼거나 사용할 수 없어 예약이 중지되었습니다.	Desktop gesperrt oder nicht verfügbar. Zeitplan gestoppt.
+請先擷取位置。	Capture the position first.	先に位置を取得してください。	먼저 위치를 지정하세요.	Zuerst die Position erfassen.
+無法寫入剪貼簿。	Cannot write to the clipboard.	クリップボードに書き込めません。	클립보드에 쓸 수 없습니다.	Schreiben in die Zwischenablage nicht möglich.
+macOS 無法建立鍵盤事件。	macOS could not create a keyboard event.	macOSがキーイベントを作成できませんでした。	macOS에서 키보드 이벤트를 만들 수 없습니다.	macOS konnte kein Tastaturereignis erstellen.
+macOS 無法建立滑鼠事件。	macOS could not create a mouse event.	macOSがマウスイベントを作成できませんでした。	macOS에서 마우스 이벤트를 만들 수 없습니다.	macOS konnte kein Mausereignis erstellen.
+macOS 無法建立雙擊事件。	macOS could not create a double-click event.	macOSがダブルクリックイベントを作成できませんでした。	macOS에서 더블 클릭 이벤트를 만들 수 없습니다.	macOS konnte kein Doppelklickereignis erstellen.
+尚未授予『輔助使用』權限，macOS 已阻止滑鼠控制。	macOS blocked mouse control because Accessibility permission has not been granted.	アクセシビリティ権限がないため、macOSがマウス操作をブロックしました。	손쉬운 사용 권한이 없어 macOS가 마우스 제어를 차단했습니다.	macOS blockiert die Maussteuerung ohne Bedienungshilfen-Berechtigung.
+螢幕配置已變更，為避免點到不同內容已取消點擊。	Display layout changed. Click cancelled to avoid clicking different content.	画面構成が変わったため、別の内容をクリックしないよう取り消しました。	다른 내용을 클릭하지 않도록 화면 구성 변경 후 클릭을 취소했습니다.	Bildschirmanordnung geändert. Klick abgebrochen, um andere Inhalte nicht anzuklicken.
+電腦即將睡眠，排程已停止，不補送。	Computer is going to sleep. Schedule stopped without retrying.	スリープに入るため停止しました。再送しません。	컴퓨터가 절전 모드로 전환되어 재시도 없이 중지되었습니다.	Computer wechselt in den Ruhezustand. Ohne Wiederholung gestoppt.
+程式已結束。	Application closed.	アプリが終了しました。	앱이 종료되었습니다.	Anwendung beendet.
+結束 ScheduledClicker	Quit ScheduledClicker	ScheduledClickerを終了	ScheduledClicker 종료	ScheduledClicker beenden
+在指定時間安全地執行一次滑鼠單擊或雙擊	Schedule one single or double mouse click	指定時刻にマウスを1回クリックまたはダブルクリック	지정한 시각에 한 번 클릭 또는 두 번 클릭 실행	Einen Einfach- oder Doppelklick planen
+1. 何時執行？	1. When to run?	1. いつ実行しますか？	1. 언제 실행할까요?	1. Wann ausführen?
+選擇明確時間，或從現在開始倒數。	Choose a time or a delay from now.	時刻を指定するか、今からの待機時間を設定します。	시각을 지정하거나 지금부터 지연 시간을 설정하세요.	Uhrzeit oder Wartezeit ab jetzt wählen.
+時間模式	Time mode	時刻モード	시간 모드	Zeitmodus
+指定執行時間	Scheduled time	実行時刻	지정 실행 시각	Ausführungszeit
+倒數小時	Delay hours	待機時間（時）	지연 시간	Wartezeit in Stunden
+倒數分鐘	Delay minutes	待機時間（分）	지연 분	Wartezeit in Minuten
+倒數秒數	Delay seconds	待機時間（秒）	지연 초	Wartezeit in Sekunden
+可設定 1 秒至 168 小時。	Range: 1 second to 168 hours.	1秒～168時間に設定できます。	1초~168시간 설정 가능.	Bereich: 1 Sekunde bis 168 Stunden.
+2. 要點哪裡？	2. Where to click?	2. どこをクリックしますか？	2. 어디를 클릭할까요?	2. Wo klicken?
+擷取位置後，選擇單擊或雙擊。	Capture a position, then choose single or double click.	位置を取得し、クリック方法を選択します。	위치를 지정한 후 한 번 또는 두 번 클릭을 선택하세요.	Position erfassen und Einfach- oder Doppelklick wählen.
+按下後視窗會縮小，請在三秒內把滑鼠移到目標位置	The window minimizes. Move the pointer to the target within 3 seconds.	ウィンドウが最小化します。3秒以内に対象位置へマウスを移動してください。	창이 최소화됩니다. 3초 이내에 마우스를 대상 위치로 이동하세요.	Das Fenster wird minimiert. Maus innerhalb von 3 Sekunden zum Ziel bewegen.
+檢查設定並啟動一次性排程	Review settings and start a one-shot schedule	設定を確認し、1回の予約を開始	설정 확인 후 일회성 예약 시작	Einstellungen prüfen und einmaligen Zeitplan starten
+狀態	Status	状態	상태	Status
+排程狀態	Schedule status	予約状態	예약 상태	Zeitplanstatus
+無法讀取滑鼠位置，請再試一次。	Cannot read pointer position. Try again.	マウス位置を取得できません。もう一度お試しください。	마우스 위치를 읽을 수 없습니다. 다시 시도하세요.	Mausposition nicht lesbar. Erneut versuchen.
+無法讀取滑鼠位置。	Cannot read pointer position.	マウス位置を取得できません。	마우스 위치를 읽을 수 없습니다.	Mausposition nicht lesbar.
+循環模式已開啟	Loop mode is open	繰り返しモードが開いています	반복 모드가 열려 있음	Wiederholungsmodus geöffnet
+請先關閉循環視窗，再啟動一次性排程。	Close the loop window before starting a one-shot schedule.	繰り返しウィンドウを閉じてから、1回の予約を開始してください。	반복 창을 닫은 후 일회성 예약을 시작하세요.	Wiederholungsfenster vor dem Start eines einmaligen Zeitplans schließen.
+無法讀取螢幕	Cannot read displays	画面を取得できません	화면을 읽을 수 없음	Bildschirme nicht lesbar
+macOS 沒有回報可用的顯示器，請確認目前為已登入且未鎖定的桌面。	macOS reported no available display. Ensure you are logged in and the desktop is unlocked.	利用可能な画面がありません。ログイン済みで画面ロックが解除されているか確認してください。	사용 가능한 화면이 없습니다. 로그인 상태와 화면 잠금 해제를 확인하세요.	macOS meldet keinen verfügbaren Bildschirm. Anmeldung und entsperrten Desktop prüfen.
+macOS 沒有回報可用的顯示器。	macOS reported no available display.	macOSが利用可能な画面を報告していません。	macOS에서 사용 가능한 화면을 보고하지 않았습니다.	macOS meldet keinen verfügbaren Bildschirm.
+請輸入 0–168 小時、0–59 分鐘及 0–59 秒。	Enter 0–168 hours, 0–59 minutes and 0–59 seconds.	0～168時間、0～59分、0～59秒を入力してください。	0~168시간, 0~59분, 0~59초를 입력하세요.	0–168 Stunden, 0–59 Minuten und 0–59 Sekunden eingeben.
+倒數延遲必須介於 1 秒與 168 小時之間。	The delay must be between 1 second and 168 hours.	待機時間は1秒～168時間にしてください。	지연은 1초~168시간이어야 합니다.	Die Wartezeit muss zwischen 1 Sekunde und 168 Stunden liegen.
+啟動後工具會自動縮小。請確認目標畫面不會移動。	The tool minimizes after starting. Keep the target screen layout unchanged.	開始後は最小化します。対象画面を動かさないでください。	시작 후 도구가 최소화됩니다. 대상 화면 배치를 유지하세요.	Das Werkzeug wird nach dem Start minimiert. Zielansicht unverändert lassen.
+需要輔助使用權限	Accessibility permission required	アクセシビリティ権限が必要です	손쉬운 사용 권한 필요	Bedienungshilfen-Berechtigung erforderlich
+macOS 已開啟權限提示。請到「系統設定 → 隱私權與安全性 → 輔助使用」允許 ScheduledClicker，然後重新按啟動排程。	macOS opened a permission prompt. Allow ScheduledClicker in System Settings → Privacy & Security → Accessibility, then start again.	権限の確認が開きました。「システム設定 → プライバシーとセキュリティ → アクセシビリティ」でScheduledClickerを許可し、再度開始してください。	권한 요청이 열렸습니다. 시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용에서 ScheduledClicker를 허용한 후 다시 시작하세요.	Berechtigungsdialog geöffnet. ScheduledClicker unter Systemeinstellungen → Datenschutz & Sicherheit → Bedienungshilfen erlauben und erneut starten.
+已有操作進行中	An operation is in progress	操作が進行中です	동작 진행 중	Eine Aktion läuft bereits
+可按 F8（部分鍵盤需 Fn+F8）或取消排程停止。	Stop with F8 (Fn+F8 on some keyboards) or Cancel schedule.	F8（一部のキーボードはFn+F8）または予約取り消しで停止できます。	F8 (일부 키보드는 Fn+F8) 또는 예약 취소로 중지하세요.	Mit F8 (teils Fn+F8) oder „Zeitplan abbrechen“ stoppen.
+F8 監聽不可用，請用取消排程按鈕停止。	F8 monitoring unavailable. Use Cancel schedule to stop.	F8の監視を利用できません。予約取り消しボタンで停止してください。	F8 감지를 사용할 수 없습니다. 예약 취소 버튼으로 중지하세요.	F8-Überwachung nicht verfügbar. Mit „Zeitplan abbrechen“ stoppen.
+請在系統設定授予輔助使用權限後重新啟動。	Grant Accessibility permission in System Settings, then start again.	システム設定でアクセシビリティを許可してから再開してください。	시스템 설정에서 손쉬운 사용 권한을 허용한 후 다시 시작하세요.	Bedienungshilfen in den Systemeinstellungen erlauben und erneut starten.
+F8 監聽不可用，請檢查輔助使用權限。	F8 monitoring unavailable. Check Accessibility permission.	F8を監視できません。アクセシビリティ権限を確認してください。	F8 감지를 사용할 수 없습니다. 손쉬운 사용 권한을 확인하세요.	F8-Überwachung nicht verfügbar. Bedienungshilfen-Berechtigung prüfen.
+首次執行时间	First run time	初回実行時刻	첫 실행 시각	Erste Ausführungszeit
+循環間隔小時	Interval hours	間隔（時）	반복 간격 시간	Intervall in Stunden
+循環間隔分鐘	Interval minutes	間隔（分）	반복 간격 분	Intervall in Minuten
+循環間隔秒數	Interval seconds	間隔（秒）	반복 간격 초	Intervall in Sekunden
+步驟等待秒數	Action delay in seconds	操作間の待機秒数	동작 대기 초	Aktionspause in Sekunden
+最多執行輪次	Maximum rounds	最大実行回数	최대 실행 회차	Maximale Rundenzahl
+目前輪次提示詞	Current round prompt	現在の回のプロンプト	현재 회차 프롬프트	Prompt der aktuellen Runde
+小時	hours	時間	시간	Stunden
+分鐘	minutes	分	분	Minuten
+秒數	seconds	秒	초	Sekunden
+步驟等待	action delay	操作間の待機	동작 대기	Aktionspause
+輪次	round count	回数	회차	Rundenzahl
+第 {0} 輪	Round {0}	第{0}回	{0}회차	Runde {0}
+請在 {0} 秒內將滑鼠移到要點擊的位置…	Move the pointer to the click position within {0} seconds…	{0}秒以内にクリック位置へマウスを移動してください…	{0}초 이내에 마우스를 클릭 위치로 이동하세요…	Maus innerhalb von {0} Sekunden zur Klickposition bewegen…
+已於 {0} 完成{1}。	Completed {1} at {0}.	{0}に{1}を完了しました。	{0}에 {1} 완료.	{1} um {0} abgeschlossen.
+已排程：{0} 執行，剩餘 {1}。{2}	Scheduled for {0}; remaining {1}. {2}	実行予定：{0}、残り{1}。{2}	{0} 실행 예정, 남은 시간 {1}. {2}	Geplant für {0}; verbleibend {1}. {2}
+時間：{0}	Time: {0}	時刻：{0}	시각: {0}	Zeit: {0}
+位置：X {0}, Y {1}	Position: X {0}, Y {1}	位置：X {0}, Y {1}	위치: X {0}, Y {1}	Position: X {0}, Y {1}
+方式：{0}	Click: {0}	方法：{0}	방식: {0}	Klickart: {0}
+確定啟動嗎？	Start this schedule?	予約を開始しますか？	예약을 시작할까요?	Diesen Zeitplan starten?
+執行失敗：{0}	Execution failed: {0}	実行失敗：{0}	실행 실패: {0}	Ausführung fehlgeschlagen: {0}
+執行失敗，已停止且不重試：{0}	Failed; stopped without retrying: {0}	失敗したため停止しました。再試行しません：{0}	실패하여 재시도 없이 중지됨: {0}	Fehlgeschlagen; ohne Wiederholung gestoppt: {0}
+Windows 無法送出滑鼠輸入。錯誤碼：{0}	Windows could not send mouse input. Error code: {0}	Windowsがマウス入力を送信できません。エラーコード：{0}	Windows에서 마우스 입력을 보낼 수 없습니다. 오류 코드: {0}	Windows konnte keine Mauseingabe senden. Fehlercode: {0}
+首次：{0}	First run: {0}	初回：{0}	첫 실행: {0}	Erster Start: {0}
+間隔：{0}（每輪結束後起算）	Interval: {0} (from the end of each round)	間隔：{0}（各回の終了から）	간격: {0} (각 회차 종료 후부터)	Intervall: {0} (ab Ende jeder Runde)
+間隔：{0} 秒（每輪結束後起算）	Interval: {0} seconds (from the end of each round)	間隔：{0}秒（各回の終了から）	간격: {0}초 (각 회차 종료 후부터)	Intervall: {0} Sekunden (ab Ende jeder Runde)
+停止：{0}	Stop: {0}	停止：{0}	종료: {0}	Stopp: {0}
+{0}；截止 {1}	{0}; deadline {1}	{0}、終了期限 {1}	{0}; 종료 시각 {1}	{0}; Endzeit {1}
+{0} 輪	{0} rounds	{0}回	{0}회	{0} Runden
+提示詞：{0}	Prompts: {0}	プロンプト：{0}	프롬프트: {0}	Prompts: {0}
+依輪次設定（{0} 筆）{1}	Sequence ({0} prompts): {1}	回ごとに設定（{0}件）：{1}	순서대로 ({0}개): {1}	Reihenfolge ({0} Prompts): {1}
+，重複最後一筆	Repeat last prompt	最後を繰り返す	마지막 프롬프트 반복	Letzten Prompt wiederholen
+，用完即停	Stop after sequence	最後で停止	목록 완료 후 중지	Nach der Folge stoppen
+輸入框：{0}；送出鈕：{1}	Input: {0}; Send: {1}	入力欄：{0}、送信：{1}	입력란: {0}; 전송: {1}	Eingabe: {0}; Senden: {1}
+已執行送出點擊 {0} 輪{1}	Send clicked for {0} rounds{1}	送信クリック済み：{0}回{1}	전송 클릭 완료: {0}회{1}	Sendeklicks: {0} Runden{1}
+；下個步驟剩 {0} 秒	; next action in {0} s	、次の操作まで{0}秒	; 다음 동작까지 {0}초	; nächste Aktion in {0} s
+請把滑鼠移到目標位置，倒數 {0} 秒。	Move the pointer to the target; {0} seconds remaining.	対象位置へマウスを移動してください。残り{0}秒です。	마우스를 대상 위치로 이동하세요. {0}초 남음.	Maus zum Ziel bewegen; noch {0} Sekunden.
+ F8 可停止。	 Press F8 to stop.	 F8で停止できます。	 F8로 중지하세요.	 Mit F8 stoppen.
+ F8（或 Fn+F8）可停止。	 Press F8 (or Fn+F8) to stop.	 F8（またはFn+F8）で停止できます。	 F8 (또는 Fn+F8)로 중지하세요.	 Mit F8 (oder Fn+F8) stoppen.
+{0}須介於 {1}–{2}。	{0} must be between {1} and {2}.	{0}は{1}～{2}にしてください。	{0}: {1}~{2} 범위여야 합니다.	{0} muss zwischen {1} und {2} liegen.
+啟動	Start	開始	시작	Starten
+取消	Cancel	キャンセル	취소	Abbrechen
+確定	OK	OK	확인	OK
+繼續	Continue	続けて	계속	Weiter
+簡單模式	Simple mode	シンプルモード	기본 모드	Einfacher Modus
+循環模式	Loop mode	繰り返しモード	반복 모드	Wiederholungsmodus
+位置擷取	Capture positions	位置の取得	위치 지정	Positionen erfassen
+請擷取同一視窗內的兩個位置	Capture both points in one window.	同じウィンドウ内の2か所を取得します。	같은 창 안의 두 지점을 지정하세요.	Beide Punkte im selben Fenster erfassen.
+請先停止目前操作，再切換模式。	Stop the current action before switching modes.	モードの切り替え前に操作を停止してください。	현재 동작을 중지한 후 모드를 전환하세요.	Vor dem Moduswechsel die aktuelle Aktion stoppen.
+切換為深色模式	Switch to dark mode	ダークモードに切替	다크 모드로 전환	Dunkles Design
+切換為淺色模式	Switch to light mode	ライトモードに切替	라이트 모드로 전환	Helles Design
+請輸入有效的日期與時間（yyyy/MM/dd HH:mm:ss）。	Enter a valid date and time (yyyy/MM/dd HH:mm:ss).	有効な日時を入力してください（yyyy/MM/dd HH:mm:ss）。	올바른 날짜와 시간을 입력하세요(yyyy/MM/dd HH:mm:ss).	Gültiges Datum und Uhrzeit eingeben (yyyy/MM/dd HH:mm:ss).
+無法驗證目標視窗焦點（{0}）；請確認目標 App 的輔助使用支援。	Cannot verify target window focus ({0}); check the target app’s accessibility support.	対象ウインドウのフォーカスを確認できません（{0}）。対象アプリのアクセシビリティ対応を確認してください。	대상 창의 포커스를 확인할 수 없습니다({0}). 대상 앱의 손쉬운 사용 지원을 확인하세요.	Der Fokus des Zielfensters lässt sich nicht prüfen ({0}). Prüfen Sie die Bedienungshilfen-Unterstützung der Ziel-App.
+已請求啟用目標程式，等待點擊輸入框。	Requested target app activation; waiting to click the input field.	対象アプリの有効化を要求しました。入力欄のクリックを待機中。	대상 앱 활성화를 요청했습니다. 입력란 클릭을 기다리는 중입니다.	Aktivierung der Ziel-App angefordert; warte auf Klick ins Eingabefeld.
+無法啟用目標程式，已停止。	Cannot activate the target app. Stopped.	対象アプリを有効化できないため停止しました。	대상 앱을 활성화할 수 없어 중지했습니다.	Ziel-App kann nicht aktiviert werden. Gestoppt.
+擷取到無法接受鍵盤輸入的系統視窗，請重新擷取。	Captured a system window that cannot receive keyboard input. Capture again.	キーボード入力を受け付けないシステムウインドウです。再取得してください。	키보드 입력을 받을 수 없는 시스템 창입니다. 다시 캡처하세요.	Ein Systemfenster ohne Tastatureingabe wurde erfasst. Bitte erneut erfassen.
+複製診斷	Copy diagnostics	診断情報をコピー	진단 정보 복사	Diagnose kopieren
+循環輸入僅支援一般 App 視窗，請重新擷取。	Loop input supports regular app windows only. Capture again.	繰り返し入力は通常のアプリウインドウのみ対応しています。再取得してください。	반복 입력은 일반 앱 창만 지원합니다. 다시 캡처하세요.	Schleifeneingabe unterstützt nur normale App-Fenster. Bitte erneut erfassen.

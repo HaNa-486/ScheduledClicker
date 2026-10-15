@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ScheduledClicker disposable test target</title>
+<style>body{font:16px system-ui;max-width:640px;margin:32px auto;padding:0 24px}textarea{box-sizing:border-box;width:100%;height:160px;font:inherit}button{padding:12px 28px;margin:12px 0}li{white-space:pre-wrap;border-bottom:1px solid #ccc;padding:12px}small{display:block}</style></head>
+<body><h1>Disposable loop test target</h1><p>Enter only harmless test text. This page stays local and keeps entries in memory until it is closed or reloaded.</p><label for="draft">Input</label><textarea id="draft"></textarea><button id="send">Send</button><small id="count" role="status">Sent: 0</small><ol id="log"></ol>
+<script>let count=0;document.getElementById('send').addEventListener('click',()=>{const draft=document.getElementById('draft');const entry=document.createElement('li');entry.textContent=draft.value;document.getElementById('log').appendChild(entry);draft.value='';document.getElementById('count').textContent='Sent: '+(++count);});</script></body></html>

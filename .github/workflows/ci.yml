@@ -13,30 +13,61 @@ jobs:
   windows:
     name: Windows build and tests
     runs-on: windows-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Build
         shell: pwsh
         run: .\build.ps1
+      - name: Verify generated translations
+        run: python scripts/generate-localization.py --check
+      - name: Upload Windows UI evidence
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: Windows-ui-evidence
+          path: .artifacts/tests/*.png
       - name: Core tests
         shell: pwsh
         run: .\.artifacts\tests\SchedulerCoreTests.exe
       - name: Verify executable exists
         shell: pwsh
         run: if (-not (Test-Path -LiteralPath .\dist\ScheduledClicker.exe)) { throw 'Windows executable was not produced.' }
+      - name: Package Windows checksum
+        shell: pwsh
+        run: |
+          $releaseHash = (Get-FileHash -LiteralPath .\dist\ScheduledClicker.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$releaseHash  ScheduledClicker.exe" | Set-Content -LiteralPath .\dist\ScheduledClicker-Windows.sha256 -Encoding ascii
+      - name: Upload Windows application
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: ScheduledClicker-Windows
+          path: |
+            dist/ScheduledClicker.exe
+            dist/ScheduledClicker-Windows.sha256
+          if-no-files-found: error
       - name: Validate GitHub Pages metadata and links
         shell: pwsh
         run: .\scripts\validate-site.ps1
+      - name: Verify visible discovery facts
+        run: python scripts/validate-discovery.py
 
   macos:
     name: macOS universal build and tests
     runs-on: macos-15
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Build, test, ad-hoc sign, and package
         run: bash ./build-macos.sh
       - name: Inspect executable architectures
         run: lipo -archs .artifacts/macos/ScheduledClicker.app/Contents/MacOS/ScheduledClicker
+      - name: Upload macOS UI diagnostics
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: macOS-ui-evidence
+          path: .artifacts/macos/*.png
+          if-no-files-found: ignore
       - name: Upload macOS application
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
@@ -44,6 +75,6 @@ jobs:
           path: |
             dist/ScheduledClicker-macOS-universal.zip
             dist/ScheduledClicker-macOS-universal.sha256
-            .artifacts/macos/ui-light.png
-            .artifacts/macos/ui-dark.png
+            .artifacts/macos/ui-*.png
+            .artifacts/macos/loop-*.png
           if-no-files-found: error

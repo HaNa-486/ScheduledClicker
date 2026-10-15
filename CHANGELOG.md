@@ -2,6 +2,45 @@
 
 本專案的重大變更會記錄在此。格式參考 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本採用 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [1.2.0] — 2026-10-15
+
+- Release bounded prompt input/send loops for Windows and macOS: same/per-round prompts, completion-relative intervals, round/deadline bounds, trial, pause and cancel.
+- Shared simple/loop window, five languages, untouched starter localization and light/dark controls.
+- Fix Windows language picker/date input; preserve user-edited prompt text.
+- Fix Mac Dock miscapture using stored AX hit-window/top-level identity, with live keyboard-owner checks and copyable diagnostics. Add wheel/trackpad numeric adjustment.
+- Owner functional acceptance on both platforms; publish direct platform downloads, checksums, current FAQ/schema and AI-readable documentation.
+- Windows informational version is now 1.2.0; Mac accepted runtime remains 1.2.0/build12004. No new input behavior since the accepted candidates.
+
+The preview entries below are historical snapshots, superseded by the v1.2.0 release and its verification record.
+
+## [1.2.0-preview.2] — 2026-10-15 (candidate, native Mac retest pending)
+
+- Replace Mac cross-API geometry/window-order focus inference with owning accessibility window identity and top-level checks. Preserve captured CG window/visibility checks and fail before clipboard changes. Support remote WebKit leaf elements through their owning window; add content-free diagnostic codes.
+- Translate the untouched starter prompt when switching languages on both platforms; preserve every edited prompt.
+- Add mouse-wheel/trackpad adjustment to Mac numeric fields in both modes, bounded by the same validation limits; ignore momentum and disabled/hidden controls.
+- Add focus-policy, numeric-field and pristine-prompt regression checks. Safari external-display owner retest remains required; no stable release.
+
+## [1.2.0-preview.1] — 2026-10-15 (candidate, not a stable release)
+
+### Added
+
+- Bounded recurring input/send with one prompt or a sequence, first execution time, completion-relative interval, maximum rounds/deadline, trial, pause and stop.
+- One shared simple/loop window with a live clock and always-visible notices. Active operations must stop before switching modes; idle settings are retained.
+- Traditional Chinese, English, Japanese, Korean and German interfaces with system startup selection and manual switching.
+- Startup light/dark appearance detection and manual sun/moon action; redesigned neutral surfaces and controls on Windows, native AppKit adaptation on Mac.
+- Mac universal candidate build and five-language/two-appearance UI evidence. Windows owner acceptance received; Mac native input acceptance remains pending.
+- Version-aware website guide, download distinctions, FAQ, structured data and supplemental AI-readable summaries.
+
+### Fixed
+
+- Windows language dropdown closing during clock-triggered layout.
+- Windows themed date input validation and field adjustments.
+- Mac header mode/appearance hit-area overlap; CI guards against recurrence.
+
+### Verification status
+
+See VERIFICATION.md for run-bound results. CI screenshots and event construction do not prove native clipboard/paste/send, physical F8 or wrong-window rejection on a user's Mac. Stable v1.1.2 remains the published download.
+
 ## [1.1.2] - 2026-08-28
 
 ### Fixed

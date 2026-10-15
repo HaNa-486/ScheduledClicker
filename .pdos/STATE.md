@@ -1,15 +1,15 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 28
+- State revision: 29
 - Updated: 2026-10-15
-- State confidence: owner reports all Mac build12004 functions usable; Windows redesign accepted earlier; detailed negative-case coverage not itemized
-- Phase: owner accepted both platforms and explicitly authorized v1.2.0 release, merge and website updates; release preparation in progress
+- State confidence: owner accepted Mac build12004 and Windows targeted tests; exact release/public downloads and deployed site verified; detailed native negative-case coverage not itemized
+- Phase: v1.2.0 formally released under owner authorization; public downloads and discovery site deployed and verified
 
 ## Repository identity
 
-- Branch: codex/recurring-prompt-loop
-- Observed commit: 0f254f8
+- Branch: main
+- Observed commit: acbc2d057abed2003f0ffccd42f9e173fbe38592
 
 ## Product anchors
 
@@ -21,21 +21,21 @@
 
 ## Current work
 
-- Current slice: Publish accepted runtime as v1.2.0; Windows informational metadata only, Mac remains accepted build12004. Add exact CI Windows artifact/checksum and align all public download/discovery content.
-- Workstream: `workstreams/2026-10-15-release-120.md` active; earlier workstreams paused or historical.
-- Active review: `reviews/REV-20261015-release-120.md`; independent read-only release review required, final artifact/link verification pending.
+- Current slice: Completed v1.2.0 release. Windows informational metadata only; Mac remains accepted build12004. Both apps/checksums and nine-page discovery content are public.
+- Workstream: `workstreams/2026-10-15-release-120.md` completed; earlier workstreams paused or historical.
+- Active review: `reviews/REV-20261015-release-120.md` completed; independent review passed and delivery finding verified.
 - Active remediations: Mac normal functional acceptance and Windows targeted tests confirmed by owner. High wrong-window records retain individual native negative-case evidence gaps; do not relabel those cases verified.
-- Blocking dependencies: successful final CI, artifact checks and independent review before publication; live asset/site verification afterward.
+- Blocking dependencies: none for the authorized release; native negative-case evidence remains a documented limitation.
 - Consequential decisions: User explicitly authorizes formal publication and download/SEO/AI-discovery updates in this turn. No new signing/notarization credentials requested. See `specs/release-120.md` for release and rollback contract.
 
 ## Handoff
 
-- What changed: Build12004 replaces CG first-rectangle owner selection with original AX hit-window/topLevel identity and same-API bounds; all steps revalidate against the captured window. Capture permission request precedes countdown, failed recapture clears that side. Same-frame sibling rebinding is rejected. Exact candidate download and AI summary updated.
-- Verification evidence: CI 38718545337 at 8943758 both platforms pass. Mac 21/54 core, 31 capture/focus policy, 15 numbers, 1116 localization and 24 renders; Windows full regression plus 2102 localization. Downloaded build12004 ZIP hash/version checked; independent source review passes. See `../VERIFICATION.md`.
-- Not verified individually: owner acceptance did not itemize wrong-sibling refusal, physical F8 or permission-denial cases; every display/DPI/assistive-technology combination, notarization and live site publication remain outside evidence.
-- Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input. CI artifacts expire and require GitHub sign-in.
-- Release assessment: conditionally ready subject to exact CI/artifact and live-link gates. Owner authorizes release after both-platform functional acceptance; do not claim every native failure case verified. Unsigned/ad-hoc and fixed-coordinate limits remain documented.
-- Next safe action: finish CI and independent review, stage the exact release assets, merge and publish under owner authorization, then verify public downloads and deployed site.
+- What changed: Published v1.2.0 from 3e03d77, merged PR #3 as acbc2d0; uploaded exact CI Windows EXE/Mac universal ZIP and checksums, updated README, nine pages, structured data, FAQ and AI-readable summaries with direct stable URLs.
+- Verification evidence: Source CI 38724830343, PR CI 38724838088, main CI 38725336658 and Pages 38725335990 pass. Four anonymous asset GETs match staged CI bytes/hashes; nine live HTML pages and four discovery files match source text. Tag/main ancestry/tree, versions, browser download view and independent review pass. See `../VERIFICATION.md`.
+- Not verified individually: owner acceptance did not itemize wrong-sibling refusal, physical F8 or permission-denial cases; every display/DPI/assistive-technology combination and notarization remain outside evidence.
+- Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input. Stable release assets now provide anonymous downloads; Actions artifacts are no longer the public delivery route.
+- Release assessment: published with owner authorization after both-platform functional acceptance and all delivery gates passed. Retain conditionally ready evidence classification; do not claim every native failure case verified. Unsigned/ad-hoc and fixed-coordinate limits remain documented.
+- Next safe action: handle any concrete post-release user feedback; collect missing native negative-case evidence before broadening safety claims.
 
 ## Read next
 

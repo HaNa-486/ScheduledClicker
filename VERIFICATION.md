@@ -1,5 +1,16 @@
 # 驗證報告
 
+## 2026-10-15：v1.2.0 正式發布與公開交付驗證
+
+- 使用者確認 Mac build12004 全部功能及 Windows 三項重點測試通過，明確授權正式發布與網站更新。本節取代下方歷史候選紀錄的未授權／未發布狀態。
+- 正式來源與標籤：`v1.2.0` → `3e03d77e79e9b24261dd61195895005dc590caf9`；[PR #3](https://github.com/HaNa-486/ScheduledClicker/pull/3) 合併為 `acbc2d057abed2003f0ffccd42f9e173fbe38592`，兩者完整 tree 相同，tag 為 main 祖先。Release 已標為 Latest、非草稿、非預覽版。
+- [來源 CI 38724830343](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38724830343)、PR CI 38724838088 及 [main CI 38725336658](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38725336658) 全部成功。Windows 40 循環／10 原核心、2102 語系／版面、15 選單、153 外觀、20 日期與共用視窗回歸；Mac 21 原核心／54 循環、31 擷取／焦點、15 數字、1116 語系與 24 UI renders 通過，universal 架構及 ad-hoc 簽章通過。
+- 四個正式附件取自同一來源 CI；未登入公開 GET 全部 HTTP 200，下載後逐位元及 SHA-256 與已核對的 CI 附件一致。Windows EXE 128512 bytes，FileVersion 1.2.0.0／ProductVersion 1.2.0；SHA-256 `afc50a12e2d71f87d443c7345648e91c33e33855cdddd0e3b3230bcbf8e197d3`。Mac ZIP 379053 bytes，bundle 1.2.0／build12004；SHA-256 `25688ba7a6c062349fff825c6f9efeb7ef71d4e5dfdd99ce1206932bfa6ce3ee`。Mac 內部執行檔與使用者驗收 build12004 逐位元相同；Windows 本次僅變更正式版資訊。
+- [正式版及全部附件](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.2.0)；[正式下載頁](https://hana-486.github.io/ScheduledClicker/download/)。Release 資產是標準下載來源；repository 的本機建置 EXE 可能因建置時間而有不同 hash。
+- [Pages 部署 38725335990](https://github.com/HaNa-486/ScheduledClicker/actions/runs/38725335990) 成功。九個公開 HTML 頁面及 llms.txt、llms-full.txt、sitemap.xml、robots.txt 均 HTTP 200，排除 CRLF/LF 換行差異後與來源全文一致。瀏覽器已確認正式下載頁的 Windows／Mac 版本與連結。九頁靜態檢查、78 discovery 檢查及本機桌面／窄版下載頁視覺檢查通過。
+- 獨立唯讀審查沒有剩餘發布 blocker；保持 conditionally ready 的證據邊界：使用者實機功能驗收未逐項涵蓋錯誤 sibling 拒絕、實體 F8 與拒絕授權。未宣稱所有顯示器、DPI、輔助科技情境皆驗證。Windows 未簽章、Mac ad-hoc 未公證；固定座標／剪貼簿／送出不等於送達等限制維持公開。
+- SEO／AEO／AISEO／GEO／LLMO 工作涵蓋真實可見資訊、平台下載、SoftwareApplication 與 FAQ 結構化資料、版本與摘要一致性；沒有宣稱已被索引、取得富摘要或排名保證。
+
 ## 2026-10-15：使用者回報 Mac build12004 功能驗收通過
 
 - 使用者回報「mac os 版本全部功能都能正常使用了」。記錄為最新 Mac 候選版的實機功能驗收；未逐項提供錯誤視窗拒絕、F8 或首次授權負向測試結果，不補造個別案例證據。

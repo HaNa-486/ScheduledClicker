@@ -1,15 +1,15 @@
 # PDOS state
 
 - Protocol version: 0.4.0-alpha.1
-- State revision: 29
+- State revision: 30
 - Updated: 2026-10-15
 - State confidence: owner accepted Mac build12004 and Windows targeted tests; exact release/public downloads and deployed site verified; detailed native negative-case coverage not itemized
-- Phase: v1.2.0 formally released under owner authorization; public downloads and discovery site deployed and verified
+- Phase: Implementing owner-authorized five-language first-use website; publish after verification. v1.2.0 runtime remains unchanged.
 
 ## Repository identity
 
-- Branch: main
-- Observed commit: acbc2d057abed2003f0ffccd42f9e173fbe38592
+- Branch: codex/multilingual-install-guide
+- Observed commit: 2e1f82a
 
 ## Product anchors
 
@@ -21,12 +21,12 @@
 
 ## Current work
 
-- Current slice: Completed v1.2.0 release. Windows informational metadata only; Mac remains accepted build12004. Both apps/checksums and nine-page discovery content are public.
-- Workstream: `workstreams/2026-10-15-release-120.md` completed; earlier workstreams paused or historical.
-- Active review: `reviews/REV-20261015-release-120.md` completed; independent review passed and delivery finding verified.
+- Current slice: Fix warning-specific opening help, direct install anchors, checksum instructions, five full website languages and support entry points; synchronize discovery.
+- Workstream: `workstreams/2026-10-15-multilingual-install-guide.md` active; release-120 completed.
+- Active review: `reviews/REV-20261015-site-first-use.md`; five findings authorized, independent safety/discovery review in progress.
 - Active remediations: Mac normal functional acceptance and Windows targeted tests confirmed by owner. High wrong-window records retain individual native negative-case evidence gaps; do not relabel those cases verified.
-- Blocking dependencies: none for the authorized release; native negative-case evidence remains a documented limitation.
-- Consequential decisions: User explicitly authorizes formal publication and download/SEO/AI-discovery updates in this turn. No new signing/notarization credentials requested. See `specs/release-120.md` for release and rollback contract.
+- Blocking dependencies: Browser validation, independent review and CI before deployment; verify live localized pages afterward.
+- Consequential decisions: Owner explicitly authorizes these website fixes and publication after checks; signing and Search Console deferred. See specs/multilingual-install-guide.md.
 
 ## Handoff
 
@@ -35,9 +35,11 @@
 - Not verified individually: owner acceptance did not itemize wrong-sibling refusal, physical F8 or permission-denial cases; every display/DPI/assistive-technology combination and notarization remain outside evidence.
 - Residual risks: fixed coordinates cannot identify changed chat/field semantics; send click does not prove delivery; clipboard is overwritten and may retain prompt; cancellation cannot undo completed input. Stable release assets now provide anonymous downloads; Actions artifacts are no longer the public delivery route.
 - Release assessment: published with owner authorization after both-platform functional acceptance and all delivery gates passed. Retain conditionally ready evidence classification; do not claim every native failure case verified. Unsigned/ad-hoc and fixed-coordinate limits remain documented.
-- Next safe action: handle any concrete post-release user feedback; collect missing native negative-case evidence before broadening safety claims.
+- Next safe action: Finish browser and independent review, repair any blockers, publish and verify live locale pages.
 
 ## Read next
+
+- `specs/multilingual-install-guide.md` and `reviews/REV-20261015-site-first-use.md` - current website scope and review
 
 - `specs/release-120.md` and `reviews/REV-20261015-release-120.md` - current release evidence and scope
 

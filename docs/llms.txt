@@ -1,20 +1,37 @@
-# ScheduledClicker
+# ScheduledClicker v1.2.0 — Verified product facts and language guides
 
-Latest stable version: **v1.2.0**, released 2026-10-15. Free MIT-licensed local desktop tool for Windows 11 and macOS 13+. Simple mode schedules one single/double click; loop mode repeats configured prompt input and send clicks within a round limit or deadline. Five interface languages and system-selected light/dark appearance with manual switching.
+ScheduledClicker v1.2.0 is a free, local desktop tool for Windows 11 and macOS 13+. Schedule a mouse click or repeat prompt input and Send clicks, with five languages and light/dark appearance.
 
-- [Windows EXE](https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe)
-- [macOS universal ZIP: Apple silicon and Intel](https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip)
-- [Installation and matching checksums](https://hana-486.github.io/ScheduledClicker/download/)
-- [Release notes](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.2.0)
-- [Loop behavior and setup](https://hana-486.github.io/ScheduledClicker/recurring-input/)
-- [Windows](https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/)
-- [macOS](https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/)
-- [FAQ](https://hana-486.github.io/ScheduledClicker/faq/)
-- [Safety and clipboard behavior](https://hana-486.github.io/ScheduledClicker/safety-and-verification/)
-- [Full product facts](https://hana-486.github.io/ScheduledClicker/llms-full.txt)
-- [Source and license](https://github.com/HaNa-486/ScheduledClicker)
-- [Versioned verification](https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md)
+- [Scheduled clicks. Recurring prompts.](https://hana-486.github.io/ScheduledClicker/)
+- [Download ScheduledClicker v1.2.0](https://hana-486.github.io/ScheduledClicker/download/)
+- [Scheduled clicks and prompt loops for Windows](https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/)
+- [Scheduled clicks and prompt loops for Mac](https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/)
+- [Set up a recurring prompt loop](https://hana-486.github.io/ScheduledClicker/recurring-input/)
+- [Schedule a continuation prompt for Codex](https://hana-486.github.io/ScheduledClicker/codex-session-continuation/)
+- [Download verification, permissions and limits](https://hana-486.github.io/ScheduledClicker/safety-and-verification/)
+- [ScheduledClicker questions and answers](https://hana-486.github.io/ScheduledClicker/faq/)
+- [ScheduledClicker version history](https://hana-486.github.io/ScheduledClicker/changelog/)
 
-Official release downloads do not require GitHub sign-in. The loop overwrites the clipboard and performs real input; cancellation cannot undo past actions. Keep the computer awake/unlocked and target fixed. It does not detect AI completion, quota availability or delivery, and does not bypass limits.
+Choose ScheduledClicker.exe for Windows or ScheduledClicker-macOS-universal.zip for Mac. Apple silicon and Intel use the same ZIP. The .sha256 files are text checksums, not apps. GitHub's Source code ZIP/TAR files contain source, not the ready-to-run app. Official release downloads do not require sign-in.
+The app starts in Traditional Chinese for any Chinese system locale, including Simplified Chinese; Japanese, Korean and German select their matching language, and all others select English. Switch languages in either mode. This website offers the same five languages through the links at the top; each language has its own shareable pages.
+The app has no network access, account, ads or telemetry. Loop mode overwrites the system clipboard and does not restore its previous contents; text may remain in clipboard history or the target draft. Simple mode does not use the clipboard. Mac Copy diagnostics also replaces it when you press that button. Schedules and positions are not saved across restarts.
+Keep the computer awake and unlocked, with the target window, input and conversation unchanged. Fixed coordinates cannot identify a different conversation or moved field. A Send click does not prove delivery. The app does not inspect AI replies, bypass usage limits or detect reset times.
+The owner accepted Mac build12004 functionality and Windows prompt-language, custom-text preservation and loop trial checks. Both platforms passed automated builds, scheduling, localization and UI checks. This does not establish every third-party app, display setup, permission-denial path or physical emergency-stop scenario.
+The Windows EXE is unsigned. The Mac app is ad-hoc signed, not Developer ID signed or Apple-notarized. An unfamiliar-publisher warning is different from a malware, damaged-file or organization-policy block. Follow the matching instructions below; do not disable system protection to run the app.
 
-Updated 2026-10-15. Supplemental summary; not a guarantee of indexing, ranking or AI citation.
+- ScheduledClicker.exe: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe
+- ScheduledClicker-macOS-universal.zip: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip
+- ScheduledClicker-Windows.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-Windows.sha256
+- ScheduledClicker-macOS-universal.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.sha256
+
+- VERIFICATION.md: https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md
+
+Report a problem on GitHub Issues (a GitHub account is required to post). Include Windows/macOS version, app version/build, target app, reproduction steps and the full error. On Mac, Copy diagnostics can supply build and execution-stage details; inspect it before posting. Do not include prompts, private conversations or personal file paths in public reports. If you have no account, check the FAQ and existing issues first.
+https://github.com/HaNa-486/ScheduledClicker/issues
+
+## Languages
+- [English](https://hana-486.github.io/ScheduledClicker/)
+- [繁體中文](https://hana-486.github.io/ScheduledClicker/zh-Hant/)
+- [日本語](https://hana-486.github.io/ScheduledClicker/ja/)
+- [한국어](https://hana-486.github.io/ScheduledClicker/ko/)
+- [Deutsch](https://hana-486.github.io/ScheduledClicker/de/)

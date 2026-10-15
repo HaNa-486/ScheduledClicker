@@ -1,0 +1,56 @@
+# ScheduledClicker v1.2.0 — 已核對的產品資訊與多語指南
+
+ScheduledClicker v1.2.0 是免費的本機桌面工具，支援 Windows 11 與 macOS 13 以上。可排程滑鼠點擊，或重複輸入提示詞並點擊送出，提供五語系及深淺色介面。
+
+- [定時點擊，循環輸入提示詞。](https://hana-486.github.io/ScheduledClicker/zh-Hant/)
+- [下載 ScheduledClicker v1.2.0](https://hana-486.github.io/ScheduledClicker/zh-Hant/download/)
+- [Windows 定時點擊與提示詞循環](https://hana-486.github.io/ScheduledClicker/zh-Hant/windows-scheduled-auto-clicker/)
+- [Mac 定時點擊與提示詞循環](https://hana-486.github.io/ScheduledClicker/zh-Hant/macos-scheduled-auto-clicker/)
+- [設定提示詞循環](https://hana-486.github.io/ScheduledClicker/zh-Hant/recurring-input/)
+- [為 Codex 排程續跑提示詞](https://hana-486.github.io/ScheduledClicker/zh-Hant/codex-session-continuation/)
+- [下載校驗、權限與使用限制](https://hana-486.github.io/ScheduledClicker/zh-Hant/safety-and-verification/)
+- [ScheduledClicker 常見問題](https://hana-486.github.io/ScheduledClicker/zh-Hant/faq/)
+- [ScheduledClicker 版本紀錄](https://hana-486.github.io/ScheduledClicker/zh-Hant/changelog/)
+
+Windows 請選 ScheduledClicker.exe；Mac 請選 ScheduledClicker-macOS-universal.zip，Apple silicon 與 Intel 共用同一檔案。.sha256 是校驗文字檔，不是程式。GitHub 的 Source code ZIP／TAR 是原始碼，不是可直接執行的 App。正式版下載不需要登入。
+程式啟動時，任何中文系統語系（含簡體中文）會顯示繁體中文；日文、韓文與德文系統顯示對應語言，其餘顯示英文。兩種模式都可切換語言。官網也提供這五種語言，可用頂端連結切換，每種語言都有可分享的獨立頁面。
+程式沒有網路存取、帳號、廣告或遙測。循環模式會覆寫系統剪貼簿，不會還原原本內容；文字可能留在剪貼簿歷程或目標草稿。簡單模式不使用剪貼簿。Mac 的「複製診斷」也會在按下時覆寫剪貼簿。排程與擷取位置不會跨重啟保存。
+請讓電腦保持喚醒、不鎖屏，目標視窗、輸入框與對話保持不變。固定座標無法辨識切換過的對話或移動過的欄位，送出點擊也不代表訊息已送達。工具不讀取 AI 回覆、不繞過用量限制，也不偵測重設時間。
+使用者已驗收 Mac build12004 功能，並通過 Windows 預設提示詞語系切換、自訂文字保留及循環試跑。兩平台通過自動建置、排程、語系與介面檢查；這不代表所有第三方程式、螢幕配置、拒絕授權情境或實體緊急停止操作都已個別驗證。
+Windows EXE 尚未簽章。Mac App 使用 ad-hoc 簽章，沒有 Developer ID 簽章或 Apple 公證。未知發行者提醒，與惡意程式、檔案損毀或組織政策阻擋不同。請依下方對應情境處理，不要為了執行程式而關閉系統防護。
+
+- ScheduledClicker.exe: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe
+- ScheduledClicker-macOS-universal.zip: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip
+- ScheduledClicker-Windows.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-Windows.sha256
+- ScheduledClicker-macOS-universal.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.sha256
+
+- VERIFICATION.md: https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md
+
+請到 GitHub Issues 回報（發文需要 GitHub 帳號）。提供 Windows／macOS 版本、程式版本／build、目標 App、重現步驟與完整錯誤。Mac 可用「複製診斷」取得建置及執行階段資訊，貼出前請先檢查。公開回報不要包含提示詞、私人對話或個人檔案路徑。沒有帳號時，可先查閱常見問題及既有 Issues。
+https://github.com/HaNa-486/ScheduledClicker/issues
+
+若 SmartScreen 因不認識此程式而顯示「Windows 已保護您的電腦」，請先確認官方來源與校驗碼。若你決定繼續，且 Windows 有提供選項，可點「其他資訊」→「仍要執行」；未簽章版本可能顯示「未知的發行者」。若訊息明確指出惡意程式、防毒偵測或受管理裝置限制，請停止，使用回報連結或聯絡管理員。不要關閉 SmartScreen 或防毒；校驗碼一致也不等於安全保證。
+
+遇到無法辨識開發者或未公證提醒時，先嘗試開啟 App 一次。若你信任這份官方下載，前往「系統設定」→「隱私權與安全性」，找到 ScheduledClicker 的提醒並選「強制打開」，接著依畫面確認「打開」。若是惡意程式或 App 損毀警告，請停止並回報完整訊息，不要套用此方法。不要停用 Gatekeeper，也不要用終端機指令移除隔離標記。
+
+替換預覽版或舊版本時，請先結束舊 App，再將新檔案移入「應用程式」。重新檢查「輔助使用」：若啟用項目指向舊檔且權限持續失效，可移除該舊項目，重新加入「應用程式」內的現有 App，再開啟程式。請重新擷取位置。v1.2.0 與 build12004 分別是正式版本與內部建置編號，不是兩個不同下載。
+
+校驗碼用來確認檔案內容與公布的版本一致，不能獨立證明作者可信。下載對應的 .sha256，以文字方式開啟，將其中 64 字元雜湊與指令結果比較，大小寫可忽略。不一致時不要開啟程式，請從官方連結重下載；若仍不一致，請回報。
+
+Windows：開啟 PowerShell，將範例路徑替換成 EXE 的實際位置（檔案總管右鍵點選檔案→複製路徑）。執行下方指令，將 Hash 欄位與 ScheduledClicker-Windows.sha256 比對。使用完整路徑，不必先切換 PowerShell 的目前資料夾。
+
+Mac：開啟「終端機」，輸入 shasum -a 256 再加一個空白，將原始 ZIP 從 Finder 拖進終端機以填入完整路徑，再按 Return。將結果前 64 個字元與 ScheduledClicker-macOS-universal.sha256 比較。自行輸入路徑時，含空白的路徑要加引號。
+
+使用 Windows 按鈕下載 ScheduledClicker.exe，放在你要執行的本機資料夾，不會有安裝精靈。
+依下方 Windows 校驗說明確認檔案後，雙擊 EXE。
+程式開啟後，先用簡單模式測試一次無害點擊。循環模式先用可丟棄的文字試跑，再操作真正的對話。
+使用 Mac 按鈕下載 ScheduledClicker-macOS-universal.zip，先校驗 ZIP 再解壓縮。Safari 若已自動解壓縮，你可能已取得 ScheduledClicker.app；要校驗 ZIP 時，請保留或重新下載原始 ZIP。
+必要時雙擊 ZIP 解壓縮，在 Finder 將 ScheduledClicker.app 拖到「應用程式」。沒有 PKG 安裝程式，也不需要另外找 Apple silicon 版本。
+從「應用程式」開啟 App。若 macOS 無法驗證開發者或公證，請參照下方首次開啟說明。
+開啟「系統設定」→「隱私權與安全性」→「輔助使用」，啟用 ScheduledClicker；若清單沒有，按 + 選取「應用程式」內的 App。系統要求時以 Mac 帳號驗證；若權限仍未生效，結束並重新開啟 ScheduledClicker。
+先用簡單模式測試無害點擊。要測循環時，在同一個可見的目標視窗擷取輸入框與送出按鈕，以可丟棄文字試跑一輪。此權限允許控制其他程式，請只授予你信任的 App。
+開啟循環模式，設定首次執行、每輪完成後等待，以及步驟之間的延遲。
+啟用最多輪數、截止時間或兩者。第一次試跑建議只設定一輪，使用可丟棄文字。
+選擇每輪相同提示詞或編輯提示詞序列，設定序列結束後是否重複最後一筆。取代原有輸入為選用，預設在游標處插入。
+分別等待 3 秒後擷取輸入框與送出按鈕，兩點應在同一個可見視窗內，且保持該視窗位置不變。
+點選試跑一輪並確認內容。這會真的貼上文字並點擊送出；先檢查目標結果再啟動排程，完成點擊的輪數不代表送達回執。

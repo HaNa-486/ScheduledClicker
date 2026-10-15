@@ -7,3 +7,6 @@ dist/ScheduledClicker-macOS-universal.sha256
 .vs/
 
 dist/ScheduledClicker-Windows.sha256
+
+# Python generator bytecode
+__pycache__/

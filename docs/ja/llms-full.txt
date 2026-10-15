@@ -1,0 +1,56 @@
+# ScheduledClicker v1.2.0 — 確認済み製品情報と言語別ガイド
+
+ScheduledClicker v1.2.0 は Windows 11 / macOS 13 以降に対応する無料のローカルツールです。クリックの予約やプロンプト入力・送信クリックの繰り返しができ、5 言語とライト／ダーク表示に対応します。
+
+- [クリックを予約。プロンプトを繰り返す。](https://hana-486.github.io/ScheduledClicker/ja/)
+- [ScheduledClicker v1.2.0 をダウンロード](https://hana-486.github.io/ScheduledClicker/ja/download/)
+- [Windows のクリック予約とプロンプトループ](https://hana-486.github.io/ScheduledClicker/ja/windows-scheduled-auto-clicker/)
+- [Mac のクリック予約とプロンプトループ](https://hana-486.github.io/ScheduledClicker/ja/macos-scheduled-auto-clicker/)
+- [プロンプトループを設定する](https://hana-486.github.io/ScheduledClicker/ja/recurring-input/)
+- [Codex の続行プロンプトを予約する](https://hana-486.github.io/ScheduledClicker/ja/codex-session-continuation/)
+- [ファイルの検証、権限、使用上の制限](https://hana-486.github.io/ScheduledClicker/ja/safety-and-verification/)
+- [ScheduledClicker のよくある質問](https://hana-486.github.io/ScheduledClicker/ja/faq/)
+- [ScheduledClicker の更新履歴](https://hana-486.github.io/ScheduledClicker/ja/changelog/)
+
+Windows は ScheduledClicker.exe、Mac は ScheduledClicker-macOS-universal.zip です。Apple silicon と Intel は同じ ZIP を使います。.sha256 は検証用テキストで、アプリではありません。GitHub の Source code ZIP／TAR はソースコードで、そのまま使えるアプリではありません。正式版のダウンロードにログインは不要です。
+起動時のシステム言語が中国語の場合は簡体字の設定も含め繁体字中国語、日本語・韓国語・ドイツ語の場合はそれぞれの言語、それ以外は英語で表示します。両モードで切り替え可能です。サイトも上部のリンクから同じ 5 言語を選べ、それぞれのページを個別に共有できます。
+アプリにネットワークアクセス、アカウント、広告、テレメトリはありません。ループはクリップボードを上書きし、以前の内容を復元しません。履歴や下書きに文字が残る場合があります。シンプルモードはクリップボードを使いません。Mac の診断コピーも押したときに上書きします。スケジュールと座標は再起動後に保存されません。
+PC をスリープ・ロックさせず、対象ウィンドウ、入力欄、会話を変えないでください。固定座標では会話の切り替えや入力欄の移動を識別できません。送信クリックは配信完了を意味しません。AI の応答、利用制限の回避、リセット時刻の検出には対応しません。
+所有者が Mac build12004 の機能と、Windows の初期プロンプトの言語切り替え、編集内容の保持、ループ試行を確認しました。両 OS の自動ビルド、スケジュール、翻訳、UI 検査は合格しています。ただし、すべての他社アプリ、画面構成、権限拒否、物理キーによる緊急停止を個別に検証したものではありません。
+Windows EXE は未署名です。Mac は ad-hoc 署名で、Developer ID 署名・Apple 公証はありません。発行元不明の警告は、マルウェア、破損、組織ポリシーによるブロックとは異なります。下記の該当する手順に従い、保護機能を無効にしないでください。
+
+- ScheduledClicker.exe: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe
+- ScheduledClicker-macOS-universal.zip: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip
+- ScheduledClicker-Windows.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-Windows.sha256
+- ScheduledClicker-macOS-universal.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.sha256
+
+- VERIFICATION.md: https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md
+
+GitHub Issues から報告できます（投稿には GitHub アカウントが必要）。OS とアプリのバージョン／ビルド、対象アプリ、再現手順、エラー全文を記載してください。Mac の診断コピーでビルドや実行段階を確認できます。公開前に内容を確認し、プロンプト、私的な会話、個人のファイルパスを含めないでください。アカウントがない場合は FAQ や既存の Issues を参照できます。
+https://github.com/HaNa-486/ScheduledClicker/issues
+
+未認識のアプリとして SmartScreen に「Windows によって PC が保護されました」と表示された場合は、公式の入手先とチェックサムを確認します。続行を選ぶ場合、Windows に選択肢があれば「詳細情報」→「実行」を選べます。未署名のため発行元が不明と表示される場合があります。マルウェア、防ウイルス検出、管理対象端末の制限の場合は停止し、問題を報告するか管理者に確認してください。SmartScreen や防ウイルスを無効にしないでください。ハッシュの一致だけで安全性は保証されません。
+
+開発元不明・未公証の警告では、まず一度アプリを開こうとします。公式ダウンロードを信頼する場合は「システム設定」→「プライバシーとセキュリティ」の ScheduledClicker に関する表示で「このまま開く」を選び、表示された確認で「開く」を選択します。マルウェアや破損の警告にはこの対処を使わず、停止して正確な文面を報告してください。Gatekeeper を無効にしたり、ターミナルで隔離属性を削除したりしないでください。
+
+旧版やプレビュー版を置き換える前にアプリを終了してください。新しいアプリを「アプリケーション」に移し、アクセシビリティ権限を再確認します。許可済み項目が旧ファイルを指して権限が機能しない場合は、旧項目を削除して現在のアプリを追加し、開き直します。座標は再取得してください。v1.2.0 と build12004 はリリース版と内部ビルド番号で、別々のダウンロードではありません。
+
+チェックサムは公開ファイルとの一致を確認するもので、作成者の信頼性を独立に証明するものではありません。対応する .sha256 をテキストとして開き、64 文字のハッシュとコマンド結果を比較します。大文字・小文字は区別しません。不一致なら起動せず公式リンクから再取得し、繰り返す場合は報告してください。
+
+Windows：PowerShell を開き、例のパスを実際の EXE の場所に置き換えます（エクスプローラーでファイルを右クリック→パスのコピー）。下記を実行し、Hash 欄と ScheduledClicker-Windows.sha256 を比較します。フルパスを使うので現在のフォルダーは問いません。
+
+Mac：「ターミナル」に shasum -a 256 と空白を入力し、Finder から元の ZIP をドラッグしてフルパスを挿入し、Return を押します。先頭 64 文字と ScheduledClicker-macOS-universal.sha256 を比較します。パスを手入力する場合、空白を含むパスは引用符で囲みます。
+
+Windows ボタンから ScheduledClicker.exe をダウンロードし、実行したいローカルフォルダーに置きます。インストールウィザードはありません。
+下記の Windows 検証手順でファイルを確認し、EXE をダブルクリックします。
+開いたらシンプルモードで無害なクリックを 1 回試してください。ループは使い捨ての文字で確認してから実際の会話で使います。
+Mac ボタンから ScheduledClicker-macOS-universal.zip をダウンロードし、展開前に ZIP を検証します。Safari が自動展開した場合は ScheduledClicker.app が既にあることがあります。検証するには元の ZIP を保存するか再取得してください。
+必要なら ZIP をダブルクリックして展開し、Finder で ScheduledClicker.app を「アプリケーション」にドラッグします。PKG や Apple silicon 専用の別ファイルはありません。
+「アプリケーション」から起動します。開発元や公証を確認できない場合は、下の起動手順を確認してください。
+「システム設定」→「プライバシーとセキュリティ」→「アクセシビリティ」で ScheduledClicker を有効にします。一覧になければ + から「アプリケーション」内のアプリを追加します。必要なら Mac の認証を行い、権限が反映されなければ終了して開き直します。
+シンプルモードで無害なクリックを試します。ループは同じ表示中の対象ウィンドウで入力欄と送信ボタンを取得し、使い捨ての文字で 1 回試してください。この権限は他のアプリの操作を許可するため、信頼するアプリにのみ与えてください。
+ループモードで初回日時、各回の後の待機時間、操作間隔を設定します。
+最大回数、終了日時、または両方を有効にします。初回試行は 1 回にし、使い捨ての文字を使います。
+毎回同じ内容か順番に異なるプロンプトかを選び、終了後に最後の内容を繰り返すか設定します。既存文字の置換は任意で、初期設定はカーソル位置への挿入です。
+それぞれ 3 秒のカウントダウン後に入力欄と送信ボタンを取得します。同じ表示中のウィンドウで取得し、その位置を変えないでください。
+1 回試行して確認画面を読みます。実際に文字を貼り付けて送信をクリックします。結果を確認してから予約を開始してください。クリック完了回数は配信確認ではありません。

@@ -34,3 +34,6 @@ footer{max-width:1180px;margin:80px auto 0;padding:30px 24px 44px;border-top:1px
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
 .version-note{max-width:1120px;margin:18px auto;padding:16px 20px;border:1px solid #29405f;border-radius:12px;background:#11243a;color:#dbe8f8;line-height:1.6}.version-note a{color:#8edfff;text-decoration:underline}.prose table{display:block;max-width:100%;overflow-x:auto}.prose td,.prose th{padding:10px;text-align:left;vertical-align:top}
+
+/* Keep official platform downloads close to the page heading. */
+.download-page{margin-top:24px}.download-page .page-hero{padding:16px 0}.download-page .page-hero h1{font-size:clamp(32px,4vw,46px);margin-bottom:16px}.download-page .page-hero .lead{font-size:17px;margin-bottom:0}.download-card code{overflow-wrap:anywhere}.prose pre{max-width:100%;overflow-x:auto;padding:12px;background:#08162d;border-radius:8px}

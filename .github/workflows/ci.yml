@@ -32,6 +32,19 @@ jobs:
       - name: Verify executable exists
         shell: pwsh
         run: if (-not (Test-Path -LiteralPath .\dist\ScheduledClicker.exe)) { throw 'Windows executable was not produced.' }
+      - name: Package Windows checksum
+        shell: pwsh
+        run: |
+          $releaseHash = (Get-FileHash -LiteralPath .\dist\ScheduledClicker.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$releaseHash  ScheduledClicker.exe" | Set-Content -LiteralPath .\dist\ScheduledClicker-Windows.sha256 -Encoding ascii
+      - name: Upload Windows application
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: ScheduledClicker-Windows
+          path: |
+            dist/ScheduledClicker.exe
+            dist/ScheduledClicker-Windows.sha256
+          if-no-files-found: error
       - name: Validate GitHub Pages metadata and links
         shell: pwsh
         run: .\scripts\validate-site.ps1

@@ -8,7 +8,7 @@ $canonicalUrls = [System.Collections.Generic.HashSet[string]]::new([System.Strin
 $titles = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 $descriptions = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 $expectedPrimaryLabels = @('Windows', 'macOS', 'Download', 'FAQ', 'GitHub')
-$expectedDetailLabels = @('Windows details', 'macOS details', 'Codex workflow', 'Safety & verification', 'Download', 'FAQ', 'Changelog', 'Loop mode preview')
+$expectedDetailLabels = @('Windows details', 'macOS details', 'Codex workflow', 'Safety & verification', 'Download', 'FAQ', 'Changelog', 'Loop mode')
 $expectedPrimaryUrls = @(
     'https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/',
     'https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/',

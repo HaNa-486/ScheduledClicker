@@ -1,4 +1,6 @@
-# macOS 1.2.0 preview local acceptance
+# macOS 1.2.0 local acceptance and regression guide
+
+The owner accepted normal build12004 functionality and authorized v1.2.0 release on 2026-10-15. The checklist below remains useful for new environments; historical repair notes record what was known at each step.
 
 The universal ZIP supports macOS 13+ on Apple silicon and Intel. CI builds both architectures, checks the ad-hoc signature, and renders five languages in light/dark appearance. It does not grant Accessibility permission or send real input on a user's desktop.
 

@@ -2,6 +2,17 @@
 
 本專案的重大變更會記錄在此。格式參考 [Keep a Changelog](https://keepachangelog.com/zh-TW/1.1.0/)，版本採用 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [1.2.0] — 2026-10-15
+
+- Release bounded prompt input/send loops for Windows and macOS: same/per-round prompts, completion-relative intervals, round/deadline bounds, trial, pause and cancel.
+- Shared simple/loop window, five languages, untouched starter localization and light/dark controls.
+- Fix Windows language picker/date input; preserve user-edited prompt text.
+- Fix Mac Dock miscapture using stored AX hit-window/top-level identity, with live keyboard-owner checks and copyable diagnostics. Add wheel/trackpad numeric adjustment.
+- Owner functional acceptance on both platforms; publish direct platform downloads, checksums, current FAQ/schema and AI-readable documentation.
+- Windows informational version is now 1.2.0; Mac accepted runtime remains 1.2.0/build12004. No new input behavior since the accepted candidates.
+
+The preview entries below are historical snapshots, superseded by the v1.2.0 release and its verification record.
+
 ## [1.2.0-preview.2] — 2026-10-15 (candidate, native Mac retest pending)
 
 - Replace Mac cross-API geometry/window-order focus inference with owning accessibility window identity and top-level checks. Preserve captured CG window/visibility checks and fail before clipboard changes. Support remote WebKit leaf elements through their owning window; add content-free diagnostic codes.

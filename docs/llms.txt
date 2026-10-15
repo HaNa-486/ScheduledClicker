@@ -1,19 +1,20 @@
 # ScheduledClicker
 
-Free local Windows 11 and macOS 13+ scheduling tool. Stable v1.1.2 supports one scheduled single/double click. Candidate 1.2.0-preview.2 adds bounded recurring prompt input/send, five languages and light/dark switching; it is not a stable release.
+Latest stable version: **v1.2.0**, released 2026-10-15. Free MIT-licensed local desktop tool for Windows 11 and macOS 13+. Simple mode schedules one single/double click; loop mode repeats configured prompt input and send clicks within a round limit or deadline. Five interface languages and system-selected light/dark appearance with manual switching.
 
-- [Website](https://hana-486.github.io/ScheduledClicker/)
-- [Stable downloads](https://github.com/HaNa-486/ScheduledClicker/releases/latest)
-- [Preview behavior and setup](https://hana-486.github.io/ScheduledClicker/recurring-input/)
-- [Preview downloads](https://hana-486.github.io/ScheduledClicker/download/#preview)
+- [Windows EXE](https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe)
+- [macOS universal ZIP: Apple silicon and Intel](https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip)
+- [Installation and matching checksums](https://hana-486.github.io/ScheduledClicker/download/)
+- [Release notes](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.2.0)
+- [Loop behavior and setup](https://hana-486.github.io/ScheduledClicker/recurring-input/)
 - [Windows](https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/)
-- [macOS permissions and platform](https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/)
+- [macOS](https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/)
 - [FAQ](https://hana-486.github.io/ScheduledClicker/faq/)
 - [Safety and clipboard behavior](https://hana-486.github.io/ScheduledClicker/safety-and-verification/)
-- [Full versioned product facts](https://hana-486.github.io/ScheduledClicker/llms-full.txt)
+- [Full product facts](https://hana-486.github.io/ScheduledClicker/llms-full.txt)
 - [Source and license](https://github.com/HaNa-486/ScheduledClicker)
-- [Candidate verification](https://github.com/HaNa-486/ScheduledClicker/blob/codex/recurring-prompt-loop/VERIFICATION.md)
+- [Versioned verification](https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md)
 
-The loop overwrites the clipboard and performs real input. Keep the computer awake/unlocked and target fixed. It does not detect AI completion, quota availability or delivery, and does not bypass limits. Mac CI does not establish native-input acceptance on a user desktop. See the versioned verification report.
+Official release downloads do not require GitHub sign-in. The loop overwrites the clipboard and performs real input; cancellation cannot undo past actions. Keep the computer awake/unlocked and target fixed. It does not detect AI completion, quota availability or delivery, and does not bypass limits.
 
 Updated 2026-10-15. Supplemental summary; not a guarantee of indexing, ranking or AI citation.

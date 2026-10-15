@@ -1,4 +1,4 @@
-"""Check public facts against visible copy and stable/preview availability."""
+"""Check public facts against visible copy and stable release availability."""
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse, unquote
@@ -50,11 +50,17 @@ for path in DOCS.rglob("index.html"):
     page = Page(source)
     visible = normalize(" ".join(page.words))
     assert page.h1 == 1, f"Expected one h1: {path}"
-    assert "1.1.2" in visible and "1.2.0-preview.2" in visible, f"Missing version distinction: {path}"
+    assert "v1.2.0" in visible, f"Missing current release: {path}"
+    assert "1.2.0-preview" not in source and "/actions/runs/" not in source, f"Stale test-build download: {path}"
+    assert "Stable: v1.1.2" not in source, f"Old version presented as current: {path}"
     faq_count = 0
     for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', source, re.S):
         data = json.loads(raw)
         for node in data.get("@graph", [data]):
+            if node.get("@type") == "SoftwareApplication":
+                assert node["softwareVersion"] == "1.2.0", f"Stale software schema: {path}"
+                assert "/releases/download/v1.2.0/" in node["downloadUrl"], f"Unpinned software download: {path}"
+                checks += 1
             if node.get("@type") != "FAQPage":
                 continue
             faq_count += 1
@@ -78,7 +84,11 @@ for path in DOCS.rglob("index.html"):
 
 for name in ("llms.txt", "llms-full.txt"):
     text = (DOCS / name).read_text(encoding="utf-8")
-    for required in ("1.1.2", "1.2.0-preview.2", "clipboard", "recurring-input/", "VERIFICATION.md"):
+    for required in ("1.2.0", "releases/download/v1.2.0/", "clipboard", "recurring-input/", "VERIFICATION.md"):
         assert required in text, f"Missing fact in {name}: {required}"
         checks += 1
-print(f"PASS: {checks} discovery checks: visible FAQ/schema parity, version boundaries, fragments and AI summaries.")
+downloads = (DOCS / "download/index.html").read_text(encoding="utf-8")
+for asset in ("ScheduledClicker.exe", "ScheduledClicker-macOS-universal.zip", "ScheduledClicker-Windows.sha256", "ScheduledClicker-macOS-universal.sha256"):
+    assert f"https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/{asset}" in downloads, f"Missing official asset: {asset}"
+    checks += 1
+print(f"PASS: {checks} discovery checks: visible FAQ/schema parity, stable versions/downloads, fragments and AI summaries.")

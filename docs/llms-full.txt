@@ -1,46 +1,42 @@
 # ScheduledClicker
 
-ScheduledClicker is a free, open-source local desktop tool for Windows 11 and macOS 13+. Stable v1.1.2 schedules one single or double mouse click. Candidate 1.2.0-preview.2 adds bounded recurring prompt input/send, a shared simple/loop window, five interface languages and manual light/dark switching.
+Latest stable version: **v1.2.0**, released 2026-10-15. Free MIT-licensed local desktop tool for Windows 11 and macOS 13+. Simple mode schedules one single/double click; loop mode repeats configured prompt input and send clicks within a round limit or deadline. Five interface languages and system-selected light/dark appearance with manual switching.
 
-## Availability (updated 2026-10-15)
+- [Windows EXE](https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe)
+- [macOS universal ZIP: Apple silicon and Intel](https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip)
+- [Installation and matching checksums](https://hana-486.github.io/ScheduledClicker/download/)
+- [Release notes](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.2.0)
+- [Loop behavior and setup](https://hana-486.github.io/ScheduledClicker/recurring-input/)
+- [Windows](https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/)
+- [macOS](https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/)
+- [FAQ](https://hana-486.github.io/ScheduledClicker/faq/)
+- [Safety and clipboard behavior](https://hana-486.github.io/ScheduledClicker/safety-and-verification/)
+- [Full product facts](https://hana-486.github.io/ScheduledClicker/llms-full.txt)
+- [Source and license](https://github.com/HaNa-486/ScheduledClicker)
+- [Versioned verification](https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md)
 
-- Stable release: v1.1.2, https://github.com/HaNa-486/ScheduledClicker/releases/latest
-- Preview: 1.2.0-preview.2, feature branch codex/recurring-prompt-loop. This is not a stable release.
-- Preview guide: https://hana-486.github.io/ScheduledClicker/recurring-input/
-- Preview download instructions: https://hana-486.github.io/ScheduledClicker/download/#preview
-- Source: https://github.com/HaNa-486/ScheduledClicker
-- Candidate verification: https://github.com/HaNa-486/ScheduledClicker/blob/codex/recurring-prompt-loop/VERIFICATION.md
-- License: MIT. No ads, accounts, telemetry or application network access.
+Official release downloads do not require GitHub sign-in. The loop overwrites the clipboard and performs real input; cancellation cannot undo past actions. Keep the computer awake/unlocked and target fixed. It does not detect AI completion, quota availability or delivery, and does not bypass limits.
 
-## Preview behavior
+Updated 2026-10-15. Supplemental summary; not a guarantee of indexing, ranking or AI citation.
 
-One prompt per round or a sequence; optional repeat of the final prompt. First execution uses a specified time. The interval starts after a round completes. At least one maximum-round or deadline bound is required; when both apply, the first reached stops. Trial performs real input and a send click. Pause/resume applies only while waiting between rounds; the deadline remains binding. Pausing mid-round stops the loop. Pause/cancel cannot undo already-completed input.
+## Timing and prompts
 
-Capture the input and Send positions in the same target window. Keep the computer awake and unlocked and the target layout unchanged. The app does not identify chats, detect AI completion or quota resets, or verify delivery. It does not bypass, reset or increase service limits.
+Use one prompt every round or a sequence. A sequence can stop at its end or repeat its last entry. The first execution uses a future local time; each interval starts after the previous round completes. Maximum rounds or a deadline is required; when both are enabled, the first reached stops. Trial performs real input and a send click. Pause/resume applies only between rounds, while the deadline remains active. Pausing during a round stops it. Cancel/F8/close stops remaining steps, never undoing completed paste or clicks.
 
-Languages: Traditional Chinese, English, Japanese, Korean and German. All Chinese system locales select Traditional Chinese; ja/ko/de select their language; others select English. Users can switch in either mode. Startup reads the system light/dark appearance; the sun/moon action changes it for this session. Restart reads system choices again.
+Capture input and Send in the same visible window. Keep the intended app, chat and layout unchanged. Window checks cannot identify a changed conversation or prove delivery. On macOS, a separate activation stage waits before the input click; target identity is obtained with system-wide Accessibility hit-testing and retained for validation. Only regular accessible app windows are supported. Mac numeric duration/action-delay/round fields support wheel and trackpad adjustment.
 
-## Data and platform boundaries
+## Languages and appearance
 
-The preview loop overwrites the clipboard to paste text; previous clipboard contents are not restored. Text may remain in clipboard history or the target app. Simple mode does not use the clipboard. Schedules, positions and prompts are not saved by ScheduledClicker after exit.
+Traditional Chinese, English, Japanese, Korean and German. All Chinese system locales use Traditional Chinese; Japanese/Korean/German use their language; other locales use English. Both modes allow manual switching. Only the untouched initial prompt follows the selected language (繼續 / Continue / 続けて / 계속 / Weiter); edited prompts and active plan text are preserved. Startup follows the system app appearance, and the sun/moon action overrides it for the current session. Restart reads the system choices again.
 
-Windows uses a portable WinForms EXE. Mac uses a separate universal AppKit application with arm64 and x86_64 code, requires macOS 13+ and explicit Accessibility permission. EXE files do not run natively on Mac. Windows is unsigned; Mac is ad-hoc signed, not Developer ID signed or notarized. Checksums verify integrity, not trusted authorship.
+## Data, permissions and compatibility
 
-## Evidence boundaries
+No ads, accounts, telemetry, application network access or third-party packages. ScheduledClicker does not persist prompts or schedules after exit. The loop clipboard overwrite is not restored; text can remain in clipboard history or the target app. Simple mode does not use the clipboard. Mac Copy diagnostics includes build/OS, app identity and execution stages, not prompt text or window titles; clicking it replaces the clipboard.
 
-Windows preview owner testing passed on 2026-10-15; its automated evidence includes loop/core, five-language layout, appearance, date validation and language-picker interaction checks. Mac candidate evidence is recorded per CI run in VERIFICATION.md. CI rendering/event construction does not verify native paste/send, global F8 or wrong-sibling-window rejection on a user desktop. Historical v1.1.2 MacBook Air acceptance does not establish preview acceptance.
+Windows: portable WinForms EXE for Windows 11, unsigned, no installer; higher-integrity administrator apps can reject input. macOS: universal AppKit/Quartz app for macOS 13+ (arm64 and x86_64), user-granted Accessibility permission, ad-hoc signed and not Developer ID signed or notarized. EXE files do not run natively on Mac. Checksums verify file integrity, not trusted authorship.
 
-## Documentation
+## Verification scope and history
 
-- Windows: https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/
-- macOS: https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/
-- Loop preview: https://hana-486.github.io/ScheduledClicker/recurring-input/
-- Codex use case: https://hana-486.github.io/ScheduledClicker/codex-session-continuation/
-- Safety: https://hana-486.github.io/ScheduledClicker/safety-and-verification/
-- Download: https://hana-486.github.io/ScheduledClicker/download/
-- FAQ: https://hana-486.github.io/ScheduledClicker/faq/
-- Changelog: https://hana-486.github.io/ScheduledClicker/changelog/
+The owner accepted Mac build12004 normal functionality and Windows prompt-language/custom-text/loop checks, then authorized v1.2.0 publication. CI checks builds, scheduling, capture/focus policies, localization, UI and packaging. Individual desktop failure scenarios and every third-party app/display combination are not guaranteed. Exact build evidence and hashes are in VERIFICATION.md. Older v1.1.2 supports only one-shot clicking; v1.2.0 replaces prior loop preview downloads.
 
-Independent project; not affiliated with or endorsed by OpenAI. This file is a supplemental product summary, not an indexing guarantee or crawler instruction.
-
-Preview 2 localizes only untouched starter prompts and adds Mac numeric wheel adjustment. Mac build 12002 still failed Safari and Word owner tests. Build12003 incorrectly captured a Dock compositor surface. Current Mac build 12004 uses system-wide AX hit-window identity at capture and each step, live keyboard ownership and copyable diagnostics. It supports regular accessible app windows; no CG-rectangle fallback or layer skipping. Native acceptance is pending; automated policy tests are not a delivery guarantee. Exact candidate evidence: https://github.com/HaNa-486/ScheduledClicker/actions/runs/38718545337. Windows candidate metadata remains preview.2.
+Independent project; not affiliated with or endorsed by OpenAI. No AI completion, reset recognition or usage-limit bypass.

@@ -1,0 +1,30 @@
+# ScheduledClicker v1.2.0 — Geprüfte Produktinformationen und Sprachanleitungen
+
+ScheduledClicker v1.2.0 ist ein kostenloses lokales Werkzeug für Windows 11 und macOS 13 oder neuer. Planen Sie Mausklicks oder wiederholen Sie Texteingabe und Sendeklicks – mit fünf Sprachen sowie heller und dunkler Darstellung.
+
+- [Klicks planen. Prompts wiederholen.](https://hana-486.github.io/ScheduledClicker/de/)
+- [ScheduledClicker v1.2.0 herunterladen](https://hana-486.github.io/ScheduledClicker/de/download/)
+- [Geplante Klicks und Prompt-Schleifen für Windows](https://hana-486.github.io/ScheduledClicker/de/windows-scheduled-auto-clicker/)
+- [Geplante Klicks und Prompt-Schleifen für Mac](https://hana-486.github.io/ScheduledClicker/de/macos-scheduled-auto-clicker/)
+- [Eine Prompt-Schleife einrichten](https://hana-486.github.io/ScheduledClicker/de/recurring-input/)
+- [Einen Fortsetzungs-Prompt für Codex planen](https://hana-486.github.io/ScheduledClicker/de/codex-session-continuation/)
+- [Downloadprüfung, Berechtigungen und Grenzen](https://hana-486.github.io/ScheduledClicker/de/safety-and-verification/)
+- [Fragen und Antworten zu ScheduledClicker](https://hana-486.github.io/ScheduledClicker/de/faq/)
+- [Versionsverlauf von ScheduledClicker](https://hana-486.github.io/ScheduledClicker/de/changelog/)
+
+Unter Windows wählen Sie ScheduledClicker.exe, auf dem Mac ScheduledClicker-macOS-universal.zip. Apple silicon und Intel verwenden dieselbe ZIP. .sha256-Dateien sind Prüfsummen als Text, keine Anwendungen. GitHubs Source code ZIP/TAR enthält Quellcode und keine direkt startbare App. Offizielle Downloads benötigen keine Anmeldung.
+Bei chinesischer Systemsprache – einschließlich vereinfachtem Chinesisch – startet die App auf traditionellem Chinesisch. Japanisch, Koreanisch und Deutsch wählen die jeweilige Sprache; sonst wird Englisch verwendet. Beide Modi erlauben einen Wechsel. Auch diese Website bietet oben dieselben fünf Sprachen mit eigenen, teilbaren Seitenadressen an.
+Die App verwendet keinen Netzwerkzugriff, kein Konto, keine Werbung und keine Telemetrie. Der Schleifenmodus überschreibt die Zwischenablage, ohne den vorherigen Inhalt wiederherzustellen. Text kann im Verlauf oder im Zielentwurf bleiben. Der einfache Modus verwendet keine Zwischenablage. Auch die Mac-Diagnosekopie überschreibt sie beim Betätigen. Zeitpläne und Positionen werden nicht über einen Neustart gespeichert.
+Der Computer muss wach und entsperrt bleiben; Zielfenster, Eingabefeld und Gespräch dürfen sich nicht ändern. Feste Koordinaten erkennen weder einen anderen Chat noch ein verschobenes Feld. Ein Sendeklick bestätigt keine Zustellung. Die App liest keine KI-Antworten, umgeht keine Nutzungslimits und erkennt keine Rücksetzzeitpunkte.
+Der Eigentümer hat die Funktionen von Mac build12004 sowie unter Windows Sprachwechsel des Anfangs-Prompts, Erhalt eigener Texte und einen Schleifentest bestätigt. Automatisierte Builds, Zeitplan-, Sprach- und UI-Prüfungen beider Plattformen waren erfolgreich. Das belegt nicht jede Fremdanwendung, Bildschirmkonfiguration, verweigerte Berechtigung oder Betätigung der physischen Notstopptaste.
+Die Windows-EXE ist nicht signiert. Die Mac-App ist ad-hoc signiert, ohne Developer-ID-Signatur oder Apple-Notarisierung. Eine Warnung vor einem unbekannten Herausgeber ist etwas anderes als Schadsoftware, eine beschädigte Datei oder eine Organisationssperre. Folgen Sie dem passenden Abschnitt; deaktivieren Sie keine Schutzfunktionen, um die App auszuführen.
+
+- ScheduledClicker.exe: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe
+- ScheduledClicker-macOS-universal.zip: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip
+- ScheduledClicker-Windows.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-Windows.sha256
+- ScheduledClicker-macOS-universal.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.sha256
+
+- VERIFICATION.md: https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md
+
+Melden Sie ein Problem über GitHub Issues; zum Schreiben ist ein GitHub-Konto erforderlich. Geben Sie Betriebssystem, App-Version/Build, Ziel-App, Schritte zur Reproduktion und vollständige Fehlermeldung an. Die Mac-Diagnosekopie liefert Build und Ausführungsphase. Prüfen Sie sie vor dem Veröffentlichen. Keine Prompts, privaten Gespräche oder persönlichen Dateipfade in öffentliche Berichte aufnehmen. Ohne Konto können Sie FAQ und vorhandene Issues lesen.
+https://github.com/HaNa-486/ScheduledClicker/issues

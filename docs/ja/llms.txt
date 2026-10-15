@@ -1,0 +1,30 @@
+# ScheduledClicker v1.2.0 — 確認済み製品情報と言語別ガイド
+
+ScheduledClicker v1.2.0 は Windows 11 / macOS 13 以降に対応する無料のローカルツールです。クリックの予約やプロンプト入力・送信クリックの繰り返しができ、5 言語とライト／ダーク表示に対応します。
+
+- [クリックを予約。プロンプトを繰り返す。](https://hana-486.github.io/ScheduledClicker/ja/)
+- [ScheduledClicker v1.2.0 をダウンロード](https://hana-486.github.io/ScheduledClicker/ja/download/)
+- [Windows のクリック予約とプロンプトループ](https://hana-486.github.io/ScheduledClicker/ja/windows-scheduled-auto-clicker/)
+- [Mac のクリック予約とプロンプトループ](https://hana-486.github.io/ScheduledClicker/ja/macos-scheduled-auto-clicker/)
+- [プロンプトループを設定する](https://hana-486.github.io/ScheduledClicker/ja/recurring-input/)
+- [Codex の続行プロンプトを予約する](https://hana-486.github.io/ScheduledClicker/ja/codex-session-continuation/)
+- [ファイルの検証、権限、使用上の制限](https://hana-486.github.io/ScheduledClicker/ja/safety-and-verification/)
+- [ScheduledClicker のよくある質問](https://hana-486.github.io/ScheduledClicker/ja/faq/)
+- [ScheduledClicker の更新履歴](https://hana-486.github.io/ScheduledClicker/ja/changelog/)
+
+Windows は ScheduledClicker.exe、Mac は ScheduledClicker-macOS-universal.zip です。Apple silicon と Intel は同じ ZIP を使います。.sha256 は検証用テキストで、アプリではありません。GitHub の Source code ZIP／TAR はソースコードで、そのまま使えるアプリではありません。正式版のダウンロードにログインは不要です。
+起動時のシステム言語が中国語の場合は簡体字の設定も含め繁体字中国語、日本語・韓国語・ドイツ語の場合はそれぞれの言語、それ以外は英語で表示します。両モードで切り替え可能です。サイトも上部のリンクから同じ 5 言語を選べ、それぞれのページを個別に共有できます。
+アプリにネットワークアクセス、アカウント、広告、テレメトリはありません。ループはクリップボードを上書きし、以前の内容を復元しません。履歴や下書きに文字が残る場合があります。シンプルモードはクリップボードを使いません。Mac の診断コピーも押したときに上書きします。スケジュールと座標は再起動後に保存されません。
+PC をスリープ・ロックさせず、対象ウィンドウ、入力欄、会話を変えないでください。固定座標では会話の切り替えや入力欄の移動を識別できません。送信クリックは配信完了を意味しません。AI の応答、利用制限の回避、リセット時刻の検出には対応しません。
+所有者が Mac build12004 の機能と、Windows の初期プロンプトの言語切り替え、編集内容の保持、ループ試行を確認しました。両 OS の自動ビルド、スケジュール、翻訳、UI 検査は合格しています。ただし、すべての他社アプリ、画面構成、権限拒否、物理キーによる緊急停止を個別に検証したものではありません。
+Windows EXE は未署名です。Mac は ad-hoc 署名で、Developer ID 署名・Apple 公証はありません。発行元不明の警告は、マルウェア、破損、組織ポリシーによるブロックとは異なります。下記の該当する手順に従い、保護機能を無効にしないでください。
+
+- ScheduledClicker.exe: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe
+- ScheduledClicker-macOS-universal.zip: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip
+- ScheduledClicker-Windows.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-Windows.sha256
+- ScheduledClicker-macOS-universal.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.sha256
+
+- VERIFICATION.md: https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md
+
+GitHub Issues から報告できます（投稿には GitHub アカウントが必要）。OS とアプリのバージョン／ビルド、対象アプリ、再現手順、エラー全文を記載してください。Mac の診断コピーでビルドや実行段階を確認できます。公開前に内容を確認し、プロンプト、私的な会話、個人のファイルパスを含めないでください。アカウントがない場合は FAQ や既存の Issues を参照できます。
+https://github.com/HaNa-486/ScheduledClicker/issues

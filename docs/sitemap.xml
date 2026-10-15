@@ -1,15 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://hana-486.github.io/ScheduledClicker/</loc>
-    <lastmod>2026-10-15</lastmod>
-  </url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/download/</loc><lastmod>2026-10-15</lastmod></url>
   <url><loc>https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
   <url><loc>https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/recurring-input/</loc><lastmod>2026-10-15</lastmod></url>
   <url><loc>https://hana-486.github.io/ScheduledClicker/codex-session-continuation/</loc><lastmod>2026-10-15</lastmod></url>
   <url><loc>https://hana-486.github.io/ScheduledClicker/safety-and-verification/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://hana-486.github.io/ScheduledClicker/download/</loc><lastmod>2026-10-15</lastmod></url>
   <url><loc>https://hana-486.github.io/ScheduledClicker/faq/</loc><lastmod>2026-10-15</lastmod></url>
   <url><loc>https://hana-486.github.io/ScheduledClicker/changelog/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://hana-486.github.io/ScheduledClicker/recurring-input/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/download/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/windows-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/macos-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/recurring-input/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/codex-session-continuation/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/safety-and-verification/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/faq/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/zh-Hant/changelog/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/download/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/windows-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/macos-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/recurring-input/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/codex-session-continuation/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/safety-and-verification/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/faq/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ja/changelog/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/download/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/windows-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/macos-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/recurring-input/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/codex-session-continuation/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/safety-and-verification/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/faq/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/ko/changelog/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/download/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/windows-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/macos-scheduled-auto-clicker/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/recurring-input/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/codex-session-continuation/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/safety-and-verification/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/faq/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://hana-486.github.io/ScheduledClicker/de/changelog/</loc><lastmod>2026-10-15</lastmod></url>
 </urlset>

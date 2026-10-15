@@ -1,42 +1,63 @@
-# ScheduledClicker
+# ScheduledClicker v1.2.0 — Verified product facts and language guides
 
-Latest stable version: **v1.2.0**, released 2026-10-15. Free MIT-licensed local desktop tool for Windows 11 and macOS 13+. Simple mode schedules one single/double click; loop mode repeats configured prompt input and send clicks within a round limit or deadline. Five interface languages and system-selected light/dark appearance with manual switching.
+ScheduledClicker v1.2.0 is a free, local desktop tool for Windows 11 and macOS 13+. Schedule a mouse click or repeat prompt input and Send clicks, with five languages and light/dark appearance.
 
-- [Windows EXE](https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe)
-- [macOS universal ZIP: Apple silicon and Intel](https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip)
-- [Installation and matching checksums](https://hana-486.github.io/ScheduledClicker/download/)
-- [Release notes](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.2.0)
-- [Loop behavior and setup](https://hana-486.github.io/ScheduledClicker/recurring-input/)
-- [Windows](https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/)
-- [macOS](https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/)
-- [FAQ](https://hana-486.github.io/ScheduledClicker/faq/)
-- [Safety and clipboard behavior](https://hana-486.github.io/ScheduledClicker/safety-and-verification/)
-- [Full product facts](https://hana-486.github.io/ScheduledClicker/llms-full.txt)
-- [Source and license](https://github.com/HaNa-486/ScheduledClicker)
-- [Versioned verification](https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md)
+- [Scheduled clicks. Recurring prompts.](https://hana-486.github.io/ScheduledClicker/)
+- [Download ScheduledClicker v1.2.0](https://hana-486.github.io/ScheduledClicker/download/)
+- [Scheduled clicks and prompt loops for Windows](https://hana-486.github.io/ScheduledClicker/windows-scheduled-auto-clicker/)
+- [Scheduled clicks and prompt loops for Mac](https://hana-486.github.io/ScheduledClicker/macos-scheduled-auto-clicker/)
+- [Set up a recurring prompt loop](https://hana-486.github.io/ScheduledClicker/recurring-input/)
+- [Schedule a continuation prompt for Codex](https://hana-486.github.io/ScheduledClicker/codex-session-continuation/)
+- [Download verification, permissions and limits](https://hana-486.github.io/ScheduledClicker/safety-and-verification/)
+- [ScheduledClicker questions and answers](https://hana-486.github.io/ScheduledClicker/faq/)
+- [ScheduledClicker version history](https://hana-486.github.io/ScheduledClicker/changelog/)
 
-Official release downloads do not require GitHub sign-in. The loop overwrites the clipboard and performs real input; cancellation cannot undo past actions. Keep the computer awake/unlocked and target fixed. It does not detect AI completion, quota availability or delivery, and does not bypass limits.
+Choose ScheduledClicker.exe for Windows or ScheduledClicker-macOS-universal.zip for Mac. Apple silicon and Intel use the same ZIP. The .sha256 files are text checksums, not apps. GitHub's Source code ZIP/TAR files contain source, not the ready-to-run app. Official release downloads do not require sign-in.
+The app starts in Traditional Chinese for any Chinese system locale, including Simplified Chinese; Japanese, Korean and German select their matching language, and all others select English. Switch languages in either mode. This website offers the same five languages through the links at the top; each language has its own shareable pages.
+The app has no network access, account, ads or telemetry. Loop mode overwrites the system clipboard and does not restore its previous contents; text may remain in clipboard history or the target draft. Simple mode does not use the clipboard. Mac Copy diagnostics also replaces it when you press that button. Schedules and positions are not saved across restarts.
+Keep the computer awake and unlocked, with the target window, input and conversation unchanged. Fixed coordinates cannot identify a different conversation or moved field. A Send click does not prove delivery. The app does not inspect AI replies, bypass usage limits or detect reset times.
+The owner accepted Mac build12004 functionality and Windows prompt-language, custom-text preservation and loop trial checks. Both platforms passed automated builds, scheduling, localization and UI checks. This does not establish every third-party app, display setup, permission-denial path or physical emergency-stop scenario.
+The Windows EXE is unsigned. The Mac app is ad-hoc signed, not Developer ID signed or Apple-notarized. An unfamiliar-publisher warning is different from a malware, damaged-file or organization-policy block. Follow the matching instructions below; do not disable system protection to run the app.
 
-Updated 2026-10-15. Supplemental summary; not a guarantee of indexing, ranking or AI citation.
+- ScheduledClicker.exe: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe
+- ScheduledClicker-macOS-universal.zip: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip
+- ScheduledClicker-Windows.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-Windows.sha256
+- ScheduledClicker-macOS-universal.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.sha256
 
-## Timing and prompts
+- VERIFICATION.md: https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md
 
-Use one prompt every round or a sequence. A sequence can stop at its end or repeat its last entry. The first execution uses a future local time; each interval starts after the previous round completes. Maximum rounds or a deadline is required; when both are enabled, the first reached stops. Trial performs real input and a send click. Pause/resume applies only between rounds, while the deadline remains active. Pausing during a round stops it. Cancel/F8/close stops remaining steps, never undoing completed paste or clicks.
+Report a problem on GitHub Issues (a GitHub account is required to post). Include Windows/macOS version, app version/build, target app, reproduction steps and the full error. On Mac, Copy diagnostics can supply build and execution-stage details; inspect it before posting. Do not include prompts, private conversations or personal file paths in public reports. If you have no account, check the FAQ and existing issues first.
+https://github.com/HaNa-486/ScheduledClicker/issues
 
-Capture input and Send in the same visible window. Keep the intended app, chat and layout unchanged. Window checks cannot identify a changed conversation or prove delivery. On macOS, a separate activation stage waits before the input click; target identity is obtained with system-wide Accessibility hit-testing and retained for validation. Only regular accessible app windows are supported. Mac numeric duration/action-delay/round fields support wheel and trackpad adjustment.
+## Languages
+- [English](https://hana-486.github.io/ScheduledClicker/)
+- [繁體中文](https://hana-486.github.io/ScheduledClicker/zh-Hant/)
+- [日本語](https://hana-486.github.io/ScheduledClicker/ja/)
+- [한국어](https://hana-486.github.io/ScheduledClicker/ko/)
+- [Deutsch](https://hana-486.github.io/ScheduledClicker/de/)
 
-## Languages and appearance
+If SmartScreen says Windows protected your PC because the app is unrecognized, confirm the official download and checksum first. If you choose to proceed and Windows offers it, select More info → Run anyway. This unsigned build may display Unknown publisher. If the message reports malware, an antivirus detection or a managed-device restriction, stop and use the report link or contact your administrator. Do not turn off SmartScreen or antivirus; a matching checksum alone does not prove safety.
 
-Traditional Chinese, English, Japanese, Korean and German. All Chinese system locales use Traditional Chinese; Japanese/Korean/German use their language; other locales use English. Both modes allow manual switching. Only the untouched initial prompt follows the selected language (繼續 / Continue / 続けて / 계속 / Weiter); edited prompts and active plan text are preserved. Startup follows the system app appearance, and the sun/moon action overrides it for the current session. Restart reads the system choices again.
+For an unidentified-developer or unnotarized-app warning, first try opening the app once. If you trust this official download, go to System Settings → Privacy & Security, find the message about ScheduledClicker and choose Open Anyway, then confirm Open if offered. Do not use this as a remedy for a malware or damaged-app warning; stop and report the exact message instead. Do not disable Gatekeeper or remove quarantine with a terminal command.
 
-## Data, permissions and compatibility
+Replacing a preview or older copy? Quit the old app before moving the new copy into Applications. Check Accessibility again: if the enabled entry points to the old copy and permission still fails, remove that entry and add the current app from Applications, then reopen it. Capture positions again. v1.2.0 uses Mac build12004; these are the release version and internal build number, not two different downloads.
 
-No ads, accounts, telemetry, application network access or third-party packages. ScheduledClicker does not persist prompts or schedules after exit. The loop clipboard overwrite is not restored; text can remain in clipboard history or the target app. Simple mode does not use the clipboard. Mac Copy diagnostics includes build/OS, app identity and execution stages, not prompt text or window titles; clicking it replaces the clipboard.
+A checksum checks that your bytes match the published file; it does not independently establish trusted authorship. Download the matching .sha256 file and open it as text. Compare its 64-character hash with your command result; uppercase/lowercase does not matter. If they differ, do not open the app: download again from the official link and report a repeated mismatch.
 
-Windows: portable WinForms EXE for Windows 11, unsigned, no installer; higher-integrity administrator apps can reject input. macOS: universal AppKit/Quartz app for macOS 13+ (arm64 and x86_64), user-granted Accessibility permission, ad-hoc signed and not Developer ID signed or notarized. EXE files do not run natively on Mac. Checksums verify file integrity, not trusted authorship.
+Windows: open PowerShell. Replace the example path with the EXE's actual location (File Explorer → right-click the file → Copy as path). Run the command below and compare the Hash field with ScheduledClicker-Windows.sha256. Use the full path so your current PowerShell folder does not matter.
 
-## Verification scope and history
+Mac: open Terminal. Type shasum -a 256 followed by a space, drag the original ZIP from Finder into Terminal to insert its full path, then press Return. Compare the first 64 characters with ScheduledClicker-macOS-universal.sha256. If you type a path yourself, put quotes around paths containing spaces.
 
-The owner accepted Mac build12004 normal functionality and Windows prompt-language/custom-text/loop checks, then authorized v1.2.0 publication. CI checks builds, scheduling, capture/focus policies, localization, UI and packaging. Individual desktop failure scenarios and every third-party app/display combination are not guaranteed. Exact build evidence and hashes are in VERIFICATION.md. Older v1.1.2 supports only one-shot clicking; v1.2.0 replaces prior loop preview downloads.
-
-Independent project; not affiliated with or endorsed by OpenAI. No AI completion, reset recognition or usage-limit bypass.
+Download ScheduledClicker.exe using the Windows button. Keep it in a local folder where you want to run it; there is no installation wizard.
+Verify the downloaded file using the Windows instructions below, then double-click the EXE.
+If the app opens, choose Simple mode and test one harmless click first. Test a loop on disposable text before using a real conversation.
+Download ScheduledClicker-macOS-universal.zip using the Mac button and verify the ZIP before extracting it. If Safari already extracted the download, you may already have ScheduledClicker.app; keep or download the original ZIP if you want to verify its checksum.
+Double-click the ZIP to extract it if needed. In Finder, drag ScheduledClicker.app into Applications. There is no PKG installer and no separate Apple silicon download.
+Open the app from Applications. If macOS cannot verify the developer or notarization, review the specific opening instructions below.
+Open System Settings → Privacy & Security → Accessibility. Enable ScheduledClicker; if it is missing, use + and select the app in Applications. Approve with your Mac credentials if requested, then quit and reopen ScheduledClicker if the permission is not recognized.
+Choose Simple mode for a harmless click test. For a loop, capture the input and Send positions in the same visible target window and try one round with disposable text. Permission allows control of other apps; grant it only if you trust this app.
+Open Loop mode. Set the first run, wait after each round and delay between actions.
+Enable a maximum round count, a deadline or both. For a first trial, use one round and disposable text.
+Choose the same prompt every round or edit a sequence. Choose whether to repeat the final prompt when the sequence ends. Replacement of existing input is optional; the default inserts at the cursor.
+Capture the input field and Send button, each after its three-second countdown. Keep both in the same visible window and keep that window in place.
+Try one round and review the confirmation. This really pastes text and clicks Send. Check the target result before starting the schedule; a completed click count is not a delivery receipt.

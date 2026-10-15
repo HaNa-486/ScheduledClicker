@@ -48,6 +48,8 @@ jobs:
       - name: Validate GitHub Pages metadata and links
         shell: pwsh
         run: .\scripts\validate-site.ps1
+      - name: Verify generated multilingual site
+        run: python scripts/generate-site.py --check
       - name: Verify visible discovery facts
         run: python scripts/validate-discovery.py
 

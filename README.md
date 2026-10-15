@@ -12,6 +12,8 @@
 
 No GitHub sign-in required. The `.sha256` files are text checksums, not installers. [Installation help](https://hana-486.github.io/ScheduledClicker/download/) · [Release notes](https://github.com/HaNa-486/ScheduledClicker/releases/tag/v1.2.0) · [Website](https://hana-486.github.io/ScheduledClicker/)
 
+Website guides: [English](https://hana-486.github.io/ScheduledClicker/) · [繁體中文](https://hana-486.github.io/ScheduledClicker/zh-Hant/) · [日本語](https://hana-486.github.io/ScheduledClicker/ja/) · [한국어](https://hana-486.github.io/ScheduledClicker/ko/) · [Deutsch](https://hana-486.github.io/ScheduledClicker/de/)
+
 ## Two modes, one window
 
 - **Simple mode:** one single or double click at an exact future time or after a monotonic delay.
@@ -29,21 +31,15 @@ These automated renders show the accepted v1.2.0 interface, not proof of message
 
 ## Install and try
 
-**Windows:** download and run the portable EXE. It is unsigned, so SmartScreen may warn. Input to elevated administrator apps can be blocked by Windows.
+**Windows:** download the portable EXE and follow the [Windows opening instructions](https://hana-486.github.io/ScheduledClicker/download/#install-windows). This unsigned build may trigger an unfamiliar-publisher warning. Malware or managed-device blocks require a different response; do not disable protection.
 
-**Mac:** extract the ZIP once, move ScheduledClicker.app to Applications, and allow it in System Settings → Privacy & Security → Accessibility before capturing loop positions. If macOS blocks opening, approve this app through Privacy & Security. It is ad-hoc signed, not Apple Developer ID signed or notarized. One universal app supports Apple silicon and Intel; the accepted runtime is build 12004. A Windows EXE does not run natively on Mac.
+**Mac:** extract the universal ZIP, move ScheduledClicker.app to Applications and follow the [Mac installation and Accessibility guide](https://hana-486.github.io/ScheduledClicker/download/#install-macos). The app is ad-hoc signed, not Developer ID signed or notarized. The guide distinguishes unidentified-developer warnings from malware or damaged-file alerts. The accepted runtime is build12004; Apple silicon and Intel use the same ZIP.
 
-Start with a disposable target and one trial round. Capture input and Send in the same regular accessible Mac app window. Keep the computer awake and unlocked, with the target layout unchanged.
+[Verify the EXE with PowerShell](https://hana-486.github.io/ScheduledClicker/download/#verify-windows) or [verify the ZIP with Terminal](https://hana-486.github.io/ScheduledClicker/download/#verify-macos). These instructions explain full file paths, the 64-character comparison and what to do if the checksum differs. A matching checksum verifies bytes, not trusted authorship.
 
-```powershell
-Get-FileHash .\ScheduledClicker.exe -Algorithm SHA256
-```
+Start with a harmless simple click, then a trial with disposable text. Capture both loop positions in the same visible target window. Keep the computer awake and unlocked and the target layout unchanged.
 
-```sh
-shasum -a 256 ScheduledClicker-macOS-universal.zip
-```
-
-Compare against the matching release checksum. [Verification record](VERIFICATION.md) · [Mac acceptance guide](macOS/TESTING.md)
+[Report a problem](https://github.com/HaNa-486/ScheduledClicker/issues) with OS/app version, target app, steps and error text. Posting requires a GitHub account. Review Mac diagnostics before sharing; omit private prompts, conversations and personal paths. [Verification record](VERIFICATION.md) · [Mac acceptance guide](macOS/TESTING.md)
 
 ## Input, timing and privacy
 
@@ -60,7 +56,7 @@ The owner accepted Mac normal functionality and the Windows prompt-language/cust
 - Windows: run `./build.ps1` in PowerShell. Uses the Windows .NET Framework compiler; output is `dist/ScheduledClicker.exe`.
 - Mac: run `bash ./build-macos.sh` on a Mac with Xcode Command Line Tools. Produces an arm64/x86_64 universal app ZIP and checksum.
 - Translations: edit `localization/ui.tsv`, then run `python scripts/generate-localization.py`; `--check` checks generated catalogs.
-- Website: `./scripts/validate-site.ps1` and `python scripts/validate-discovery.py` check navigation, metadata, current downloads and visible FAQ/schema parity.
+- Website: edit `site/content/*.json`, then run `python scripts/generate-site.py`. `--check`, `./scripts/validate-site.ps1` and `python scripts/validate-discovery.py` verify all 45 static pages, reciprocal language links, install anchors, localized metadata, downloads and visible FAQ/schema parity. See [site maintenance](site/README.md).
 
 [Changelog](CHANGELOG.md) · [MIT License](LICENSE)
 

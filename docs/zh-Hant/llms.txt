@@ -1,0 +1,30 @@
+# ScheduledClicker v1.2.0 — 已核對的產品資訊與多語指南
+
+ScheduledClicker v1.2.0 是免費的本機桌面工具，支援 Windows 11 與 macOS 13 以上。可排程滑鼠點擊，或重複輸入提示詞並點擊送出，提供五語系及深淺色介面。
+
+- [定時點擊，循環輸入提示詞。](https://hana-486.github.io/ScheduledClicker/zh-Hant/)
+- [下載 ScheduledClicker v1.2.0](https://hana-486.github.io/ScheduledClicker/zh-Hant/download/)
+- [Windows 定時點擊與提示詞循環](https://hana-486.github.io/ScheduledClicker/zh-Hant/windows-scheduled-auto-clicker/)
+- [Mac 定時點擊與提示詞循環](https://hana-486.github.io/ScheduledClicker/zh-Hant/macos-scheduled-auto-clicker/)
+- [設定提示詞循環](https://hana-486.github.io/ScheduledClicker/zh-Hant/recurring-input/)
+- [為 Codex 排程續跑提示詞](https://hana-486.github.io/ScheduledClicker/zh-Hant/codex-session-continuation/)
+- [下載校驗、權限與使用限制](https://hana-486.github.io/ScheduledClicker/zh-Hant/safety-and-verification/)
+- [ScheduledClicker 常見問題](https://hana-486.github.io/ScheduledClicker/zh-Hant/faq/)
+- [ScheduledClicker 版本紀錄](https://hana-486.github.io/ScheduledClicker/zh-Hant/changelog/)
+
+Windows 請選 ScheduledClicker.exe；Mac 請選 ScheduledClicker-macOS-universal.zip，Apple silicon 與 Intel 共用同一檔案。.sha256 是校驗文字檔，不是程式。GitHub 的 Source code ZIP／TAR 是原始碼，不是可直接執行的 App。正式版下載不需要登入。
+程式啟動時，任何中文系統語系（含簡體中文）會顯示繁體中文；日文、韓文與德文系統顯示對應語言，其餘顯示英文。兩種模式都可切換語言。官網也提供這五種語言，可用頂端連結切換，每種語言都有可分享的獨立頁面。
+程式沒有網路存取、帳號、廣告或遙測。循環模式會覆寫系統剪貼簿，不會還原原本內容；文字可能留在剪貼簿歷程或目標草稿。簡單模式不使用剪貼簿。Mac 的「複製診斷」也會在按下時覆寫剪貼簿。排程與擷取位置不會跨重啟保存。
+請讓電腦保持喚醒、不鎖屏，目標視窗、輸入框與對話保持不變。固定座標無法辨識切換過的對話或移動過的欄位，送出點擊也不代表訊息已送達。工具不讀取 AI 回覆、不繞過用量限制，也不偵測重設時間。
+使用者已驗收 Mac build12004 功能，並通過 Windows 預設提示詞語系切換、自訂文字保留及循環試跑。兩平台通過自動建置、排程、語系與介面檢查；這不代表所有第三方程式、螢幕配置、拒絕授權情境或實體緊急停止操作都已個別驗證。
+Windows EXE 尚未簽章。Mac App 使用 ad-hoc 簽章，沒有 Developer ID 簽章或 Apple 公證。未知發行者提醒，與惡意程式、檔案損毀或組織政策阻擋不同。請依下方對應情境處理，不要為了執行程式而關閉系統防護。
+
+- ScheduledClicker.exe: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe
+- ScheduledClicker-macOS-universal.zip: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip
+- ScheduledClicker-Windows.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-Windows.sha256
+- ScheduledClicker-macOS-universal.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.sha256
+
+- VERIFICATION.md: https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md
+
+請到 GitHub Issues 回報（發文需要 GitHub 帳號）。提供 Windows／macOS 版本、程式版本／build、目標 App、重現步驟與完整錯誤。Mac 可用「複製診斷」取得建置及執行階段資訊，貼出前請先檢查。公開回報不要包含提示詞、私人對話或個人檔案路徑。沒有帳號時，可先查閱常見問題及既有 Issues。
+https://github.com/HaNa-486/ScheduledClicker/issues

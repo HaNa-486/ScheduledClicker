@@ -1,0 +1,12 @@
+# Multilingual first-use website
+
+- Authority: owner explicitly requests all five first-use findings fixed, complete five-language website, aligned SEO/AEO/AISEO/GEO/LLMO content and publication after verification. Signing and Search Console are deferred.
+- Scope: website content only; immutable v1.2.0 Windows/Mac release assets and app code stay unchanged.
+- Journey: arrive at any topic → identify current release → choose platform → download correct file → reach correct installation section → follow warning-specific opening and permissions → verify full-path checksum → find public issue reporting.
+- Languages: English keeps existing nine URLs; Traditional Chinese, Japanese, Korean and German each receive nine fully translated static pages. Explicit five-language links preserve topic and, with optional script, section. No automatic redirect, tracking or runtime translation.
+- Discovery: localized title/description/OG/Twitter, self-canonical, reciprocal same-topic hreflang plus English x-default, visible FAQ/schema parity, platform SoftwareApplication version/download facts, 45 sitemap URLs and ten localized AI summaries. No guaranteed indexing or rankings; llms files are supplemental.
+- Safety: distinguish unrecognized publisher/unnotarized app from malware, corruption or managed-device blocks. Explain permissions and clipboard; no disabling antivirus/Gatekeeper or stripping quarantine. Public reports omit private prompts/chats/paths. Checksum verifies bytes, not author trust.
+- Acceptance: all 45 pages are complete and locale-matched; every internal link/fragment and all language alternates resolve; correct install anchors, real full-path examples, report entry on every page; desktop/narrow layouts usable; independent safety/discovery review passes; CI and deployed text checks pass.
+- Evidence limits: browser and source review do not reproduce fresh-machine OS warnings or establish native translation review. Existing app acceptance/negative-case limits remain as recorded in VERIFICATION.md.
+- Sources: https://developers.google.com/search/docs/specialty/international/localized-versions ; https://developers.google.com/search/docs/appearance/ai-features ; https://support.apple.com/en-us/102445 ; https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation .
+- Rollback: revert website commit and redeploy Pages if a concrete regression appears; retain prior release assets and original English URL compatibility. No action merely from this fallback plan.

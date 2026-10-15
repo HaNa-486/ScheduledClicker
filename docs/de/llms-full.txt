@@ -1,0 +1,56 @@
+# ScheduledClicker v1.2.0 — Geprüfte Produktinformationen und Sprachanleitungen
+
+ScheduledClicker v1.2.0 ist ein kostenloses lokales Werkzeug für Windows 11 und macOS 13 oder neuer. Planen Sie Mausklicks oder wiederholen Sie Texteingabe und Sendeklicks – mit fünf Sprachen sowie heller und dunkler Darstellung.
+
+- [Klicks planen. Prompts wiederholen.](https://hana-486.github.io/ScheduledClicker/de/)
+- [ScheduledClicker v1.2.0 herunterladen](https://hana-486.github.io/ScheduledClicker/de/download/)
+- [Geplante Klicks und Prompt-Schleifen für Windows](https://hana-486.github.io/ScheduledClicker/de/windows-scheduled-auto-clicker/)
+- [Geplante Klicks und Prompt-Schleifen für Mac](https://hana-486.github.io/ScheduledClicker/de/macos-scheduled-auto-clicker/)
+- [Eine Prompt-Schleife einrichten](https://hana-486.github.io/ScheduledClicker/de/recurring-input/)
+- [Einen Fortsetzungs-Prompt für Codex planen](https://hana-486.github.io/ScheduledClicker/de/codex-session-continuation/)
+- [Downloadprüfung, Berechtigungen und Grenzen](https://hana-486.github.io/ScheduledClicker/de/safety-and-verification/)
+- [Fragen und Antworten zu ScheduledClicker](https://hana-486.github.io/ScheduledClicker/de/faq/)
+- [Versionsverlauf von ScheduledClicker](https://hana-486.github.io/ScheduledClicker/de/changelog/)
+
+Unter Windows wählen Sie ScheduledClicker.exe, auf dem Mac ScheduledClicker-macOS-universal.zip. Apple silicon und Intel verwenden dieselbe ZIP. .sha256-Dateien sind Prüfsummen als Text, keine Anwendungen. GitHubs Source code ZIP/TAR enthält Quellcode und keine direkt startbare App. Offizielle Downloads benötigen keine Anmeldung.
+Bei chinesischer Systemsprache – einschließlich vereinfachtem Chinesisch – startet die App auf traditionellem Chinesisch. Japanisch, Koreanisch und Deutsch wählen die jeweilige Sprache; sonst wird Englisch verwendet. Beide Modi erlauben einen Wechsel. Auch diese Website bietet oben dieselben fünf Sprachen mit eigenen, teilbaren Seitenadressen an.
+Die App verwendet keinen Netzwerkzugriff, kein Konto, keine Werbung und keine Telemetrie. Der Schleifenmodus überschreibt die Zwischenablage, ohne den vorherigen Inhalt wiederherzustellen. Text kann im Verlauf oder im Zielentwurf bleiben. Der einfache Modus verwendet keine Zwischenablage. Auch die Mac-Diagnosekopie überschreibt sie beim Betätigen. Zeitpläne und Positionen werden nicht über einen Neustart gespeichert.
+Der Computer muss wach und entsperrt bleiben; Zielfenster, Eingabefeld und Gespräch dürfen sich nicht ändern. Feste Koordinaten erkennen weder einen anderen Chat noch ein verschobenes Feld. Ein Sendeklick bestätigt keine Zustellung. Die App liest keine KI-Antworten, umgeht keine Nutzungslimits und erkennt keine Rücksetzzeitpunkte.
+Der Eigentümer hat die Funktionen von Mac build12004 sowie unter Windows Sprachwechsel des Anfangs-Prompts, Erhalt eigener Texte und einen Schleifentest bestätigt. Automatisierte Builds, Zeitplan-, Sprach- und UI-Prüfungen beider Plattformen waren erfolgreich. Das belegt nicht jede Fremdanwendung, Bildschirmkonfiguration, verweigerte Berechtigung oder Betätigung der physischen Notstopptaste.
+Die Windows-EXE ist nicht signiert. Die Mac-App ist ad-hoc signiert, ohne Developer-ID-Signatur oder Apple-Notarisierung. Eine Warnung vor einem unbekannten Herausgeber ist etwas anderes als Schadsoftware, eine beschädigte Datei oder eine Organisationssperre. Folgen Sie dem passenden Abschnitt; deaktivieren Sie keine Schutzfunktionen, um die App auszuführen.
+
+- ScheduledClicker.exe: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker.exe
+- ScheduledClicker-macOS-universal.zip: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.zip
+- ScheduledClicker-Windows.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-Windows.sha256
+- ScheduledClicker-macOS-universal.sha256: https://github.com/HaNa-486/ScheduledClicker/releases/download/v1.2.0/ScheduledClicker-macOS-universal.sha256
+
+- VERIFICATION.md: https://github.com/HaNa-486/ScheduledClicker/blob/main/VERIFICATION.md
+
+Melden Sie ein Problem über GitHub Issues; zum Schreiben ist ein GitHub-Konto erforderlich. Geben Sie Betriebssystem, App-Version/Build, Ziel-App, Schritte zur Reproduktion und vollständige Fehlermeldung an. Die Mac-Diagnosekopie liefert Build und Ausführungsphase. Prüfen Sie sie vor dem Veröffentlichen. Keine Prompts, privaten Gespräche oder persönlichen Dateipfade in öffentliche Berichte aufnehmen. Ohne Konto können Sie FAQ und vorhandene Issues lesen.
+https://github.com/HaNa-486/ScheduledClicker/issues
+
+Meldet SmartScreen wegen einer unbekannten App, dass der Computer geschützt wurde, prüfen Sie zunächst Downloadquelle und Prüfsumme. Wenn Sie fortfahren möchten und Windows die Option anbietet, wählen Sie Weitere Informationen → Trotzdem ausführen. Bei dieser nicht signierten Version kann der Herausgeber als unbekannt erscheinen. Bei Schadsoftwaremeldungen, Virenscannerfunden oder Einschränkungen verwalteter Geräte halten Sie an und melden das Problem oder fragen Ihre Administration. Deaktivieren Sie weder SmartScreen noch Virenschutz. Eine passende Prüfsumme allein garantiert keine Sicherheit.
+
+Bei einer Warnung vor unbekanntem Entwickler oder fehlender Notarisierung versuchen Sie zunächst einmal, die App zu öffnen. Wenn Sie diesem offiziellen Download vertrauen, suchen Sie unter Systemeinstellungen → Datenschutz & Sicherheit den Hinweis zu ScheduledClicker und wählen Dennoch öffnen. Bestätigen Sie Öffnen, falls angeboten. Verwenden Sie diesen Weg nicht bei einer Schadsoftware- oder Beschädigungswarnung: stoppen Sie und melden Sie den genauen Wortlaut. Deaktivieren Sie Gatekeeper nicht und entfernen Sie keine Quarantänemarkierung per Terminal.
+
+Beenden Sie vor dem Austausch einer Vorschau oder älteren Kopie die alte App. Verschieben Sie die neue nach Programme und prüfen Sie Bedienungshilfen erneut. Verweist der erlaubte Eintrag auf die alte Kopie und funktioniert der Zugriff weiterhin nicht, entfernen Sie diesen Eintrag und fügen die aktuelle App aus Programme hinzu. Öffnen Sie sie erneut und erfassen Sie Positionen neu. v1.2.0 und build12004 bezeichnen Release und interne Buildnummer, nicht zwei Downloads.
+
+Eine Prüfsumme bestätigt die Übereinstimmung mit der veröffentlichten Datei, nicht unabhängig die Vertrauenswürdigkeit des Urhebers. Öffnen Sie die passende .sha256-Datei als Text und vergleichen Sie ihren 64-stelligen Hash mit der Befehlsausgabe. Groß-/Kleinschreibung spielt keine Rolle. Bei Abweichung nicht starten: erneut offiziell herunterladen und einen wiederholten Unterschied melden.
+
+Windows: Öffnen Sie PowerShell. Ersetzen Sie den Beispielpfad durch den tatsächlichen Pfad zur EXE (Explorer → Rechtsklick auf die Datei → Als Pfad kopieren). Vergleichen Sie das Feld Hash der folgenden Ausgabe mit ScheduledClicker-Windows.sha256. Der vollständige Pfad funktioniert unabhängig vom aktuellen PowerShell-Ordner.
+
+Mac: Öffnen Sie Terminal, geben Sie shasum -a 256 und ein Leerzeichen ein und ziehen Sie die ursprüngliche ZIP aus dem Finder ins Terminal. Dadurch wird der vollständige Pfad eingefügt. Drücken Sie Return und vergleichen Sie die ersten 64 Zeichen mit ScheduledClicker-macOS-universal.sha256. Bei manueller Eingabe müssen Pfade mit Leerzeichen in Anführungszeichen stehen.
+
+Laden Sie ScheduledClicker.exe über die Windows-Schaltfläche herunter und legen Sie sie in einem lokalen Ordner ab. Es gibt keinen Installationsassistenten.
+Prüfen Sie die Datei mit der Windows-Anleitung unten und öffnen Sie die EXE per Doppelklick.
+Testen Sie nach dem Start zunächst einen harmlosen Klick im einfachen Modus. Prüfen Sie eine Schleife mit entbehrlichem Text, bevor Sie einen echten Chat verwenden.
+Laden Sie ScheduledClicker-macOS-universal.zip über die Mac-Schaltfläche herunter und prüfen Sie die ZIP vor dem Entpacken. Falls Safari sie bereits entpackt hat, kann ScheduledClicker.app schon vorliegen. Bewahren Sie die ursprüngliche ZIP auf oder laden Sie sie für die Prüfsumme erneut herunter.
+Entpacken Sie die ZIP bei Bedarf per Doppelklick. Ziehen Sie ScheduledClicker.app im Finder nach Programme. Es gibt keinen PKG-Installer und keinen separaten Apple-silicon-Download.
+Öffnen Sie die App aus Programme. Falls macOS Entwickler oder Notarisierung nicht überprüfen kann, lesen Sie den passenden Abschnitt unten.
+Aktivieren Sie ScheduledClicker unter Systemeinstellungen → Datenschutz & Sicherheit → Bedienungshilfen. Fehlt der Eintrag, fügen Sie die App aus Programme mit + hinzu. Bestätigen Sie bei Bedarf mit Ihren Mac-Anmeldedaten. Wird die Erlaubnis nicht erkannt, beenden und öffnen Sie ScheduledClicker erneut.
+Testen Sie einen harmlosen Klick im einfachen Modus. Für eine Schleife erfassen Sie Eingabe und Senden im selben sichtbaren Zielfenster und testen eine Runde mit entbehrlichem Text. Die Berechtigung erlaubt die Steuerung anderer Apps; erteilen Sie sie nur einer vertrauenswürdigen Anwendung.
+Öffnen Sie den Schleifenmodus und setzen Sie Startzeit, Wartezeit nach jeder Runde und Abstand zwischen Aktionen.
+Aktivieren Sie maximale Rundenzahl, Endzeit oder beides. Verwenden Sie für den ersten Versuch eine Runde und entbehrlichen Text.
+Wählen Sie denselben Prompt oder eine Folge und entscheiden Sie, ob der letzte Eintrag wiederholt wird. Vorhandenen Text zu ersetzen ist optional; standardmäßig wird am Cursor eingefügt.
+Erfassen Sie Eingabefeld und Sendeschaltfläche jeweils nach drei Sekunden. Beide Punkte müssen im selben sichtbaren Fenster liegen; verschieben Sie es danach nicht.
+Starten Sie einen Probelauf und lesen Sie die Bestätigung. Er fügt wirklich Text ein und klickt auf Senden. Prüfen Sie das Ergebnis vor dem Start des Zeitplans. Der Zähler ausgeführter Sendeklicks ist keine Zustellbestätigung.
